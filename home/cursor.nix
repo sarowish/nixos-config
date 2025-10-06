@@ -15,5 +15,7 @@ in
       enable = true;
       size = size;
     };
+
+    dotIcons.enable = false;
   };
 }
