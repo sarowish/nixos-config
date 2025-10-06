@@ -1,0 +1,38 @@
+#browser:not(.browser-toolbox-background) {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+:root {
+  --tabpanel-background-color: transparent !important;
+  --tab-selected-bgcolor: rgba(66, 65, 77, 0.4) !important;
+  --toolbox-bgcolor: transparent !important;
+  --toolbox-bgcolor-inactive: transparent !important;
+  background: transparent !important;
+}
+
+#navigator-toolbox,
+#nav-bar,
+#sidebar-main {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+#urlbar-background,
+#searchbar {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+#urlbar[open="true"] > #urlbar-background {
+  background-color: rgb(255, 255, 255) !important;
+}
+
+#sidebar-main {
+  &[sidebar-launcher-expanded] {
+    background-color: black !important;
+  }
+}
+
+#sidebar-main {
+  &[sidebar-launcher-expanded] {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+  }
+}

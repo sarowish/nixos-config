@@ -1,0 +1,412 @@
+@-moz-document domain("reddit.com") {
+  * {
+    --color-neutral-background: transparent !important;
+    --color-neutral-background-weak: transparent !important;
+    --color-neutral-background: transparent !important;
+    --color-neutral-background-selected: rgba(160, 160, 171, 0.3) !important;
+    --color-secondary-background: rgba(160, 160, 171, 0.3) !important;
+    --color-neutral-background-weak: transparent !important;
+    --color-button-secondary-background: transparent !important;
+    --color-neutral-background: transparent !important;
+    --shreddit-content-background: transparent !important;
+    --color-neutral-background-hover: rgba(160, 160, 171, 0.3) !important;
+    --color-tone-5: rgba(26, 255, 255, 0.3) !important;
+  }
+
+  blockquote {
+    border-color: rgba(26, 255, 255, 0.3);
+  }
+
+  reddit-header-large {
+    backdrop-filter: blur(20px);
+  }
+
+  .\[\&\>\.threadline\>\*\]\:border-tone-4 > .threadline > * {
+    border-color: rgba(160, 160, 171, 0.3) !important;
+  }
+
+  .bg-\[color\:var\(--shreddit-content-background\)\] {
+    background-color: transparent !important;
+  }
+
+  .bg-tone-4 {
+    background-color: rgba(160, 160, 171, 0.3) !important;
+  }
+
+  #comment-tree {
+    background-color: transparent !important;
+  }
+
+  :root.theme-dark .sidebar-grid,
+  :root.theme-dark .grid-container.grid,
+  :root.theme-dark
+    .sidebar-grid
+    .theme-beta:not(.stickied):not(#left-sidebar-container):not(
+      .left-sidebar-container
+    ),
+  :root.theme-dark
+    .sidebar-grid
+    .theme-rpl:not(.stickied):not(#left-sidebar-container):not(
+      .left-sidebar-container
+    ),
+  :root.theme-dark
+    .grid-container.grid
+    .theme-beta:not(.stickied):not(#left-sidebar-container):not(
+      .left-sidebar-container
+    ),
+  :root.theme-dark
+    .grid-container.grid
+    .theme-rpl:not(.stickied):not(#left-sidebar-container):not(
+      .left-sidebar-container
+    ) {
+    background-color: transparent !important;
+  }
+
+  html {
+    background-color: rgba(31, 33, 38, 0.6) !important;
+  }
+
+  .bg-neutral-background {
+    background-color: transparent !important;
+  }
+
+  .bg-neutral-background-selected {
+    background-color: rgba(160, 160, 171, 0.2) !important;
+  }
+
+  .bg-neutral-background-hover {
+    background-color: rgba(160, 160, 171, 0.2) !important;
+  }
+
+  .bg-secondary-background {
+    background-color: rgba(160, 160, 171, 0.2) !important;
+  }
+
+  .bg-neutral-background-weak {
+    background-color: transparent !important;
+  }
+
+  .button-secondary {
+    background-color: transparent !important;
+  }
+
+  .bg-scrim {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .inner.blurred {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+}
+
+@-moz-document domain("youtube.com") {
+  /* :root { */
+  /*   background-color: transparent !important; */
+  /* } */
+
+  * {
+    --yt-spec-text-primary: #cdd6f4;
+    --yt-spec-text-secondary: #d0d0d0;
+    --app-drawer-content-container-background-color: transparent !important;
+  }
+
+  html {
+    background: transparent !important;
+  }
+
+  ytd-app,
+  ytd-mini-guide-renderer {
+    background-color: rgba(31, 33, 38, 0.6) !important;
+  }
+
+  ytd-mini-guide-entry-renderer {
+    background-color: transparent !important;
+    border: 1px solid rgba(160, 160, 171, 0.3) !important;
+  }
+
+  #items.ytd-mini-guide-renderer {
+    gap: 2rem !important;
+  }
+
+  a.ytd-mini-guide-entry-renderer {
+    padding: 8px 0 7px !important;
+  }
+
+  #background.ytd-masthead {
+    background-color: transparent !important;
+  }
+
+  #page-header-container.ytd-tabbed-page-header,
+  #page-header.ytd-tabbed-page-header,
+  #tabs-inner-container.ytd-tabbed-page-header,
+  #tabs-container.ytd-tabbed-page-header {
+    background-color: transparent !important;
+  }
+
+  #background.ytd-masthead {
+    background: transparent !important;
+    backdrop-filter: blur(20px);
+  }
+
+  #guide-content.ytd-app {
+    background: transparent !important;
+  }
+
+  #search-icon-legacy.ytd-searchbox {
+    border: 1px !important;
+    border-color: rgba(160, 160, 171, 0.3) !important;
+    background-color: rgba(160, 160, 171, 0.3) !important;
+  }
+
+  #container.ytd-searchbox {
+    background-color: transparent !important;
+    border-color: rgba(160, 160, 171, 0.3) !important;
+    box-shadow: none !important;
+  }
+
+  .button-container.ytd-rich-shelf-renderer {
+    background-color: transparent !important;
+  }
+
+  #content-wrapper.ytd-feed-nudge-renderer {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  #chips-wrapper.ytd-feed-filter-chip-bar-renderer {
+    background-color: transparent !important;
+  }
+}
+
+@-moz-document domain("duckduckgo.com") {
+  * {
+    --theme-col-txt-title: #89b4fa;
+    --theme-col-txt-title-visited: #cba6f7;
+    --theme-col-txt-snippet: #eaeae2;
+    --theme-col-txt-url-domain: #cdd6f4;
+    --theme-col-txt-url-path: #7f849c;
+  }
+
+  html {
+    background-color: rgba(31, 33, 38, 0.6) !important;
+  }
+
+  body {
+    background-color: transparent !important;
+    color: #edeff5 !important;
+  }
+
+  .nav-menu,
+  .nav-menu--slideout {
+    background-color: rgba(127, 132, 155, 0.55) !important;
+  }
+
+  .At_VJ9MlrHsSjbfCtz2_ .wLL07_0Xnd1QZpzpfR4W {
+    background-color: rgba(147, 153, 178, 0.15) !important;
+    border-radius: 15px !important;
+  }
+
+  .header-wrap {
+    background-color: transparent !important;
+  }
+
+  .DrcPyihFGyKMlg6lpwsa::before {
+    content: none !important;
+  }
+
+  .XvPRmQVeIoCP5lQhICTv.ofDl_1VxUG_EKc3b9E3x::before {
+    content: none !important;
+  }
+
+  .search--header {
+    background-color: rgba(147, 153, 178, 0.4) !important;
+  }
+
+  input {
+    color: #f0f3fd !important;
+  }
+
+  .feedback-btn {
+    background-color: rgba(147, 153, 178, 0.2) !important;
+  }
+
+  .module {
+    background-color: rgba(88, 91, 112, 0.2) !important;
+  }
+
+  .tile-wrap {
+    background-color: transparent !important;
+  }
+
+  .is-link-style-exp .search__button:hover,
+  .is-link-style-exp .search__button:focus,
+  .is-link-style-exp .search:hover .search__button:focus,
+  .is-link-style-exp
+    .search--header.has-text.search--hover
+    .search__button:hover,
+  .is-link-style-exp
+    .search--header.has-text.search--focus
+    .search__button:hover,
+  .is-link-style-exp .search--home.has-text .search__button:focus,
+  .is-link-style-exp .search--home.has-text .search__button:hover {
+    background-color: var(--theme-col-txt-title) !important;
+  }
+
+  .is-link-style-exp .search__button:focus,
+  .is-link-style-exp .search:hover .search__button,
+  .is-link-style-exp .search:hover .search__button:focus,
+  .is-link-style-exp .search--home.has-text .search__button:focus,
+  .is-link-style-exp.is-mobile
+    .search--header.has-text.search--focus
+    .search__button:hover,
+  .is-link-style-exp .search__input:focus ~ .search__button,
+  .is-link-style-exp .search--header.has-text.search--hover .search__button,
+  .is-link-style-exp .search--header.has-text.search--focus .search__button,
+  .is-link-style-exp .search--home.has-text .search__button {
+    background-color: #74c7ec !important;
+  }
+
+  .kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q,
+  .kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q:active,
+  .kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q:visited {
+    color: #edeff5 !important;
+  }
+
+  .kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.SnptgjT2zdOhGYfNng6g {
+    color: #b4befe !important;
+  }
+
+  .kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.kFFXe30DOpq5j1hbWU1q.SnptgjT2zdOhGYfNng6g::after {
+    height: 3px;
+    background: #b4befe !important;
+  }
+
+  .nYs5EPJFwdhisN0E7MCB .wAo0g6uUc98EWmmASZLv::after {
+    content: none !important;
+  }
+
+  .result__a {
+    color: var(--theme-col-txt-title) !important;
+  }
+
+  .result__a:visited {
+    color: var(--theme-col-txt-title-visited) !important;
+  }
+
+  .is-related-search-exp .related-searches__item {
+    border: none !important;
+    background-color: rgba(147, 153, 178, 0.15) !important;
+  }
+
+  .ffON2NH02oMAcqyoh2UU.q7VhSk71XgyB1xYfeChb {
+    color: #cdd6f4 !important;
+  }
+
+  .footer {
+    background-color: rgba(17, 17, 27, 0.2) !important;
+    border-top: none !important;
+  }
+
+  .O9Ipab51rBntYb0pwOQn {
+    background-color: rgba(88, 91, 112, 0.2) !important;
+    border: none !important;
+  }
+
+  .LvQyYDtEWRDVojZY8klT,
+  .tV0DEo5a5LUrl8Piw6Ao {
+    background-color: rgba(88, 91, 112, 0.2) !important;
+  }
+
+  .VssOcyhy47YNtTsYTdr0.VssOcyhy47YNtTsYTdr0.VssOcyhy47YNtTsYTdr0,
+  .VssOcyhy47YNtTsYTdr0.VssOcyhy47YNtTsYTdr0.VssOcyhy47YNtTsYTdr0:active,
+  .VssOcyhy47YNtTsYTdr0.VssOcyhy47YNtTsYTdr0.VssOcyhy47YNtTsYTdr0:visited {
+    color: #7f849c !important;
+  }
+
+  .dropdown__button {
+    color: #7f849c !important;
+  }
+
+  .dropdown__button:hover,
+  .dropdown__button:focus,
+  .dropdown__button:visited,
+  .dropdown.is-open .dropdown__button {
+    color: #a6adc8 !important;
+  }
+
+  .privacy-reminder__text {
+    color: #4cba3c !important;
+  }
+
+  .switch {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .switch.is-on {
+    background: #89b4fa !important;
+  }
+
+  .Ori_hRAKtbHhhE0ysQwn {
+    color: var(--theme-col-txt-snippet) !important;
+  }
+}
+
+@-moz-document domain("last.fm") {
+  html {
+    background-color: rgba(30, 30, 46, 0.7) !important;
+  }
+
+  body {
+    background-color: transparent !important;
+  }
+}
+
+@-moz-document domain("octordly.com") {
+  html {
+    background-color: rgba(31, 33, 38, 0.6) !important;
+  }
+
+  .adv {
+    background-color: rgba(147, 153, 178, 0.15) !important;
+  }
+
+  .section--grey {
+    background-color: rgba(88, 91, 112, 0.2) !important;
+  }
+
+  .Row-current .Row-letter {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .Row-letter {
+    color: #edeff5 !important;
+  }
+
+  header .buttons button.button,
+  header .lang {
+    background: rgba(147, 153, 178, 0.15) !important;
+  }
+
+  .letter-absent {
+    background: rgba(163, 173, 196, 0.2) !important;
+  }
+
+  .Game-keyboard {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+  }
+}
+
+@-moz-document domain("piped.kavin.rocks") {
+  html {
+    background: transparent !important;
+  }
+
+  body {
+    background: transparent !important;
+  }
+
+  div.dark,
+  div.reset {
+    background-color: rgba(30, 30, 46, 0.7) !important;
+  }
+}
