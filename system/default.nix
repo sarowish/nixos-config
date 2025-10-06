@@ -70,5 +70,6 @@
     nixfmt
     gcc
     tokei
+    onefetch
   ];
 }
