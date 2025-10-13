@@ -22,6 +22,7 @@
     ./mpd.nix
     ./mpv.nix
     ./neovim
+    ./openrgb
     ./rofi.nix
     ./tealdeer.nix
     ./vesktop
