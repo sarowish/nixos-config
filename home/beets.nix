@@ -5,6 +5,7 @@
 
     settings = {
       library = "${config.xdg.stateHome}/beets/library.db";
+      paths.default = "$albumartist/[$original_year] $album%aunique{}/$track $title";
 
       plugins = [
         "fetchart"
