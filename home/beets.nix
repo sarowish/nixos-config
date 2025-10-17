@@ -11,6 +11,7 @@
         "fromfilename"
         "chroma"
         "autobpm"
+        "musicbrainz"
       ];
 
       fetchart.sources = [
