@@ -155,6 +155,7 @@
           "blur, notifications"
         ];
 
+        windowrulev2 = "workspace 7 silent, class:^(steam)$";
         workspace = "m[1], layoutopt:orientation:left";
 
         bind = [
