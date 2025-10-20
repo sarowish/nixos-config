@@ -15,6 +15,8 @@
     interface = "enp34s0";
   };
 
+  systemd.network.wait-online.enable = false;
+
   services.resolved.enable = true;
   services.mullvad-vpn.enable = true;
 }
