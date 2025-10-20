@@ -10,7 +10,7 @@
     };
 
     efi.canTouchEfiVariables = true;
-    timeout = 2;
+    timeout = 0; # boot menu can be accessed by pressing `Space`
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
