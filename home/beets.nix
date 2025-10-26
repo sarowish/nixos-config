@@ -16,6 +16,7 @@
       ];
 
       fetchart.sources = [
+        "filesystem"
         "coverart"
         "itunes"
         "amazon"
