@@ -1,4 +1,9 @@
-{ inputs, config, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}:
 
 {
   imports = [
@@ -36,7 +41,11 @@
   home.homeDirectory = "/home/chels";
 
   programs.bash.enable = true;
-  programs.obs-studio.enable = true;
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = [ pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
+  };
 
   programs.fd = {
     enable = true;
