@@ -51,7 +51,10 @@
 
   programs.virt-manager.enable = true;
   users.groups.libvirtd.members = [ "chels" ];
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.vhostUserPackages = [ pkgs.virtiofsd ];
+  };
 
   security.sudo.extraConfig = "Defaults pwfeedback";
 
