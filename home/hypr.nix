@@ -74,6 +74,7 @@
 
           layout = "master";
           resize_on_border = true;
+          hover_icon_on_border = false;
           no_focus_fallback = true;
         };
 
