@@ -74,5 +74,6 @@
     gcc
     tokei
     onefetch
+    ffmpeg
   ];
 }
