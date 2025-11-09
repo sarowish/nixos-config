@@ -8,6 +8,7 @@
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
+    ../modules/programs/ytsub.nix
     ./alacritty.nix
     ./atuin.nix
     ./beets.nix
@@ -34,6 +35,7 @@
     ./waybar.nix
     ./xdg.nix
     ./yazi.nix
+    ./ytsub.nix
     ./zathura.nix
   ];
 
