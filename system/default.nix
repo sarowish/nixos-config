@@ -5,6 +5,7 @@
     ./hardware-configuration.nix
     ./disk-config.nix
     ./boot.nix
+    ./docs.nix
     ./network.nix
     ./sound.nix
     ./graphics.nix
