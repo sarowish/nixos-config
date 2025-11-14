@@ -14,11 +14,26 @@ let
     '';
 
   };
+  razer_color = pkgs.python3Packages.buildPythonApplication rec {
+    pname = "razer_color";
+    version = "0.1.0";
+
+    pyproject = false;
+    dontUnpack = true;
+
+    dependencies = with pkgs.python3Packages; [ openrazer ];
+
+    installPhase = ''
+      install -Dm755 "${./razer_color.py}" "$out/bin/${pname}"
+    '';
+
+  };
   target = "graphical-session.target";
 in
 {
   home.packages = [
     openrgb_color
+    razer_color
   ];
 
   systemd.user.services.openrgb = {
