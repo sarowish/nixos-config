@@ -11,6 +11,7 @@
 
       settings = {
         discordBranch = "stable";
+        tray = false;
         enableSplashScreen = false;
         arRPC = true;
       };
