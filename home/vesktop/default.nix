@@ -8,6 +8,12 @@
     vesktop = {
       enable = true;
       autoscroll.enable = true;
+
+      settings = {
+        discordBranch = "stable";
+        enableSplashScreen = false;
+        arRPC = true;
+      };
     };
 
     quickCss = builtins.readFile ./quickCss.css;
