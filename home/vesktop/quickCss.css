@@ -4,7 +4,6 @@ body,
 .typeWindows__421ed,
 .app__160d8,
 .bg__960e4,
-.guilds_c48ade,
 .scroller_ef3116 {
     background: rgba(0, 0, 0, 0.08) !important;
 }
@@ -130,7 +129,7 @@ nav.container__2637a {
     background: transparent;
     border-bottom-left-radius: 8px;
 }
-.privateChannels__35e86 {
+.privateChannels_e6b769 {
     background: transparent !important;
 }
 
@@ -154,9 +153,17 @@ nav.container__2637a {
 .privateChannels__35e86 .scroller__99e7c {
     background: rgba(255, 255, 255, var(--var-opacity-left-sidebar)) !important;
 }
+
+.panels__5e434,
+.guilds__5e434,
 .theme-dark .scroller__629e4 {
     background: rgba(0, 0, 0, var(--var-opacity-left-sidebar)) !important;
 }
+
+.sidebar__5e434:after {
+    background: transparent !important
+}
+
 
 .panels_c48ade,
 .container__37e49,
