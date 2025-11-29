@@ -46,7 +46,7 @@
 
     batteryNotifier = {
       frequency = 3600;
-      percentage = 10;
+      percentage = 7;
     };
   };
 
