@@ -142,7 +142,7 @@
         cursor.no_hardware_cursors = true;
 
         misc = {
-          new_window_takes_over_fullscreen = 2;
+          on_focus_under_fullscreen = 2;
           middle_click_paste = false;
         };
 
@@ -152,12 +152,12 @@
         };
 
         layerrule = [
-          "blur, rofi"
-          "noanim, selection"
-          "blur, notifications"
+          "match:namespace rofi, blur on"
+          "match:namespace selection, no_anim on"
+          "match:namespace notifications, blur on"
         ];
 
-        windowrulev2 = "workspace 7 silent, class:^(steam)$";
+        windowrule = "match:class steam, workspace 7 silent";
         workspace = "m[1], layoutopt:orientation:left";
 
         bind = [
