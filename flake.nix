@@ -16,6 +16,19 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
 
+    niri-blurry = {
+      type = "github";
+      owner = "visualglitch91";
+      repo = "niri";
+      ref = "feat/blur";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     split-monitor-workspaces = {
       url = "github:Duckonaut/split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";

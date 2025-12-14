@@ -9,7 +9,7 @@ in
     enable = true;
     systemd = {
       enable = true;
-      target = "hyprland-session.target";
+      target = "graphical-session.target";
     };
     settings.mainBar = {
       layer = "top";
@@ -20,16 +20,26 @@ in
       margin-right = 8;
       modules-left = [
         "hyprland/workspaces"
+        "niri/workspaces"
         "mpd"
       ];
       modules-center = [ "clock" ];
       modules-right = [
         "pulseaudio"
+        "niri/language"
         "hyprland/language"
         "custom/memory"
         "cpu"
         "tray"
       ];
+      "niri/workspaces" = {
+        format = "{icon}";
+        format-icons = {
+          active = "";
+          default = "";
+          empty = "";
+        };
+      };
       "hyprland/workspaces" = {
         disable-scroll = true;
         persistent-workspaces = {
@@ -52,6 +62,9 @@ in
         format-en = "English";
         format-en-colemak_dh = "Colemak-DH";
         format-tr = "Turkish";
+      };
+      "niri/language" = {
+        format = "<span color='#${accent}'>󰌌</span>  {}";
       };
       tray = {
         spacing = 10;

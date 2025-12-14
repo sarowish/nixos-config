@@ -28,6 +28,7 @@
     ./mpd.nix
     ./mpv.nix
     ./neovim
+    ./niri.nix
     ./openrgb
     ./rmpc.nix
     ./rofi.nix
