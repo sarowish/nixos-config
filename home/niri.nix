@@ -494,9 +494,9 @@ in
           (plain "Mod+R" (flag "switch-preset-column-width"))
           (plain "Mod+Shift+R" (flag "switch-preset-window-height"))
           (plain "Mod+Ctrl+R" (flag "reset-window-height"))
-          (plain "Mod+Shift+F" (flag "maximize-column"))
-          (plain "Mod+F" (flag "fullscreen-window"))
-          (plain "Mod+Ctrl+F" (flag "expand-column-to-available-width"))
+          (plain "Mod+F" (flag "expand-column-to-available-width"))
+          (plain "Mod+Shift+F" (flag "fullscreen-window"))
+          (plain "Mod+Ctrl+F" (flag "maximize-column"))
 
           (plain "Mod+Alt+C" (leaf "set-column-width" "-10%"))
           (plain "Mod+Alt+T" (leaf "set-column-width" "+10%"))
