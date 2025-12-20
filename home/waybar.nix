@@ -33,6 +33,8 @@ in
         "tray"
       ];
       "niri/workspaces" = {
+        on-scroll-up = "niri msg action focus-workspace-down";
+        on-scroll-down = "niri msg action focus-workspace-up";
         format = "{icon}";
         format-icons = {
           active = "";
