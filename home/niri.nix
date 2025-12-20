@@ -449,6 +449,7 @@ in
           (plain "Mod+Shift+Ctrl+C" (flag "move-column-to-monitor-left"))
           (plain "Mod+Shift+Ctrl+T" (flag "move-column-to-monitor-right"))
 
+          (plain "Mod+Tab" (flag "focus-workspace-previous"))
           (plain "Mod+BracketLeft" (flag "focus-workspace-up"))
           (plain "Mod+BracketRight" (flag "focus-workspace-down"))
           (node "Mod+WheelScrollUp" { cooldown-ms = 150; } (flag "focus-workspace-down"))
