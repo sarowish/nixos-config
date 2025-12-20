@@ -429,15 +429,19 @@ in
           (node "Mod+O" { repeat = false; } (flag "toggle-overview"))
           (node "Mod+L" { repeat = false; } (flag "close-window"))
 
-          (plain "Mod+C" (flag "focus-column-left"))
-          (plain "Mod+S" (flag "focus-window-down"))
-          (plain "Mod+N" (flag "focus-window-up"))
-          (plain "Mod+T" (flag "focus-column-right"))
+          (plain "Mod+Y" (flag "focus-column-first"))
+          (plain "Mod+C" (flag "focus-column-left-or-last"))
+          (plain "Mod+S" (flag "focus-window-or-workspace-down"))
+          (plain "Mod+N" (flag "focus-window-or-workspace-up"))
+          (plain "Mod+T" (flag "focus-column-right-or-first"))
+          (plain "Mod+V" (flag "focus-column-last"))
 
+          (plain "Mod+Shift+Y" (flag "move-column-to-first"))
           (plain "Mod+Shift+C" (flag "move-column-left"))
           (plain "Mod+Shift+S" (flag "move-window-down"))
           (plain "Mod+Shift+N" (flag "move-window-up"))
           (plain "Mod+Shift+T" (flag "move-column-right"))
+          (plain "Mod+Shift+V" (flag "move-column-to-last"))
 
           (plain "Mod+Ctrl+C" (flag "focus-monitor-left"))
           (plain "Mod+Ctrl+T" (flag "focus-monitor-right"))
@@ -453,8 +457,8 @@ in
           (plain "Mod+Shift+BracketLeft" (flag "move-workspace-up"))
           (plain "Mod+Shift+BracketRight" (flag "move-workspace-down"))
 
-          (plain "Mod+Shift+WheelScrollUp" (flag "focus-column-right"))
-          (plain "Mod+Shift+WheelScrollDown" (flag "focus-column-left"))
+          (plain "Mod+Shift+WheelScrollUp" (flag "focus-column-right-or-first"))
+          (plain "Mod+Shift+WheelScrollDown" (flag "focus-column-left-or-last"))
 
           (plain "Mod+1" (leaf "focus-workspace" 1))
           (plain "Mod+2" (leaf "focus-workspace" 2))
