@@ -447,8 +447,8 @@ in
 
           (plain "Mod+BracketLeft" (flag "focus-workspace-up"))
           (plain "Mod+BracketRight" (flag "focus-workspace-down"))
-          (node "Mod+WheelScrollUp" { cooldown-ms = 150; } (flag "focus-workspace-up"))
-          (node "Mod+WheelScrollDown" { cooldown-ms = 150; } (flag "focus-workspace-down"))
+          (node "Mod+WheelScrollUp" { cooldown-ms = 150; } (flag "focus-workspace-down"))
+          (node "Mod+WheelScrollDown" { cooldown-ms = 150; } (flag "focus-workspace-up"))
 
           (plain "Mod+Shift+BracketLeft" (flag "move-workspace-up"))
           (plain "Mod+Shift+BracketRight" (flag "move-workspace-down"))
