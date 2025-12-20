@@ -11,9 +11,9 @@
     settings = {
       "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json";
 
-      user = with config.programs.git; {
-        name = userName;
-        email = userEmail;
+      user = with config.programs.git.settings.user; {
+        name = name;
+        email = email;
       };
 
       ui.default-command = "log";

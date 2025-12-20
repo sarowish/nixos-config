@@ -1,15 +1,19 @@
 {
   programs.git = {
     enable = true;
-    userName = "Berke Enercan";
-    userEmail = "berkeenercan@tutanota.com";
+
+    settings = {
+      user = {
+        name = "Berke Enercan";
+        email = "berkeenercan@tutanota.com";
+      };
+      credential.helper = "store";
+    };
+
     signing = {
       format = "ssh";
       key = "~/.ssh/id_ed25519.pub";
       signByDefault = true;
-    };
-    extraConfig = {
-      credential.helper = "store";
     };
   };
 
