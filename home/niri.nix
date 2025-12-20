@@ -16,7 +16,7 @@ in
 
   programs.niri = {
     enable = true;
-    package = inputs.niri-blurry.packages.${pkgs.system}.niri;
+    package = inputs.niri-blurry.packages.${pkgs.stdenv.hostPlatform.system}.niri;
 
     settings = {
       # environment.NIXOS_OZONE_WL = "1";

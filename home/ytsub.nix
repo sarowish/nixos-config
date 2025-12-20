@@ -2,7 +2,7 @@
 {
   programs.ytsub = {
     enable = true;
-    package = inputs.ytsub.packages.${pkgs.system}.default;
+    package = inputs.ytsub.packages.${pkgs.stdenv.hostPlatform.system}.default;
     settings = {
       highlight_symbol = "|";
       tabs = [

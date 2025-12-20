@@ -84,7 +84,7 @@
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
       };
       extensions = {
-        packages = with inputs.firefox-addons.packages.${pkgs.system}; [
+        packages = with inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
           bitwarden
           sponsorblock
           darkreader
