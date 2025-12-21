@@ -306,6 +306,12 @@ in
           (leaf "clip-to-geometry" true)
         ])
 
+        (plain "window-rule" [
+          (leaf "match" { app-id = "steam"; })
+          (leaf "open-on-workspace" "7")
+          (leaf "open-maximized" true)
+        ])
+
         (leaf "workspace" "1")
         (leaf "workspace" "2")
         (leaf "workspace" "3")
