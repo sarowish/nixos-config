@@ -9,6 +9,7 @@
   imports = [
     inputs.sops-nix.homeManagerModules.sops
     ../modules/programs/ytsub.nix
+    ../modules/programs/mpd-notify.nix
     ./alacritty.nix
     ./atuin.nix
     ./beets.nix

@@ -47,6 +47,7 @@
     };
 
     ytsub.url = "github:sarowish/ytsub";
+    mpd-notify.url = "github:sarowish/mpd-notify";
   };
 
   outputs =

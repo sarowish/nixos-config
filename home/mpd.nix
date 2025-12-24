@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}:
 {
   home.packages = with pkgs; [
     mpc
@@ -33,5 +38,10 @@
         small_image = "";
       };
     };
+  };
+
+  services.mpd-notify = {
+    enable = true;
+    package = inputs.mpd-notify.packages.${pkgs.stdenv.hostPlatform.system}.default;
   };
 }
