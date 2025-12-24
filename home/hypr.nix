@@ -18,7 +18,7 @@
     enable = true;
     settings =
       let
-        wallpaperFile = "${config.xdg.userDirs.pictures}/Wallpapers/yq8k2d.png";
+        wallpaperFile = "${config.xdg.userDirs.pictures}/Wallpapers/GbkX938.png";
       in
       {
         preload = wallpaperFile;
