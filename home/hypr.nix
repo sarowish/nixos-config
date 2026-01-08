@@ -21,8 +21,10 @@
         wallpaperFile = "${config.xdg.userDirs.pictures}/Wallpapers/GbkX938.png";
       in
       {
-        preload = wallpaperFile;
-        wallpaper = ",${wallpaperFile}";
+        wallpaper = {
+          monitor = "";
+          path = wallpaperFile;
+        };
       };
   };
 
