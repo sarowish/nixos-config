@@ -28,18 +28,6 @@
     };
   };
 
-  services.mpd-discord-rpc = {
-    enable = true;
-    settings = {
-      format = {
-        details = "$title";
-        state = "$artist";
-        large_text = "$album";
-        small_image = "";
-      };
-    };
-  };
-
   services.mpd-notify = {
     enable = true;
     package = inputs.mpd-notify.packages.${pkgs.stdenv.hostPlatform.system}.default;
