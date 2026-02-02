@@ -22,7 +22,7 @@
       in
       {
         wallpaper = {
-          monitor = "";
+          monitor = "*";
           path = wallpaperFile;
         };
       };
