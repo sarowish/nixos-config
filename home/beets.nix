@@ -13,6 +13,7 @@
         "chroma"
         "autobpm"
         "musicbrainz"
+        "mpdupdate"
       ];
 
       fetchart.sources = [
