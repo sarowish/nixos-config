@@ -17,8 +17,6 @@
       };
     };
 
-    quickCss = builtins.readFile ./quickCss.css;
-
     config = {
       useQuickCss = true;
       transparent = true;
