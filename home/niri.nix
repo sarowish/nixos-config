@@ -509,11 +509,11 @@ in
           (plain "Mod+Shift+F" (flag "fullscreen-window"))
           (plain "Mod+Ctrl+F" (flag "maximize-column"))
 
-          (plain "Mod+Alt+C" (leaf "set-column-width" "-10%"))
-          (plain "Mod+Alt+T" (leaf "set-column-width" "+10%"))
+          (plain "Mod+Alt+C" (leaf "set-column-width" "-5%"))
+          (plain "Mod+Alt+T" (leaf "set-column-width" "+5%"))
 
-          (plain "Mod+Alt+S" (leaf "set-window-height" "+10%"))
-          (plain "Mod+Alt+N" (leaf "set-window-height" "-10%"))
+          (plain "Mod+Alt+S" (leaf "set-window-height" "+5%"))
+          (plain "Mod+Alt+N" (leaf "set-window-height" "-5%"))
 
           (plain "Mod+U" (flag "toggle-window-floating"))
           (plain "Mod+Shift+U" (flag "switch-focus-between-floating-and-tiling"))
