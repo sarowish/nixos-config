@@ -21,12 +21,13 @@
       useQuickCss = true;
       transparent = true;
       plugins = {
-        accountPanelServerProfile.enable = true;
+        alwaysExpandRoles.enable = true;
         betterFolders.enable = true;
         expressionCloner.enable = true;
         friendsSince.enable = true;
         memberCount.enable = true;
         mentionAvatars.enable = true;
+        moreQuickReactions.enable = true;
         noReplyMention.enable = true;
         noUnblockToJump.enable = true;
         previewMessage.enable = true;
