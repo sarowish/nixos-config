@@ -46,6 +46,8 @@ in
     Service = {
       ExecStart = "${openrgb_color}/bin/openrgb_color ${config.colors.accent}";
       Type = "oneshot";
+      Restart = "on-failure";
+      RestartSec = "5s";
     };
 
     Install.WantedBy = [
