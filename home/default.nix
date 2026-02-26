@@ -8,10 +8,12 @@
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
+    ../modules/programs/bawa.nix
     ../modules/programs/ytsub.nix
     ../modules/programs/mpd-notify.nix
     ./alacritty.nix
     ./atuin.nix
+    ./bawa.nix
     ./beets.nix
     ./btop.nix
     ./colors.nix

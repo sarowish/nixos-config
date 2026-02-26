@@ -174,6 +174,7 @@
           "SUPER, i, exec, rofi -show drun"
           "SUPER, period, exec, librewolf"
           "SUPER, semicolon, exec, foot ytsub"
+          "SUPER SHIFT, z, exec, foot bawa"
           "SUPER, h, exec, ${pkgs.euphonica}/bin/euphonica"
           "SUPER SHIFT, h, exec, foot ${pkgs.pulsemixer}/bin/pulsemixer"
           "SUPER, d, exec, foot yazi"
@@ -188,6 +189,7 @@
           "SUPER, w, exec, killall -SIGUSR1 .waybar-wrapped"
 
           "SUPER, p, exec, mpc toggle"
+          "SUPER, z, exec, bawa load"
 
           "SUPER, space, layoutmsg, swapwithmaster master"
           "SUPER SHIFT ALT, t, layoutmsg, addmaster master"

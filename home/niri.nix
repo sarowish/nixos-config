@@ -338,6 +338,12 @@ in
               "ytsub"
             ]
           ))
+          (plain "Mod+Shift+z" (
+            leaf "spawn" [
+              "foot"
+              "bawa"
+            ]
+          ))
           (plain "Mod+D" (
             leaf "spawn" [
               "foot"
@@ -406,6 +412,13 @@ in
             leaf "spawn" [
               "mpc"
               "toggle"
+            ]
+          ))
+
+          (plain "Mod+z" (
+            leaf "spawn" [
+              "bawa"
+              "load"
             ]
           ))
 
