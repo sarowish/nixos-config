@@ -22,7 +22,6 @@
       transparent = true;
       plugins = {
         alwaysExpandRoles.enable = true;
-        betterFolders.enable = true;
         expressionCloner.enable = true;
         friendsSince.enable = true;
         memberCount.enable = true;
