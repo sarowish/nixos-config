@@ -9,7 +9,7 @@
         underline-offset = 2;
       };
 
-      colors = with config.colors; {
+      colors-dark = with config.colors; {
         alpha = 0.9;
         background = background;
         foreground = foreground;
