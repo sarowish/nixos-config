@@ -25,6 +25,8 @@
           monitor = "*";
           path = wallpaperFile;
         };
+
+        splash = false;
       };
   };
 
