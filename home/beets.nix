@@ -8,6 +8,7 @@
       paths.default = "$albumartist/[$original_year] $album%aunique{}/$track $title";
 
       plugins = [
+        "edit"
         "fetchart"
         "fromfilename"
         "chroma"
