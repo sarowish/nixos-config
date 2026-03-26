@@ -18,7 +18,7 @@
     enable = true;
     settings =
       let
-        wallpaperFile = "${config.xdg.userDirs.pictures}/Wallpapers/dfgaqgb.jpg";
+        wallpaperFile = "${config.xdg.userDirs.pictures}/Wallpapers/mvtbk0tt7fqg1_m.png";
       in
       {
         wallpaper = {
