@@ -31,6 +31,16 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "25.05";
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 15d";
+  };
+  nix.extraOptions = ''
+    min-free = ${toString (1024 * 1024 * 1024)}
+    max-free = ${toString (8 * 1024 * 1024 * 1024)}
+  '';
+
   programs.steam.enable = true;
   programs.hyprland.enable = true;
   services.hardware.openrgb.enable = true;
