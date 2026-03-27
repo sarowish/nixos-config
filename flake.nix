@@ -46,6 +46,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    vicinae.url = "github:vicinaehq/vicinae";
+    vicinae-extensions = {
+      url = "github:vicinaehq/extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     ytsub.url = "github:sarowish/ytsub";
     bawa.url = "github:sarowish/bawa";
     mpd-notify.url = "github:sarowish/mpd-notify";

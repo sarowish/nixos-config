@@ -327,9 +327,8 @@ in
           (plain "Mod+Period" (leaf "spawn" "librewolf"))
           (plain "Mod+I" (
             leaf "spawn" [
-              "rofi"
-              "-show"
-              "drun"
+              "vicinae"
+              "toggle"
             ]
           ))
           (plain "Mod+SemiColon" (

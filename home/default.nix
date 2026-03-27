@@ -39,6 +39,7 @@
     ./vesktop
     ./waybar.nix
     ./xdg.nix
+    ./vicinae.nix
     ./yazi.nix
     ./ytsub.nix
     ./zathura.nix
