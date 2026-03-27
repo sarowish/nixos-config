@@ -10,7 +10,7 @@
       telemetry.system_info = false;
       pop_to_root_on_close = true;
 
-      theme.dark.name = "catpuccin-mocha";
+      theme.dark.name = "catppuccin-mocha";
     };
 
     extensions = with inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}; [
