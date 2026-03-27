@@ -9,6 +9,7 @@
         "videos"
         "streams"
       ];
+      refresh_on_launch = false;
       refresh_threshold = 0;
       subtitle_languages = [
         "en"
