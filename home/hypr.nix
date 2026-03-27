@@ -14,22 +14,6 @@
     wl-clipboard
   ];
 
-  services.hyprpaper = {
-    enable = true;
-    settings =
-      let
-        wallpaperFile = "${config.xdg.userDirs.pictures}/Wallpapers/mvtbk0tt7fqg1_m.png";
-      in
-      {
-        wallpaper = {
-          monitor = "*";
-          path = wallpaperFile;
-        };
-
-        splash = false;
-      };
-  };
-
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;

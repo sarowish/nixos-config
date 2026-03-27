@@ -13,6 +13,7 @@
     ../modules/programs/mpd-notify.nix
     ./alacritty.nix
     ./atuin.nix
+    ./awww.nix
     ./bawa.nix
     ./beets.nix
     ./btop.nix
