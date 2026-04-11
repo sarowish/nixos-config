@@ -1,16 +1,9 @@
 return {
-    'nvim-treesitter/nvim-treesitter',
-    opts = {
-        highlight = {
-            enable = true,
-        },
-        query_linter = {
-            enable = true,
-            use_virtual_text = true,
-            lint_events = { "BufWrite", "CursorHold" },
-        }
-    },
-    config = function(_, opts)
-        require('nvim-treesitter.configs').setup(opts)
+    "romus204/tree-sitter-manager.nvim",
+    dependencies = {},
+    config = function()
+        require("tree-sitter-manager").setup({
+            ensure_installed = { "bash", "rust", "python", "fish", "toml", "hyprlang", "nix" },
+        })
     end
 }
