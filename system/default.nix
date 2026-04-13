@@ -86,5 +86,7 @@
     tokei
     onefetch
     ffmpeg
+    zip
+    unzip
   ];
 }
