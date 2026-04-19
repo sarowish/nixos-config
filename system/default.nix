@@ -88,5 +88,6 @@
     ffmpeg
     zip
     unzip
+    cachix
   ];
 }

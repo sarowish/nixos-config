@@ -59,6 +59,11 @@
     mpd-notify.url = "github:sarowish/mpd-notify";
   };
 
+  nixConfig = {
+    extra-substituters = [ "https://ytsub.cachix.org" ];
+    extra-trusted-public-keys = [ "ytsub.cachix.org-1:+//b4AUWp/46hIbTHVLhCU+DIP7TowiUWzM6Hsn8Ryg=" ];
+  };
+
   outputs =
     {
       self,
