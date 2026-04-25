@@ -32,7 +32,7 @@
     ./mpd.nix
     ./mpv.nix
     ./neovim
-    ./niri.nix
+    ./niri
     ./openrgb
     ./rmpc.nix
     ./rofi.nix

@@ -21,6 +21,10 @@ in
       settings.xwayland-satellite.path = lib.getExe niriPkgs.xwayland-satellite-unstable;
 
       settings = {
+        includes = lib.mkAfter [
+          ./blur.kdl
+        ];
+
         environment.NIXOS_OZONE_WL = "1";
 
         input = {
