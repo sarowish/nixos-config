@@ -5,6 +5,15 @@ blur {
     saturation 1.0
 }
 
+layer-rule {
+    match namespace="notifications"
+    match namespace="vicinae"
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
 window-rule {
     background-effect {
         blur true
