@@ -108,6 +108,12 @@ in
             draw-border-with-background = false;
             clip-to-geometry = true;
           }
+
+          {
+            matches = [ { app-id = "steam"; } ];
+            open-on-workspace = "7";
+            open-maximized = true;
+          }
         ];
 
         workspaces."1" = { };
@@ -137,6 +143,7 @@ in
           "XF86AudioStop".action = spawn "playerctl" "stop";
           "XF86AudioPrev".action = spawn "playerctl" "previous";
           "XF86AudioNext".action = spawn "playerctl" "next";
+          "Mod+X".action = spawn "cycle_sinks";
           "Mod+G".action = spawn "mpc" "toggle";
           "Mod+z".action = spawn "bawa" "load";
 
