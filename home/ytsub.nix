@@ -16,15 +16,17 @@
         "tr"
       ];
 
-      focused = {
-        fg = "Magenta";
-        bg = "Black";
-        modifiers = "bold";
-      };
+      theme = {
+        focused = {
+          fg = "Magenta";
+          bg = "Black";
+          modifiers = "bold";
+        };
 
-      error = {
-        fg = "Red";
-        modifiers = "italic";
+        error = {
+          fg = "Red";
+          modifiers = "italic";
+        };
       };
     };
   };
