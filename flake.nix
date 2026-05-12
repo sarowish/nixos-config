@@ -59,6 +59,7 @@
     ytsub.url = "github:sarowish/ytsub";
     bawa.url = "github:sarowish/bawa";
     mpd-herald.url = "github:sarowish/mpd-herald";
+    nix-t3code.url = "github:limwa/nix-t3code";
   };
 
   nixConfig = {
