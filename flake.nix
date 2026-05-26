@@ -53,7 +53,7 @@
 
     ytsub.url = "github:sarowish/ytsub";
     bawa.url = "github:sarowish/bawa";
-    mpd-notify.url = "github:sarowish/mpd-notify";
+    mpd-herald.url = "github:sarowish/mpd-herald";
   };
 
   nixConfig = {

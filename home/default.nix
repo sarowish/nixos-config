@@ -10,7 +10,7 @@
     inputs.sops-nix.homeManagerModules.sops
     ../modules/programs/bawa.nix
     ../modules/programs/ytsub.nix
-    ../modules/programs/mpd-notify.nix
+    ../modules/programs/mpd-herald.nix
     ./alacritty.nix
     ./atuin.nix
     ./awww.nix

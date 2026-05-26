@@ -1,7 +1,6 @@
 {
   inputs,
   pkgs,
-  config,
   ...
 }:
 {
@@ -20,16 +19,15 @@
     '';
   };
 
-  services.mpdscribble = {
+  services.mpd-herald = {
     enable = true;
-    endpoints."last.fm" = {
-      username = "cuttxo";
-      passwordFile = config.sops.secrets.last_fm.path;
+    package = inputs.mpd-herald.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    settings = {
+      scrobbling.lastfm = {
+        enable = true;
+        api_key = "f29aa97582fb204d125eeaa93df2ea5d";
+        secret = "ae86e05c49bafbd7c4a3d017ed192bb5";
+      };
     };
-  };
-
-  services.mpd-notify = {
-    enable = true;
-    package = inputs.mpd-notify.packages.${pkgs.stdenv.hostPlatform.system}.default;
   };
 }

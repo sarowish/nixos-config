@@ -12,15 +12,15 @@ let
     mkIf
     ;
 
-  cfg = config.services.mpd-notify;
+  cfg = config.services.mpd-herald;
 
   tomlFormat = pkgs.formats.toml { };
 in
 {
-  options.services.mpd-notify = {
-    enable = mkEnableOption "mpd-notify";
+  options.services.mpd-herald = {
+    enable = mkEnableOption "mpd-herald";
 
-    package = mkPackageOption pkgs "mpd-notify" { nullable = true; };
+    package = mkPackageOption pkgs "mpd-herald" { nullable = true; };
 
     settings = mkOption {
       type = tomlFormat.type;
@@ -31,18 +31,18 @@ in
   config = mkIf cfg.enable {
     home.packages = mkIf (cfg.package != null) [ cfg.package ];
 
-    xdg.configFile."mpd-notify/config.toml" = mkIf (cfg.settings != { }) {
+    xdg.configFile."mpd-herald/config.toml" = mkIf (cfg.settings != { }) {
       source = tomlFormat.generate "config.toml" cfg.settings;
     };
 
-    systemd.user.services.mpd-notify = {
+    systemd.user.services.mpd-herald = {
       Unit = {
-        Description = "Notifier for MPD";
+        Description = "MPD companion for notifications, Discord Rich Presence, and Last.fm scrobbling";
         After = [ "mpd.service" ];
         PartOf = [ "mpd.service" ];
       };
       Service = {
-        ExecStart = "${cfg.package}/bin/mpd-notify";
+        ExecStart = "${cfg.package}/bin/mpd-herald";
         Restart = "on-failure";
       };
       Install.WantedBy = [ "mpd.service" ];

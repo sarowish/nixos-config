@@ -657,7 +657,7 @@
         "type": "github"
       }
     },
-    "mpd-notify": {
+    "mpd-herald": {
       "inputs": {
         "crane": "crane_2",
         "flake-utils": "flake-utils_2",
@@ -665,16 +665,16 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1777899967,
-        "narHash": "sha256-MhCFYI8JTKBP/MxHxIp7NcjAySZc5eaBic0EnihydOA=",
+        "lastModified": 1779678606,
+        "narHash": "sha256-1pef26+B7dRCns0K3MnTPVdHzZh0Tfmu6sFvrpE5s3c=",
         "owner": "sarowish",
-        "repo": "mpd-notify",
-        "rev": "b2fbd6725f7bc3d1acb4b7f0b594c5aaa1aa17e4",
+        "repo": "mpd-herald",
+        "rev": "8d46a195d7eb2e6dc0e3b8e347ef99b744919447",
         "type": "github"
       },
       "original": {
         "owner": "sarowish",
-        "repo": "mpd-notify",
+        "repo": "mpd-herald",
         "type": "github"
       }
     },
@@ -1053,7 +1053,7 @@
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
-        "mpd-notify": "mpd-notify",
+        "mpd-herald": "mpd-herald",
         "niri": "niri",
         "niri-pkgs": "niri-pkgs",
         "nixcord": "nixcord",
@@ -1110,7 +1110,7 @@
     "rust-overlay_3": {
       "inputs": {
         "nixpkgs": [
-          "mpd-notify",
+          "mpd-herald",
           "nixpkgs"
         ]
       },
