@@ -93,5 +93,6 @@
     zip
     unzip
     cachix
+    jless
   ];
 }
