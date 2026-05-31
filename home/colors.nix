@@ -7,7 +7,7 @@
   };
 
   config.colors = {
-    accent = "45a7d8";
+    accent = "196a9f";
 
     background = "1e1e2e";
     foreground = "d9e0ee";
