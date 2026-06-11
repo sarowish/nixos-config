@@ -49,6 +49,10 @@
   home.username = "chels";
   home.homeDirectory = "/home/chels";
 
+  home.packages = [
+    inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
   programs.bash.enable = true;
 
   programs.obs-studio = {
