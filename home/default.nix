@@ -23,6 +23,7 @@
     ./foot.nix
     ./git.nix
     ./gtk.nix
+    ./helium.nix
     ./hyfetch.nix
     ./hypr.nix
     ./imv.nix
@@ -48,10 +49,6 @@
 
   home.username = "chels";
   home.homeDirectory = "/home/chels";
-
-  home.packages = [
-    inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
 
   programs.bash.enable = true;
 
