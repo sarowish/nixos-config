@@ -159,6 +159,7 @@
           "SUPER, f, fullscreen"
           "SUPER, i, exec, rofi -show drun"
           "SUPER, period, exec, librewolf"
+          "SUPER SHIFT, period, exec, helium"
           "SUPER, semicolon, exec, foot ytsub"
           "SUPER SHIFT, z, exec, foot bawa"
           "SUPER, h, exec, ${pkgs.euphonica}/bin/euphonica"
