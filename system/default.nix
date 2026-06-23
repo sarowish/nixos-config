@@ -44,10 +44,6 @@
   programs.steam.enable = true;
   programs.hyprland.enable = true;
   services.hardware.openrgb.enable = true;
-  services.transmission = {
-    enable = true;
-    package = pkgs.transmission_4;
-  };
 
   zramSwap = {
     enable = true;
