@@ -1,7 +1,7 @@
 return {
     'kyazdani42/nvim-tree.lua',
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-    keys = { { '<A-tab>', "<cmd>NvimTreeToggle<cr>", mode = 'n' } },
+    keys = { { '<leader>e', "<cmd>NvimTreeToggle<cr>", mode = 'n' } },
     opts = {
         disable_netrw = true,
         diagnostics = {
