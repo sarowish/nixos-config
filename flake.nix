@@ -10,7 +10,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -67,7 +67,7 @@
       "https://ytsub.cachix.org"
       "https://niri.cachix.org"
       "https://hyprland.cachix.org"
-      "https:vicinae.cachix.org"
+      "https://vicinae.cachix.org"
     ];
     extra-trusted-public-keys = [
       "ytsub.cachix.org-1:+//b4AUWp/46hIbTHVLhCU+DIP7TowiUWzM6Hsn8Ryg="

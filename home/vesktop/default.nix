@@ -26,7 +26,6 @@
         alwaysExpandRoles.enable = true;
         characterCounter.enable = true;
         expressionCloner.enable = true;
-        friendsSince.enable = true;
         gameActivityToggle.enable = true;
         memberCount.enable = true;
         mentionAvatars.enable = true;

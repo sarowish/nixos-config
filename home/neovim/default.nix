@@ -13,6 +13,7 @@ in
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+    sideloadInitLua = true;
 
     extraPackages = with pkgs; [
       nixd
