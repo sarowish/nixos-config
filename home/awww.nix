@@ -1,11 +1,6 @@
+{ pkgs, ... }:
 {
-  config,
-  pkgs,
-  inputs,
-  ...
-}:
-{
-  home.packages = [ inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww ];
+  home.packages = [ pkgs.awww ];
 
   systemd.user.services.awww-daemon = {
     Unit = {
@@ -14,7 +9,7 @@
       After = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww}/bin/awww-daemon";
+      ExecStart = "${pkgs.awww}/bin/awww-daemon";
       Restart = "on-failure";
     };
     Install = {
