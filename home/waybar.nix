@@ -7,6 +7,9 @@ in
 {
   programs.waybar = {
     enable = true;
+    package = pkgs.waybar.overrideAttrs (old: {
+      patches = (old.patches or [ ]) ++ [ ../patches/waybar-hyprland-lua.patch ];
+    });
     systemd = {
       enable = true;
       targets = [ "graphical-session.target" ];
@@ -44,13 +47,9 @@ in
       };
       "hyprland/workspaces" = {
         disable-scroll = true;
-        persistent-workspaces = {
-          "*" = 9;
-        };
         all-outputs = false;
-        on-scroll-up = "hyprctl dispatch workspace m+1";
-        on-scroll-down = "hyprctl dispatch workspace m-1";
-        on-click = "activate";
+        on-scroll-up = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"m+1\" })'";
+        on-scroll-down = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"m-1\" })'";
         format = "{icon}";
         format-icons = {
           urgent = "";

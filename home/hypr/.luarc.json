@@ -1,0 +1,10 @@
+{
+  "diagnostics.globals": [
+    "hl",
+    "nix"
+  ],
+  "workspace.library": [
+    "/home/chels/.config/hypr/stubs",
+    "types"
+  ]
+}

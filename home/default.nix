@@ -38,7 +38,7 @@ in
     ./gtk.nix
     ./helium.nix
     ./hyfetch.nix
-    ./hypr.nix
+    ./hypr
     ./imv.nix
     ./jujutsu.nix
     ./librewolf
