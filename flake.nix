@@ -58,6 +58,7 @@
     bawa.url = "github:sarowish/bawa";
     mpd-herald.url = "github:sarowish/mpd-herald";
     nix-t3code.url = "github:limwa/nix-t3code";
+    codex.url = "github:sadjow/codex-cli-nix";
   };
 
   nixConfig = {
