@@ -3,6 +3,7 @@
   pkgs,
   lib,
   inputs,
+  osConfig,
   ...
 }:
 let
@@ -28,6 +29,10 @@ in
         environment.NIXOS_OZONE_WL = "1";
 
         input = {
+          keyboard.xkb = with osConfig.services.xserver.xkb; {
+            inherit layout options;
+          };
+
           focus-follows-mouse = {
             enable = true;
             max-scroll-amount = "0%";
