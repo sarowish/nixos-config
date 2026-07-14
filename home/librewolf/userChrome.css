@@ -6,8 +6,8 @@
 :root {
   --tabpanel-background-color: transparent !important;
   --tab-selected-bgcolor: rgba(66, 65, 77, 0.4) !important;
-  --toolbox-bgcolor: transparent !important;
-  --toolbox-bgcolor-inactive: transparent !important;
+  --toolbox-background-color: transparent !important;
+  --toolbox-background-color-inactive: transparent !important;
   background: transparent !important;
 }
 
