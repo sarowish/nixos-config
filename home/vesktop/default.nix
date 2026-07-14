@@ -1,5 +1,24 @@
-{ inputs, ... }:
 {
+  inputs,
+  pkgs,
+  ...
+}:
+
+let
+  vesktopWithByedpi = pkgs.symlinkJoin {
+    name = "vesktop-with-byedpi";
+    paths = [ pkgs.vesktop ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram "$out/bin/vesktop" \
+        --add-flags "--proxy-server=socks5://127.0.0.1:1080" \
+        --add-flags "--disable-quic"
+    '';
+  };
+in
+{
+  home.packages = [ vesktopWithByedpi ];
+
   imports = [ inputs.nixcord.homeModules.nixcord ];
 
   programs.nixcord = {
@@ -8,6 +27,7 @@
     vesktop = {
       enable = true;
       autoscroll.enable = true;
+      installPackage = false;
 
       settings = {
         discordBranch = "stable";
