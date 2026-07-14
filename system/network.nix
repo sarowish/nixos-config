@@ -28,6 +28,4 @@
       Domains = [ "~." ];
     };
   };
-
-  services.mullvad-vpn.enable = true;
 }
