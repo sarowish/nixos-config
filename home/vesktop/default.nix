@@ -5,9 +5,17 @@
 }:
 
 let
+  vesktop =
+    (pkgs.vesktop.override {
+      electron_40 = pkgs.electron_42;
+    }).overrideAttrs
+      (old: {
+        preBuild = builtins.replaceStrings [ "!=" ] [ "-gt" ] old.preBuild;
+      });
+
   vesktopWithByedpi = pkgs.symlinkJoin {
     name = "vesktop-with-byedpi";
-    paths = [ pkgs.vesktop ];
+    paths = [ vesktop ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram "$out/bin/vesktop" \
