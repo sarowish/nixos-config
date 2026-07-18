@@ -5,6 +5,19 @@
   ...
 }:
 
+let
+  t3code =
+    inputs.nix-t3code.packages.${pkgs.stdenv.hostPlatform.system}.t3code.overrideAttrs
+      (oldAttrs: {
+        # Electron resolves the app entrypoint from package.json. nix-t3code 0.0.28
+        # omitted it from the installed desktop directory.
+        installPhase =
+          builtins.replaceStrings
+            [ "apps/desktop/{node_modules,dist-electron}" ]
+            [ "apps/desktop/{package.json,node_modules,dist-electron}" ]
+            oldAttrs.installPhase;
+      });
+in
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
@@ -83,7 +96,7 @@
   home.stateVersion = "26.05";
 
   home.packages = [
-    inputs.nix-t3code.packages.${pkgs.stdenv.hostPlatform.system}.t3code
+    t3code
     inputs.codex.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
