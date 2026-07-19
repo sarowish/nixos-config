@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   ...
@@ -7,7 +8,7 @@
 let
   vesktopWithByedpi = pkgs.symlinkJoin {
     name = "vesktop-with-byedpi";
-    paths = [ pkgs.vesktop ];
+    paths = [ config.programs.nixcord.finalPackage.vesktop ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram "$out/bin/vesktop" \
