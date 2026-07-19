@@ -18,6 +18,15 @@
 
       ui.default-command = "log";
 
+      aliases.history = {
+        definition = [
+          "log"
+          "-r"
+          "..@"
+        ];
+        doc = "Show all revision history";
+      };
+
       signing = {
         behavior = "drop";
         backend = "ssh";
