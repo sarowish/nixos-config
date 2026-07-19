@@ -3,7 +3,7 @@ return {
     dependencies = {},
     config = function()
         require("tree-sitter-manager").setup({
-            ensure_installed = { "bash", "rust", "python", "fish", "toml", "hyprlang", "nix", "javascript" },
+            ensure_installed = { "bash", "rust", "python", "fish", "toml", "hyprlang", "nix", "javascript", "typescript", "tsx" },
         })
     end
 }
