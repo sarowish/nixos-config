@@ -7,7 +7,7 @@ blur {
 
 layer-rule {
     match namespace="notifications"
-    match namespace="vicinae"
+    match namespace="rofi"
     background-effect {
         blur true
         xray false

@@ -135,7 +135,7 @@ in
           "Mod+Shift+Return".action = spawn "alacritty";
           "Mod+Period".action = spawn "librewolf";
           "Mod+Shift+Period".action = spawn "helium";
-          "Mod+I".action = spawn "vicinae" "toggle";
+          "Mod+I".action = spawn "rofi" "-show" "drun";
           "Mod+SemiColon".action = spawn "foot" "ytsub";
           "Mod+Shift+Z".action = spawn "foot" "bawa";
           "Mod+D".action = spawn "foot" "yazi";

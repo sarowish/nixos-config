@@ -48,12 +48,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    vicinae.url = "github:vicinaehq/vicinae";
-    vicinae-extensions = {
-      url = "github:vicinaehq/extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     ytsub.url = "github:sarowish/ytsub";
     bawa.url = "github:sarowish/bawa";
     mpd-herald.url = "github:sarowish/mpd-herald";
@@ -66,7 +60,6 @@
       "https://ytsub.cachix.org"
       "https://niri.cachix.org"
       "https://hyprland.cachix.org"
-      "https://vicinae.cachix.org"
     ];
     extra-trusted-public-keys = [
       "ytsub.cachix.org-1:+//b4AUWp/46hIbTHVLhCU+DIP7TowiUWzM6Hsn8Ryg="
