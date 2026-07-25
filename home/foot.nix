@@ -11,6 +11,7 @@
 
       colors-dark = with config.colors; {
         alpha = 0.9;
+        blur = true;
         background = background;
         foreground = foreground;
 
