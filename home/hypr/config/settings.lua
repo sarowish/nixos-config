@@ -54,7 +54,7 @@ hl.config({
     decoration = {
         rounding = 8,
         shadow = {
-            range = 6,
+            range = 3,
             render_power = 3,
             color = "rgba(" .. nix.accent .. "ee)",
             color_inactive = "rgba(000000ee)",
