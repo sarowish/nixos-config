@@ -104,8 +104,8 @@ hl.curve("almostLinear", {
 local animations = {
     { leaf = "global",        enabled = false },
     { leaf = "windows",       enabled = true, speed = 3.0,  bezier = "easeOutQuint" },
-    { leaf = "windowsIn",     enabled = true, speed = 3.0,  bezier = "easeOutQuint", style = "popin 85%" },
-    { leaf = "windowsOut",    enabled = true, speed = 3.0,  bezier = "linear",       style = "popin 85%" },
+    { leaf = "windowsIn",     enabled = true, speed = 3.0,  bezier = "easeOutQuint", style = "popin" },
+    { leaf = "windowsOut",    enabled = true, speed = 3.0,  bezier = "linear",       style = "popin" },
     { leaf = "fadeShadow",    enabled = true, speed = 5,    bezier = "easeOutQuart" },
     { leaf = "border",        enabled = true, speed = 5,    bezier = "easeOutQuart" },
     { leaf = "fadeIn",        enabled = true, speed = 1.4,  bezier = "almostLinear" },
@@ -115,7 +115,7 @@ local animations = {
     { leaf = "layersOut",     enabled = true, speed = 1.5,  bezier = "linear",       style = "fade" },
     { leaf = "fadeLayersIn",  enabled = true, speed = 1.5,  bezier = "almostLinear" },
     { leaf = "fadeLayersOut", enabled = true, speed = 1.2,  bezier = "almostLinear" },
-    { leaf = "workspaces",    enabled = true, speed = 2.5,  bezier = "easeOutQuart", style = "slidefade 20%" },
+    { leaf = "workspaces",    enabled = true, speed = 3.5,    bezier = "easeOutQuart", style = "slidevert" },
 }
 
 for _, animation in ipairs(animations) do
