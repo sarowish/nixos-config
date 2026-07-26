@@ -40,7 +40,7 @@ hl.config({
             active_border = "rgb(" .. nix.accent .. ")",
             inactive_border = "rgba(595959aa)",
         },
-        layout = "master",
+        layout = "scrolling",
         resize_on_border = true,
         hover_icon_on_border = false,
         no_focus_fallback = true,
@@ -49,6 +49,7 @@ hl.config({
     binds = {
         workspace_back_and_forth = true,
         allow_workspace_cycles = true,
+        scroll_event_delay = 0,
     },
 
     decoration = {
@@ -72,6 +73,12 @@ hl.config({
         new_status = "master",
         new_on_top = true,
         orientation = "right",
+    },
+
+    scrolling = {
+        fullscreen_on_one_column = false,
+        follow_min_visible = 1.0,
+        explicit_column_widths = "0.33, 0.5, 1.0",
     },
 
     cursor = {
@@ -115,7 +122,7 @@ local animations = {
     { leaf = "layersOut",     enabled = true, speed = 1.5,  bezier = "linear",       style = "fade" },
     { leaf = "fadeLayersIn",  enabled = true, speed = 1.5,  bezier = "almostLinear" },
     { leaf = "fadeLayersOut", enabled = true, speed = 1.2,  bezier = "almostLinear" },
-    { leaf = "workspaces",    enabled = true, speed = 3.5,    bezier = "easeOutQuart", style = "slidevert" },
+    { leaf = "workspaces",    enabled = true, speed = 3.5,  bezier = "easeOutQuart", style = "slidevert" },
 }
 
 for _, animation in ipairs(animations) do
