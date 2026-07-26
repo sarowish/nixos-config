@@ -90,21 +90,6 @@ hl.config({
         middle_click_paste = false,
     },
 
-    plugin = {
-        scrolloverview = {
-            scale = 0.60,
-            workspace_gap = 25,
-            wallpaper = 2,
-            blur = true,
-
-            shadow = {
-                enabled = true,
-                range = 6,
-                render_power = 3,
-                color = "rgba(" .. nix.accent .. "ee)",
-            },
-        },
-    },
 })
 
 hl.curve("easeOutQuart", {
