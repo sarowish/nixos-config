@@ -8,9 +8,9 @@ in
     enable = true;
 
     settings = {
-      default_session.command = "${tuigreet} --time --remember --asterisks --cmd niri-session";
+      default_session.command = "${tuigreet} --time --remember --asterisks --cmd start-hyprland";
       initial_session = {
-        command = "niri-session";
+        command = "start-hyprland";
         user = "chels";
       };
     };
