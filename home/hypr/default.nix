@@ -9,7 +9,9 @@
 
 let
   inherit (config.lib.file) mkOutOfStoreSymlink;
-  hyprlandPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+  hyprlandPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprlandPackage = hyprlandPackages.hyprland;
+  scrollOverview = inputs.scroll-overview.packages.${pkgs.stdenv.hostPlatform.system}.scrolloverview;
 
   runtimeConfig = {
     accent = config.colors.accent;
@@ -38,8 +40,10 @@ in
     configType = "lua";
     xwayland.enable = true;
     package = hyprlandPackage;
-    portalPackage =
-      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    portalPackage = hyprlandPackages.xdg-desktop-portal-hyprland;
+    plugins = [
+      "${scrollOverview}/lib/libscrolloverview.so"
+    ];
 
     extraConfig = ''
       package.path = package.path

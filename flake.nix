@@ -31,6 +31,11 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    scroll-overview = {
+      url = "github:yayuuu/hyprland-scroll-overview/new-release";
+      inputs.hyprland.follows = "hyprland";
+    };
+
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -80,6 +85,7 @@
     {
       nixosConfigurations.be = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           disko.nixosModules.disko
 

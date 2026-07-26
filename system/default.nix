@@ -1,5 +1,7 @@
-{ pkgs, ... }:
-
+{ pkgs, inputs, ... }:
+let
+  hyprlandPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -43,7 +45,11 @@
   '';
 
   programs.steam.enable = true;
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    package = hyprlandPackages.hyprland;
+    portalPackage = hyprlandPackages.xdg-desktop-portal-hyprland;
+  };
   services.hardware.openrgb.enable = true;
 
   zramSwap = {
