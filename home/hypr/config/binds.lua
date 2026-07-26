@@ -233,9 +233,53 @@ bind("SUPER + ALT + t", hl.dsp.layout("colresize +0.05"))
 bind("SUPER + ALT + n", hl.dsp.window.resize({ x = 0, y = -20, relative = true }), { repeating = true })
 bind("SUPER + ALT + s", hl.dsp.window.resize({ x = 0, y = 20, relative = true }), { repeating = true })
 
+local double_right_click_pending = false
+local double_right_click_generation = 0
+local double_right_click_window
+
+local function fit_on_double_right_click()
+    local ctx = get_active_scrolling_context()
+    if not ctx then return end
+
+    local window = ctx.window
+    if not window then return end
+
+    double_right_click_generation = double_right_click_generation + 1
+    local generation = double_right_click_generation
+
+    if double_right_click_pending
+        and window == double_right_click_window
+    then
+        double_right_click_pending = false
+        double_right_click_window = nil
+
+        if ctx.column.width == 1.0 then
+            local default_width = hl.get_config("scrolling.column_width")
+            hl.dispatch(hl.dsp.layout("colresize " .. default_width))
+        else
+            hl.dispatch(hl.dsp.layout("fit active"))
+        end
+        return
+    end
+
+    double_right_click_pending = true
+    double_right_click_window = window
+
+    hl.timer(function()
+        if generation == double_right_click_generation then
+            double_right_click_pending = false
+            double_right_click_window = nil
+        end
+    end, {
+        timeout = 300,
+        type = "oneshot",
+    })
+end
+
 bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
 bind("SUPER + mouse:275", hl.dsp.focus({ workspace = "m-1" }))
 bind("SUPER + mouse:276", hl.dsp.focus({ workspace = "m+1" }))
 bind("SUPER + mouse_down", hl.dsp.layout("focus left"))
 bind("SUPER + mouse_up", hl.dsp.layout("focus right"))
+bind("SUPER + mouse:273", fit_on_double_right_click, { click = true })
