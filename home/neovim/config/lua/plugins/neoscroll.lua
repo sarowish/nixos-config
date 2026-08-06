@@ -6,5 +6,6 @@ return {
     opts = {
         hide_cursor = false,
         easing_function = "quadratic",
+        ignored_events = { "CursorMoved" },
     },
 }
