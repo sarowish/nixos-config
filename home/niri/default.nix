@@ -98,6 +98,18 @@ in
             inactive.color = "#505050";
           };
           border.enable = false;
+
+          shadow = {
+            enable = true;
+            softness = 10;
+            spread = 2;
+            offset = {
+              x = 0;
+              y = 0;
+            };
+            color = "#${accent}ee";
+            inactive-color = "#000000ee";
+          };
         };
 
         hotkey-overlay.skip-at-startup = true;
