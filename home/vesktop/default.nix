@@ -40,6 +40,9 @@ in
 
     quickCss = builtins.readFile ./quickCss.css;
 
+    userPlugins."mpdControls.desktop" = "github:sarowish/mpdControls/3f65bfd2420075068ecf5e75e6ab1f89106930cb";
+    extraConfig.plugins.MPDControls.enable = true;
+
     config = {
       useQuickCss = true;
       transparent = true;
