@@ -97,5 +97,6 @@ in
     unzip
     cachix
     jless
+    android-tools
   ];
 }
