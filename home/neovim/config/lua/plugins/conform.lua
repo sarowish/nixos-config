@@ -6,7 +6,9 @@ return {
     opts = {
         formatters_by_ft = {
             python = { "ruff_format", "ruff_organize_imports" },
-            javascript = { "prettier" }
+            javascript = { "prettier" },
+            svelte = { "prettier" },
+            html = { "prettier" },
         }
     },
 }
