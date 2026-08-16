@@ -4,9 +4,7 @@ return {
     filetypes = { 'python' },
     settings = {
         basedpyright = {
-            analysis = {
-                typeCheckingMode = "off"
-            }
+
         }
     }
 }
