@@ -59,7 +59,7 @@ return {
                 gitsigns = true,
                 telescope = true,
                 nvimtree = {
-                    enabled = true,
+                    enabled = false,
                     show_root = true,
                     transparent_panel = false,
                 },

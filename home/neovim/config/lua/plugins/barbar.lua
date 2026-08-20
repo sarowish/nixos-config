@@ -7,9 +7,6 @@ return {
         icons = {
             button = '✖'
         },
-        sidebar_filetypes = {
-            NvimTree = true
-        }
     },
     config = function(_, opts)
         local set = vim.keymap.set
