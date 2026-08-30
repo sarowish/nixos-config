@@ -5,6 +5,9 @@ return {
     },
     opts = {
         formatters_by_ft = {
+            elixir = { "mix" },
+            eelixir = { "mix" },
+            heex = { "mix" },
             python = { "ruff_format", "ruff_organize_imports" },
             javascript = { "prettier" },
             svelte = { "prettier" },
