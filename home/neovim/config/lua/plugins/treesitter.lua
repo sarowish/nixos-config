@@ -9,6 +9,7 @@ return {
                 "python",
                 "fish",
                 "toml",
+                "yaml",
                 "hyprlang",
                 "nix",
                 "javascript",
