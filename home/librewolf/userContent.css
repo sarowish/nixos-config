@@ -63,7 +63,7 @@
   }
 
   html {
-    background-color: rgba(31, 33, 38, 0.6) !important;
+    background-color: rgba(31, 33, 38, 0.5) !important;
   }
 
   .bg-neutral-background {
@@ -116,7 +116,7 @@
 
   ytd-app,
   ytd-mini-guide-renderer {
-    background-color: rgba(31, 33, 38, 0.6) !important;
+    background-color: rgba(31, 33, 38, 0.5) !important;
   }
 
   ytd-mini-guide-entry-renderer {
@@ -187,7 +187,7 @@
   }
 
   html {
-    background-color: rgba(31, 33, 38, 0.6) !important;
+    background-color: rgba(31, 33, 38, 0.5) !important;
   }
 
   body {

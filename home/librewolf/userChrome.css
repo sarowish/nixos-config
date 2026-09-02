@@ -1,9 +1,10 @@
 #browser:not(.browser-toolbox-background) {
-  background-color: transparent !important;
+  background-color: var(--user-chrome-background-color) !important;
   background-image: none !important;
 }
 
 :root {
+  --user-chrome-background-color: rgba(0, 0, 0, 0.36);
   --tabpanel-background-color: transparent !important;
   --tab-selected-bgcolor: rgba(66, 65, 77, 0.4) !important;
   --toolbox-background-color: transparent !important;
@@ -11,10 +12,17 @@
   background: transparent !important;
 }
 
-#navigator-toolbox,
-#nav-bar,
-#sidebar-main {
-  background-color: rgba(0, 0, 0, 0.2) !important;
+#navigator-toolbox {
+  background-color: var(--user-chrome-background-color) !important;
+}
+
+#sidebar-container,
+#sidebar-launcher-splitter {
+  background-color: transparent !important;
+}
+
+#sidebar-container[sidebar-launcher-expanded] {
+  background-color: rgba(0, 0, 0, 0.9) !important;
 }
 
 #urlbar-background,
@@ -23,16 +31,4 @@
 }
 #urlbar[open="true"] > #urlbar-background {
   background-color: rgb(255, 255, 255) !important;
-}
-
-#sidebar-main {
-  &[sidebar-launcher-expanded] {
-    background-color: black !important;
-  }
-}
-
-#sidebar-main {
-  &[sidebar-launcher-expanded] {
-    background-color: rgba(0, 0, 0, 0.9) !important;
-  }
 }
