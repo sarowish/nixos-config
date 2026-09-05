@@ -1,0 +1,11 @@
+@define-color accent #fb817a;
+
+window.Bar {
+  color: white;
+  background: transparent;
+  font-family: "Fira Sans Book", "Nerd Fonts";
+}
+
+.accent {
+  color: #{"@accent"};
+}

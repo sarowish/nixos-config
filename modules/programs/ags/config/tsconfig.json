@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "ags/gtk4",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "ags": ["./.direnv/ags-types/ags/index.d.ts"],
+      "ags/*": ["./.direnv/ags-types/ags/*"],
+      "gnim": ["./.direnv/ags-types/gnim/index.d.ts"],
+      "gnim/*": ["./.direnv/ags-types/gnim/*"]
+    },
+    "target": "ES2022"
+  }
+}

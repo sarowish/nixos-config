@@ -29,6 +29,7 @@ in
 
     home-manager.users.chels.imports = [
       homeManager.chels
+      homeManager.ags
       homeManager.alacritty
       homeManager.atuin
       homeManager.awww
@@ -61,7 +62,6 @@ in
       homeManager.shell
       homeManager.tealdeer
       homeManager.vesktop
-      homeManager.waybar
       homeManager.xdg
       homeManager.yazi
       homeManager.ytsub
