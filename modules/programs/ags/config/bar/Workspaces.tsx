@@ -13,7 +13,7 @@ export default function Workspaces({
 }) {
   const workspaces = niri.state((state) => workspacesOnOutput(state, output))
   return (
-    <box class="Workspaces" visible={workspaces((items) => items.length > 0)}>
+    <box class="Workspaces" marginEnd={8} visible={workspaces((items) => items.length > 0)}>
       <Gtk.EventControllerScroll
         flags={Gtk.EventControllerScrollFlags.VERTICAL | Gtk.EventControllerScrollFlags.DISCRETE}
         onScroll={(_, _dx, dy) => {

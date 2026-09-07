@@ -4,6 +4,7 @@ import type { createNiri } from "../services/niri"
 import type { createMpd } from "../services/mpd"
 import type { createSystemStats } from "../services/system"
 import Workspaces from "./Workspaces"
+import WindowMap from "./WindowMap"
 import KeyboardLayout from "./KeyboardLayout"
 import Clock from "./Clock"
 import Volume from "./Volume"
@@ -18,6 +19,7 @@ type Services = {
 }
 
 export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; services: Services }) {
+  const output = monitor.connector ?? ""
   return (
     <window
       visible
@@ -35,8 +37,13 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
       $={(window) => onCleanup(() => window.destroy())}
     >
       <centerbox>
-        <box $type="start" spacing={8}>
-          <Workspaces niri={services.niri} output={monitor.connector ?? ""} />
+        <box $type="start">
+          <Workspaces niri={services.niri} output={output} />
+          <WindowMap
+            niri={services.niri}
+            output={output}
+            outputHeight={monitor.get_geometry().height}
+          />
           <Media mpd={services.mpd} />
         </box>
         <Clock $type="center" />

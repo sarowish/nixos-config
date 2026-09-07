@@ -52,6 +52,7 @@ in
 
       xdg.configFile."ags-theme.css".text = ''
         @define-color accent #${config.colors.accent};
+        @define-color urgent #${config.colors.yellow};
       '';
 
       programs.ags = {

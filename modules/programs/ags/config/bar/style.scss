@@ -22,6 +22,26 @@ window.Bar {
     }
   }
 
+  .WindowMap {
+    .tile {
+      border-radius: 1px;
+      background-color: rgba(255, 255, 255, 0.25);
+      transition: background-color 180ms ease-out;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+
+      &.focused {
+        background-color: #{"@accent"};
+      }
+
+      &.urgent {
+        background-color: #{"@urgent"};
+      }
+    }
+  }
+
   .Clock,
   .Cpu {
     padding: 0 4px;

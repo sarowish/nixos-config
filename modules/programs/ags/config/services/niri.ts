@@ -40,7 +40,7 @@ export function createNiri() {
   return { state }
 }
 
-export function focusWorkspace(id: number) {
+function requestAction(action: Record<string, unknown>) {
   const path = GLib.getenv("NIRI_SOCKET")
   if (!path) return
   const client = new Gio.SocketClient({ timeout: 2 })
@@ -49,10 +49,10 @@ export function focusWorkspace(id: number) {
     try {
       connection = client.connect_finish(result)
     } catch (error) {
-      console.error("Niri workspace:", error)
+      console.error("Niri action:", error)
       return
     }
-    const request = JSON.stringify({ Action: { FocusWorkspace: { reference: { Id: id } } } })
+    const request = JSON.stringify({ Action: action })
     const output = connection.get_output_stream()
     output.write_all_async(
       new TextEncoder().encode(`${request}\n`),
@@ -65,18 +65,26 @@ export function focusWorkspace(id: number) {
           input.read_line_async(GLib.PRIORITY_DEFAULT, null, (_, reply) => {
             try {
               const [line] = input.read_line_finish_utf8(reply)
-              if (line && "Err" in JSON.parse(line)) console.error("Niri workspace:", line)
+              if (line && "Err" in JSON.parse(line)) console.error("Niri action:", line)
             } catch (error) {
-              console.error("Niri workspace:", error)
+              console.error("Niri action:", error)
             } finally {
               connection.close(null)
             }
           })
         } catch (error) {
-          console.error("Niri workspace:", error)
+          console.error("Niri action:", error)
           connection.close(null)
         }
       },
     )
   })
+}
+
+export function focusWorkspace(id: number) {
+  requestAction({ FocusWorkspace: { reference: { Id: id } } })
+}
+
+export function focusWindow(id: number) {
+  requestAction({ FocusWindow: { id } })
 }
