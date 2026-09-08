@@ -136,6 +136,13 @@
               }
             ];
 
+            layer-rules = [
+              {
+                matches = [ { namespace = "^awww-daemonoverview$"; } ];
+                place-within-backdrop = true;
+              }
+            ];
+
             workspaces."1" = { };
             workspaces."2" = { };
             workspaces."3" = { };
