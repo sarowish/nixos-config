@@ -1,9 +1,15 @@
 {
   flake.modules.homeManager.zathura =
-    { config, ... }:
+    { config, pkgs, ... }:
+    let
+      zathuraCore = pkgs.zathuraPkgs.zathura_core.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ../../patches/zathura-preserve-transparent-page-background.patch ];
+      });
+    in
     {
       programs.zathura = {
         enable = true;
+        package = pkgs.zathura.override { zathura_core = zathuraCore; };
         options = with config.colors; {
           statusbar-h-padding = 0;
           statusbar-v-padding = 0;

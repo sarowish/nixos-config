@@ -1,0 +1,13 @@
+diff --git a/zathura/page-widget.c b/zathura/page-widget.c
+index dc3933a..18035e7 100644
+--- a/zathura/page-widget.c
++++ b/zathura/page-widget.c
+@@ -573,7 +573,7 @@ static gboolean zathura_page_widget_draw(GtkWidget* widget, cairo_t* cairo) {
+         /* pixman bilinear downscaling is slow */
+         cairo_pattern_set_filter(cairo_get_source(cairo), CAIRO_FILTER_FAST);
+       }
+-      cairo_set_operator(cairo, CAIRO_OPERATOR_SOURCE);
++      cairo_set_operator(cairo, CAIRO_OPERATOR_OVER);
+       cairo_paint(cairo);
+       cairo_restore(cairo);
+       /* All but the last jobs requested here are aborted during zooming.
