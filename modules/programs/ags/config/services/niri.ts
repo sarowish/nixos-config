@@ -88,3 +88,7 @@ export function focusWorkspace(id: number) {
 export function focusWindow(id: number) {
   requestAction({ FocusWindow: { id } })
 }
+
+export function closeWindow(id: number) {
+  requestAction({ CloseWindow: { id } })
+}

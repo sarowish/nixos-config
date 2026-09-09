@@ -1,7 +1,7 @@
 import { createEffect, onCleanup } from "ags"
-import { Gtk } from "ags/gtk4"
+import { Gtk, Gdk } from "ags/gtk4"
 import GLib from "gi://GLib?version=2.0"
-import { focusWindow, type createNiri } from "../services/niri"
+import { closeWindow, focusWindow, type createNiri } from "../services/niri"
 import {
   activeWorkspaceOnOutput,
   windowColumnsOnOutput,
@@ -138,6 +138,7 @@ export default function WindowMap({
 
   function createTile(tile: WindowMapTile, animate = true) {
     const button = new Gtk.Button({ focusable: false })
+
     const start = animate ? collapsed(tile) : tile
     const animated: AnimatedTile = {
       button,
@@ -152,6 +153,11 @@ export default function WindowMap({
     button.add_css_class("tile")
     updateClasses(button, tile.window)
     button.connect("clicked", () => focusWindow(tile.window.id))
+
+    const middleClick = new Gtk.GestureClick({ button: Gdk.BUTTON_MIDDLE })
+    middleClick.connect("pressed", (_source, _nPress, _x, _y) => closeWindow(tile.window.id))
+    button.add_controller(middleClick)
+
     fixed.put(button, start.x, start.y)
     button.set_visible(true)
     applyGeometry(animated)
