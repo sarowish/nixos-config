@@ -38,7 +38,7 @@
       xdg.configFile."hypr/stubs".source = "${hyprlandPackage}/share/hypr/stubs";
 
       wayland.windowManager.hyprland = {
-        enable = false;
+        enable = true;
         configType = "lua";
         xwayland.enable = true;
         package = hyprlandPackage;
