@@ -52,6 +52,8 @@ in
 
       xdg.configFile."ags-theme.css".text = ''
         @define-color accent #${config.colors.accent};
+        @define-color background #${config.colors.background};
+        @define-color foreground #${config.colors.foreground};
         @define-color urgent #${config.colors.yellow};
       '';
 

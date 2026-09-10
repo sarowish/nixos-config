@@ -4,9 +4,11 @@ import { Gdk, Gtk } from "ags/gtk4"
 import GLib from "gi://GLib?version=2.0"
 import { readFile } from "ags/file"
 import Bar from "./bar/Bar"
+import VolumeOsd from "./osd/VolumeOsd"
 import { createNiri } from "./services/niri"
 import { createMpd } from "./services/mpd"
 import { createSystemStats } from "./services/system"
+import { createVolumeOsd } from "./services/volume-osd"
 import style from "./style.scss"
 
 const themePath = `${GLib.get_user_config_dir()}/ags-theme.css`
@@ -25,6 +27,7 @@ app.start({
       niri: createNiri(),
       mpd: createMpd(),
       system: createSystemStats(),
+      volumeOsd: createVolumeOsd(),
     }
 
     const windows = new Map<Gdk.Monitor, () => void>()
@@ -41,6 +44,9 @@ app.start({
         if (!windows.has(monitor))
           createRoot((dispose) => {
             app.add_window(Bar({ monitor, services }))
+            app.add_window(
+              VolumeOsd({ monitor, niri: services.niri, volumeOsd: services.volumeOsd }),
+            )
             windows.set(monitor, dispose)
           })
       }

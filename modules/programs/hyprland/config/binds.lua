@@ -215,7 +215,7 @@ exec("XF86AudioMute", "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", { locked = t
 
 exec(
     "XF86AudioRaiseVolume",
-    "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
+    "wpctl set-volume --limit 1.5 @DEFAULT_AUDIO_SINK@ 5%+",
     { repeating = true }
 )
 exec(

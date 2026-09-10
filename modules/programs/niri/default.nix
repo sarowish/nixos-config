@@ -164,7 +164,9 @@
               "Mod+H".action = spawn "euphonica";
               "Mod+Shift+H".action = spawn "foot" "pulsemixer";
 
-              "XF86AudioRaiseVolume".action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+";
+              "XF86AudioRaiseVolume".action =
+                spawn "wpctl" "set-volume" "--limit" "1.5" "@DEFAULT_AUDIO_SINK@"
+                  "5%+";
               "XF86AudioLowerVolume".action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-";
               "XF86AudioMute".action = spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle";
               "XF86AudioPlay".action = spawn "playerctl" "play-pause";

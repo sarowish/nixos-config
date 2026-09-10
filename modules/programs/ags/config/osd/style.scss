@@ -1,0 +1,57 @@
+window.VolumeOsd {
+  color: #{"@foreground"};
+  background: transparent;
+  font-family: "Fira Sans Book", "Nerd Fonts";
+
+  .sink-panel {
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: #{"alpha(@background, 0.94)"};
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
+
+  .sink-icon {
+    color: #{"@accent"};
+    font-size: 24px;
+  }
+
+  .sink-name {
+    font-size: 15px;
+  }
+
+  .track-edge {
+    padding: 5px;
+    border-radius: 14px;
+    background: #{"@background"};
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
+
+  .track {
+    border-radius: 9px;
+    background: #{"mix(@background, @foreground, 0.12)"};
+  }
+
+  .fill {
+    border-radius: 9px;
+    background: #{"@accent"};
+  }
+
+  .overflow {
+    border-radius: 9px;
+    background: #f5ead7;
+  }
+
+  .volume-icon {
+    color: #{"@background"};
+    background: transparent;
+  }
+
+  .percentage {
+    color: #{"alpha(@background, 0.4)"};
+    font-family: "Fira Sans";
+    font-size: 16px;
+    font-weight: 700;
+    font-feature-settings: "tnum";
+  }
+}
