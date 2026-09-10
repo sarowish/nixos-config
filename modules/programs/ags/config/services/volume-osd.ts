@@ -3,7 +3,7 @@ import { timeout, type Timer } from "ags/time"
 import Wp from "gi://AstalWp?version=0.1"
 import GLib from "gi://GLib?version=2.0"
 
-const VOLUME_VISIBLE_FOR_MS = 1500
+const VOLUME_VISIBLE_FOR_MS = 2000
 const SINK_VISIBLE_FOR_MS = 2000
 const SINK_PRIORITY_FOR_US = 250_000
 
