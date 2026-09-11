@@ -3,6 +3,7 @@ import test from "node:test"
 import {
   activeWorkspaceOnOutput,
   emptyNiriState,
+  previousWindowIdOnWorkspace,
   updateNiri,
   windowColumnsOnOutput,
   workspacesOnOutput,
@@ -78,6 +79,63 @@ test("workspace replacement handles output moves, removals, and index ordering",
     workspacesOnOutput(replaced, "HDMI-A-1").map((w) => w.id),
     [7],
   )
+})
+
+test("active-window history stays scoped to its workspace across workspace replacement", () => {
+  const first = { ...workspace(2, "DP-1", 1, true), active_window_id: 10 }
+  const second = { ...workspace(3, "HDMI-A-1", 1, true), active_window_id: 30 }
+  let state = {
+    ...emptyNiriState,
+    workspaces: [first, second],
+    windows: [
+      tiledWindow(10, 2, 1, 1),
+      tiledWindow(20, 2, 2, 1),
+      tiledWindow(30, 3, 1, 1),
+      tiledWindow(40, 3, 2, 1),
+    ],
+  }
+
+  state = updateNiri(state, {
+    WorkspaceActiveWindowChanged: { workspace_id: 2, active_window_id: 20 },
+  })
+  assert.equal(previousWindowIdOnWorkspace(state, 2), 10)
+  assert.equal(previousWindowIdOnWorkspace(state, 3), null)
+  assert.equal(
+    updateNiri(state, {
+      WorkspaceActiveWindowChanged: { workspace_id: 2, active_window_id: 20 },
+    }),
+    state,
+  )
+
+  state = updateNiri(state, {
+    WorkspaceActiveWindowChanged: { workspace_id: 3, active_window_id: 40 },
+  })
+  assert.equal(previousWindowIdOnWorkspace(state, 2), 10)
+  assert.equal(previousWindowIdOnWorkspace(state, 3), 30)
+
+  state = updateNiri(state, {
+    WorkspacesChanged: { workspaces: [state.workspaces[0]] },
+  })
+  assert.equal(previousWindowIdOnWorkspace(state, 2), 10)
+  assert.equal(previousWindowIdOnWorkspace(state, 3), null)
+})
+
+test("previous-window lookup rejects windows that closed or moved to another workspace", () => {
+  const previous = tiledWindow(10, 2, 1, 1)
+  const state = {
+    ...emptyNiriState,
+    workspaces: [{ ...workspace(2, "DP-1", 1, true), active_window_id: 20 }],
+    windows: [previous, tiledWindow(20, 2, 2, 1)],
+    previousWindowsByWorkspace: new Map([[2, 10]]),
+  }
+
+  const closed = updateNiri(state, { WindowClosed: { id: 10 } })
+  assert.equal(previousWindowIdOnWorkspace(closed, 2), null)
+
+  const moved = updateNiri(state, {
+    WindowOpenedOrChanged: { window: { ...previous, workspace_id: 3 } },
+  })
+  assert.equal(previousWindowIdOnWorkspace(moved, 2), null)
 })
 
 test("window and keyboard events update their state without losing other data", () => {

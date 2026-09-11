@@ -26,12 +26,14 @@ export interface NiriWindow {
 export interface NiriState {
   workspaces: Workspace[]
   windows: NiriWindow[]
+  previousWindowsByWorkspace: ReadonlyMap<number, number>
   keyboard: { names: string[]; current_idx: number }
 }
 
 export const emptyNiriState: NiriState = {
   workspaces: [],
   windows: [],
+  previousWindowsByWorkspace: new Map(),
   keyboard: { names: [], current_idx: 0 },
 }
 
@@ -51,8 +53,20 @@ export type NiriEvent =
 
 // Unknown events are deliberately ignored; Niri adds new event variants over time.
 export function updateNiri(state: NiriState, event: NiriEvent): NiriState {
-  if ("WorkspacesChanged" in event)
-    return { ...state, workspaces: event.WorkspacesChanged.workspaces }
+  if ("WorkspacesChanged" in event) {
+    const workspaces = event.WorkspacesChanged.workspaces
+    const workspaceIds = new Set(workspaces.map((workspace) => workspace.id))
+
+    return {
+      ...state,
+      workspaces,
+      previousWindowsByWorkspace: new Map(
+        [...state.previousWindowsByWorkspace].filter(([workspaceId]) =>
+          workspaceIds.has(workspaceId),
+        ),
+      ),
+    }
+  }
 
   if ("WorkspaceActivated" in event) {
     const { id, focused } = event.WorkspaceActivated
@@ -71,8 +85,16 @@ export function updateNiri(state: NiriState, event: NiriEvent): NiriState {
 
   if ("WorkspaceActiveWindowChanged" in event) {
     const { workspace_id, active_window_id } = event.WorkspaceActiveWindowChanged
+    const workspace = state.workspaces.find((workspace) => workspace.id === workspace_id)
+    if (!workspace || workspace.active_window_id === active_window_id) return state
+
+    const previousWindowsByWorkspace = new Map(state.previousWindowsByWorkspace)
+    if (workspace.active_window_id === null) previousWindowsByWorkspace.delete(workspace_id)
+    else previousWindowsByWorkspace.set(workspace_id, workspace.active_window_id)
+
     return {
       ...state,
+      previousWindowsByWorkspace,
       workspaces: state.workspaces.map((workspace) =>
         workspace.id === workspace_id ? { ...workspace, active_window_id } : workspace,
       ),
@@ -158,6 +180,15 @@ export function workspacesOnOutput(state: NiriState, output: string) {
 
 export function activeWorkspaceOnOutput(state: NiriState, output: string) {
   return state.workspaces.find((workspace) => workspace.output === output && workspace.is_active)
+}
+
+export function previousWindowIdOnWorkspace(state: NiriState, workspaceId: number) {
+  const id = state.previousWindowsByWorkspace.get(workspaceId)
+  if (id === undefined) return null
+
+  return state.windows.some((window) => window.id === id && window.workspace_id === workspaceId)
+    ? id
+    : null
 }
 
 export function windowColumnsOnOutput(state: NiriState, output: string) {

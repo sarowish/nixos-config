@@ -4,6 +4,7 @@ import GLib from "gi://GLib?version=2.0"
 import { closeWindow, focusWindow, type createNiri } from "../services/niri"
 import {
   activeWorkspaceOnOutput,
+  previousWindowIdOnWorkspace,
   windowColumnsOnOutput,
   type NiriWindow,
 } from "../services/niri-state"
@@ -152,7 +153,16 @@ export default function WindowMap({
     }
     button.add_css_class("tile")
     updateClasses(button, tile.window)
-    button.connect("clicked", () => focusWindow(tile.window.id))
+    button.connect("clicked", () => {
+      const state = niri.state()
+      const workspace = activeWorkspaceOnOutput(state, output)
+      const previousId =
+        workspace?.active_window_id === tile.window.id
+          ? previousWindowIdOnWorkspace(state, workspace.id)
+          : null
+
+      focusWindow(previousId ?? tile.window.id)
+    })
 
     const middleClick = new Gtk.GestureClick({ button: Gdk.BUTTON_MIDDLE })
     middleClick.connect("pressed", (_source, _nPress, _x, _y) => closeWindow(tile.window.id))
