@@ -107,7 +107,63 @@ in
             }
           }
 
+          $env.__directory_history = [$env.PWD]
+          $env.__directory_history_index = 0
+
+          def --env __directory_history_move [offset: int] {
+            let index = ($env.__directory_history_index + $offset)
+            if $index < 0 or $index >= ($env.__directory_history | length) {
+              return
+            }
+
+            cd ($env.__directory_history | get $index)
+            $env.__directory_history_index = $index
+          }
+
+          $env.config.hooks.env_change.PWD ++= [
+            {|_, after|
+              let current = (
+                $env.__directory_history
+                | get -o $env.__directory_history_index
+              )
+              if $current == $after {
+                return
+              }
+
+              let history = (
+                $env.__directory_history
+                | take ($env.__directory_history_index + 1)
+                | append $after
+                | last 26
+              )
+              load-env {
+                __directory_history: $history
+                __directory_history_index: (($history | length) - 1)
+              }
+            }
+          ]
+
           $env.config.keybindings ++= [
+            {
+              name: directory_history_back
+              modifier: alt
+              keycode: left
+              mode: [emacs vi_normal vi_insert]
+              event: {
+                send: executehostcommand
+                cmd: "__directory_history_move (-1)"
+              }
+            }
+            {
+              name: directory_history_forward
+              modifier: alt
+              keycode: right
+              mode: [emacs vi_normal vi_insert]
+              event: {
+                send: executehostcommand
+                cmd: "__directory_history_move 1"
+              }
+            }
             {
               name: skim_files
               modifier: control
