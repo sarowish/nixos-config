@@ -6,6 +6,7 @@
         enable = true;
         settings = {
           invert = true;
+          search.shells = "all";
         };
         flags = [ "--disable-up-arrow" ];
         enableFishIntegration = true;

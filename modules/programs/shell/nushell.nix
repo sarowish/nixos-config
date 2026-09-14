@@ -35,9 +35,6 @@ in
                     --print0
                     --limit 1
                     --search-mode prefix
-                    --shell fish
-                    --shell nu
-                    --shell ""
                     -- $ctx.line
                   | complete
                 )
