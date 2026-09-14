@@ -55,6 +55,7 @@ in
       homeManager.mpv
       homeManager.neovim
       homeManager.niri
+      homeManager.nushell
       homeManager.obs-studio
       homeManager.openrgb
       homeManager.rmpc
