@@ -1,0 +1,122 @@
+window.Player {
+  padding: 0;
+  margin: 0;
+  color: #{"@foreground"};
+  font-family: "Fira Sans Book", "Nerd Fonts";
+  background: transparent;
+
+  .player-card {
+    border: 5px solid #{"@background"};
+    border-radius: 14px;
+    background: #{"mix(@background, @foreground, 0.12)"};
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  .player-content {
+    padding: 11px;
+  }
+  .cover {
+    border-radius: 9px;
+    background: #{"@background"};
+  }
+  .missing-cover {
+    font-size: 64px;
+    opacity: 0.5;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .artist {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  .album {
+    font-size: 12px;
+    opacity: 0.55;
+  }
+  .times {
+    font-size: 10px;
+    opacity: 0.55;
+  }
+
+  button {
+    padding: 0;
+    min-width: 34px;
+    min-height: 34px;
+    border: none;
+    border-radius: 24px;
+    color: inherit;
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    transition:
+      background-color 160ms ease-out,
+      opacity 160ms ease-out;
+
+    &:hover,
+    &:focus-visible {
+      background: #{"alpha(@foreground, 0.06)"};
+    }
+    &:focus-visible {
+      outline: 2px solid #{"@accent"};
+      outline-offset: 3px;
+    }
+    &:disabled {
+      opacity: 0.4;
+    }
+  }
+  .transport image {
+    -gtk-icon-size: 20px;
+  }
+  .transport button:not(.play) {
+    opacity: 0.65;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+  }
+  .transport .play {
+    min-width: 60px;
+    min-height: 44px;
+    color: #{"@background"};
+    background: #{"@accent"};
+
+    &:hover,
+    &:focus-visible {
+      background: #{"mix(@accent, @foreground, 0.18)"};
+    }
+  }
+
+  scale {
+    padding: 6px 0;
+    trough {
+      min-height: 6px;
+      border: none;
+      border-radius: 3px;
+      background: #{"@background"};
+    }
+    highlight {
+      background: #{"@accent"};
+      border: none;
+      min-height: 6px;
+      border-radius: 3px;
+    }
+    slider {
+      min-width: 10px;
+      min-height: 10px;
+      margin: -2px;
+      padding: 0;
+      background: #{"@accent"};
+      border: none;
+      box-shadow: none;
+      opacity: 0;
+      transition: opacity 120ms ease-out;
+    }
+    &:hover slider,
+    &:focus-visible slider,
+    &:active slider {
+      opacity: 1;
+    }
+  }
+}
