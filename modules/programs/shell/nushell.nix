@@ -3,8 +3,24 @@ let
 in
 {
   flake.modules.homeManager.nushell =
-    { config, lib, ... }:
     {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      starshipNushellConfig = pkgs.runCommand "starship-nushell-config.nu" { } ''
+        ${lib.getExe config.programs.starship.package} init nu > "$out"
+        substituteInPlace "$out" \
+          --replace-fail \
+          '(job list | length)' \
+          '(job list | where { $in.description? != "atuin-history-end" } | length)'
+      '';
+    in
+    {
+      programs.starship.enableNushellIntegration = false;
+
       programs.nushell = {
         enable = true;
 
@@ -55,6 +71,9 @@ in
         };
 
         extraConfig = lib.mkAfter ''
+          # Do not show Atuin's short-lived history bookkeeping as a user job.
+          use ${starshipNushellConfig}
+
           let carapace_completer = $env.config.completions.external.completer
 
           let fish_completer = {|spans|
