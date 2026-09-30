@@ -67,7 +67,17 @@ in
       };
 
       systemd.user.services.ags = {
-        Unit.ConditionEnvironment = "NIRI_SOCKET";
+        Unit = {
+          After = [ "niri.service" ];
+          ConditionEnvironment = "NIRI_SOCKET";
+          X-Restart-Triggers = [
+            (builtins.path {
+              path = ./config;
+              name = "ags-config";
+            })
+            config.xdg.configFile."ags-theme.css".source
+          ];
+        };
       };
     };
 }
