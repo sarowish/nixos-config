@@ -1,4 +1,23 @@
 @-moz-document domain("reddit.com") {
+  @media (max-width: 1280px) {
+    #left-sidebar-container,
+    flex-left-nav-container {
+      display: none !important;
+    }
+
+    .grid-container:not(.grid-full) {
+      --flex-nav-width: 0px !important;
+    }
+
+    #subgrid-container {
+      width: 100% !important;
+    }
+
+    #navbar-menu-button {
+      display: inline-flex !important;
+    }
+  }
+
   * {
     --color-neutral-background: transparent !important;
     --color-neutral-background-weak: transparent !important;
