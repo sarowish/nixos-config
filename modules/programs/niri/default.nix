@@ -83,7 +83,10 @@
               };
             };
 
-            cursor.size = 16;
+            cursor = {
+              size = config.home.pointerCursor.size;
+              theme = config.home.pointerCursor.name;
+            };
 
             layout = {
               gaps = 16;
