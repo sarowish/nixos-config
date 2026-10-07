@@ -1,8 +1,8 @@
-import { For } from "ags"
+import { createMemo, For } from "ags"
 import { Gtk } from "ags/gtk4"
 import { execAsync } from "ags/process"
 import { focusWorkspace, type createNiri } from "../services/niri"
-import { workspacesOnOutput, type Workspace } from "../services/niri-state"
+import { workspacesOnOutput } from "../services/niri-state"
 
 export default function Workspaces({
   niri,
@@ -12,6 +12,10 @@ export default function Workspaces({
   output: string
 }) {
   const workspaces = niri.state((state) => workspacesOnOutput(state, output))
+  const workspaceIds = createMemo(() => workspaces().map((workspace) => workspace.id), {
+    equals: (left, right) =>
+      left.length === right.length && left.every((id, index) => id === right[index]),
+  })
   return (
     <box class="Workspaces" marginEnd={8} visible={workspaces((items) => items.length > 0)}>
       <Gtk.EventControllerScroll
@@ -27,16 +31,21 @@ export default function Workspaces({
           return true
         }}
       />
-      <For each={workspaces}>
-        {(workspace: Workspace) => (
-          <button
-            class={workspace.is_active ? "active" : ""}
-            focusable={false}
-            onClicked={() => focusWorkspace(workspace.id)}
-          >
-            <label label={workspace.is_active || workspace.active_window_id !== null ? "" : ""} />
-          </button>
-        )}
+      <For each={workspaceIds}>
+        {(id: number) => {
+          const workspace = workspaces((items) => items.find((item) => item.id === id))
+          return (
+            <button
+              class={workspace((item) =>
+                item?.is_active ? "active" : item?.active_window_id != null ? "occupied" : "",
+              )}
+              focusable={false}
+              onClicked={() => focusWorkspace(id)}
+            >
+              <box class="indicator" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
+            </button>
+          )
+        }}
       </For>
     </box>
   )

@@ -14,11 +14,30 @@ window.Bar {
   }
 
   .Workspaces button {
-    min-width: 16px;
-    padding: 0 2px;
+    padding: 0 5px;
+
+    .indicator {
+      min-width: 8px;
+      min-height: 8px;
+      border: 1px solid currentColor;
+      border-radius: 6px;
+      transition:
+        min-width 180ms ease-out,
+        background-color 180ms ease-out,
+        border-color 180ms ease-out;
+    }
+
+    &.occupied .indicator {
+      background-color: currentColor;
+    }
 
     &.active {
       color: #{"@accent"};
+
+      .indicator {
+        min-width: 20px;
+        background-color: currentColor;
+      }
     }
   }
 
