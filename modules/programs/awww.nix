@@ -115,6 +115,7 @@
             "awww-overview-daemon.service"
           ];
           After = [
+            "graphical-session.target"
             "awww-daemon.service"
             "awww-overview-daemon.service"
           ];
