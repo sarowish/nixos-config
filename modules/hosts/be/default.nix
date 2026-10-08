@@ -12,7 +12,7 @@ in
       nixos.documentation
       nixos.fonts
       nixos.greetd
-      nixos.hyprland
+      # nixos.hyprland
       nixos.keyboard
       nixos.nix
       nixos.nvidia
@@ -24,6 +24,7 @@ in
       nixos.sudo
       nixos.user-chels
       nixos.virtualisation
+      nixos.xdg
       nixos.zram
     ];
 
@@ -46,7 +47,7 @@ in
       homeManager.gtk
       homeManager.helium
       homeManager.hyfetch
-      homeManager.hyprland
+      # homeManager.hyprland
       homeManager.imv
       homeManager.jujutsu
       homeManager.librewolf

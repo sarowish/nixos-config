@@ -38,4 +38,8 @@
         };
       };
     };
+
+  flake.modules.nixos.xdg = {
+    environment.pathsToLink = [ "/share/xdg-desktop-portal" ];
+  };
 }
