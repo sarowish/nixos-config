@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake.modules.homeManager.librewolf =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
 
     {
       programs.librewolf = {
@@ -94,8 +94,20 @@
               user-agent-string-switcher
             ];
           };
-          userChrome = builtins.readFile ./userChrome.css;
-          userContent = builtins.readFile ./userContent.css;
+          userChrome = ''
+            :root {
+              --user-chrome-accent-color: #${config.colors.accent};
+            }
+          ''
+          + builtins.readFile ./userChrome.css;
+          userContent = ''
+            @-moz-document url-prefix("about:") {
+              :root {
+                --user-content-accent-color: #${config.colors.accent};
+              }
+            }
+          ''
+          + builtins.readFile ./userContent.css;
         };
       };
     };

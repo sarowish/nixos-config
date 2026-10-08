@@ -9,7 +9,83 @@
   --tab-selected-bgcolor: rgba(66, 65, 77, 0.4) !important;
   --toolbox-background-color: transparent !important;
   --toolbox-background-color-inactive: transparent !important;
+  --toolbox-background-gradient: none !important;
   background: transparent !important;
+}
+
+
+@media not (forced-colors) {
+  :root {
+    --user-chrome-accent-muted: color-mix(
+      in srgb,
+      var(--user-chrome-accent-color) 50%,
+      gray
+    );
+    --user-chrome-accent-toolbar: light-dark(
+      var(--user-chrome-accent-muted),
+      color-mix(in srgb, var(--user-chrome-accent-muted) 50%, white)
+    );
+
+    --color-accent-primary: var(--user-chrome-accent-color) !important;
+    --color-accent-primary-hover: color-mix(
+      in srgb,
+      var(--user-chrome-accent-color) 85%,
+      white
+    ) !important;
+    --color-accent-primary-active: color-mix(
+      in srgb,
+      var(--user-chrome-accent-color) 70%,
+      white
+    ) !important;
+    --icon-color-accent-primary-desaturated: var(
+      --user-chrome-accent-muted
+    ) !important;
+
+    --button-background-color-hover: light-dark(
+      color-mix(in srgb, var(--user-chrome-accent-muted) 30%, white),
+      var(--user-chrome-accent-muted)
+    ) !important;
+    --button-background-color-active: light-dark(
+      color-mix(in srgb, var(--user-chrome-accent-muted) 45%, white),
+      color-mix(in srgb, var(--user-chrome-accent-muted) 75%, white)
+    ) !important;
+    --button-background-color-primary-disabled: var(
+      --button-background-color-hover
+    ) !important;
+
+    --toolbarbutton-background-color-hover: color-mix(
+      in srgb,
+      var(--user-chrome-accent-toolbar) 25%,
+      transparent
+    ) !important;
+    --toolbarbutton-background-color-active: color-mix(
+      in srgb,
+      var(--user-chrome-accent-toolbar) 40%,
+      transparent
+    ) !important;
+    --urlbar-box-background-color-active: color-mix(
+      in srgb,
+      var(--user-chrome-accent-toolbar) 60%,
+      transparent
+    ) !important;
+
+
+    --tab-border-color-selected: var(--user-chrome-accent-color) !important;
+    --tab-border-color-selected-leading: var(
+      --user-chrome-accent-color
+    ) !important;
+    --tab-border-color-selected-trailing: var(
+      --user-chrome-accent-color
+    ) !important;
+  }
+
+  menupopup > :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
+    background-color: var(--button-background-color-menu-hover) !important;
+  }
+
+  menupopup > :is(menu, menuitem)[_moz-menuactive]:not([disabled]):active {
+    background-color: var(--button-background-color-menu-active) !important;
+  }
 }
 
 #navigator-toolbox {

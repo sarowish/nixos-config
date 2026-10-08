@@ -1,3 +1,43 @@
+/* Keep built-in page accents consistent with the browser controls. */
+@-moz-document url-prefix("about:") {
+  @media not (forced-colors) {
+    :root {
+      --user-content-accent-muted: color-mix(
+        in srgb,
+        var(--user-content-accent-color) 50%,
+        gray
+      );
+
+      --color-accent-primary: var(--user-content-accent-color) !important;
+      --color-accent-primary-hover: color-mix(
+        in srgb,
+        var(--user-content-accent-color) 85%,
+        white
+      ) !important;
+      --color-accent-primary-active: color-mix(
+        in srgb,
+        var(--user-content-accent-color) 70%,
+        white
+      ) !important;
+      --icon-color-accent-primary-desaturated: var(
+        --user-content-accent-muted
+      ) !important;
+
+      --button-background-color-hover: light-dark(
+        color-mix(in srgb, var(--user-content-accent-muted) 30%, white),
+        var(--user-content-accent-muted)
+      ) !important;
+      --button-background-color-active: light-dark(
+        color-mix(in srgb, var(--user-content-accent-muted) 45%, white),
+        color-mix(in srgb, var(--user-content-accent-muted) 75%, white)
+      ) !important;
+      --button-background-color-primary-disabled: var(
+        --button-background-color-hover
+      ) !important;
+    }
+  }
+}
+
 @-moz-document domain("reddit.com") {
   @media (max-width: 1280px) {
     #left-sidebar-container,
