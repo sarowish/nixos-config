@@ -22,9 +22,9 @@ window.Bar {
       border: 1px solid currentColor;
       border-radius: 6px;
       transition:
-        min-width 180ms ease-out,
-        background-color 180ms ease-out,
-        border-color 180ms ease-out;
+        min-width 240ms cubic-bezier(0.22, 1, 0.36, 1.2),
+        background-color 100ms ease-out,
+        border-color 100ms ease-out;
     }
 
     &.occupied .indicator {
