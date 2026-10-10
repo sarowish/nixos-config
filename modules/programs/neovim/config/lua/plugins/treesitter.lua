@@ -5,6 +5,8 @@ return {
         require("tree-sitter-manager").setup({
             ensure_installed = {
                 "bash",
+                "c",
+                "cpp",
                 "nu",
                 "rust",
                 "python",
