@@ -27,6 +27,7 @@ in
         environmentVariables = {
           CARAPACE_LENIENT = 1;
           MANPAGER = "nvim +Man!";
+          XMAKE_COLORTERM = "color256";
         };
 
         settings = {

@@ -9,6 +9,7 @@ in
       interactiveShellInit = ''
         set fish_greeting
         set -x MANPAGER 'nvim +Man!'
+        set -x XMAKE_COLORTERM `color256`
       '';
       shellAbbrs = abbreviations;
     };
