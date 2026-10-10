@@ -8,6 +8,20 @@
     }:
 
     let
+      trayCountIcons =
+        pkgs.runCommand "vesktop-tray-count-icons" { nativeBuildInputs = [ pkgs.imagemagick ]; }
+          ''
+            mkdir -p "$out"
+            for count in 1 2 3 4 5 6 7 8 9 '9+'; do
+              font_size=64
+              if [ "$count" = '9+' ]; then font_size=52; fi
+              magick -size 64x64 xc:none \
+                -fill '#ed4245' -draw 'circle 31.5,31.5 31.5,0' \
+                -font ${pkgs.fira-sans}/share/fonts/opentype/FiraSans-Bold.otf \
+                -pointsize "$font_size" -fill white -gravity center -annotate +0+0 "$count" \
+                "$out/count-$count.png"
+            done
+          '';
       vesktopWithByedpi = pkgs.symlinkJoin {
         name = "vesktop-with-byedpi";
         paths = [ config.programs.nixcord.finalPackage.vesktop ];
@@ -29,12 +43,19 @@
         discord.enable = false;
         vesktop = {
           enable = true;
+          package = pkgs.vesktop.overrideAttrs (old: {
+            patches = (old.patches or [ ]) ++ [ ../../../patches/vesktop-tray-count.patch ];
+            postPatch = (old.postPatch or "") + ''
+              cp ${trayCountIcons}/*.png static/tray/
+            '';
+          });
           autoscroll.enable = true;
           installPackage = false;
 
           settings = {
             discordBranch = "stable";
-            tray = false;
+            tray = true;
+            appBadge = true;
             enableSplashScreen = false;
             arRPC = true;
           };

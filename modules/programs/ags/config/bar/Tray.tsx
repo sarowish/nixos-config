@@ -8,10 +8,15 @@ function TrayItem({ item }: { item: AstalTray.TrayItem }) {
     item.about_to_show()
     if (item.menu_model) menu.popup()
   }
+  const tooltip = createBinding(item, "tooltip")
   const button = (
     <button
       class="TrayItem"
       focusable={false}
+      tooltipText={tooltip(() => {
+        const text = item.tooltip_text
+        return text.startsWith("Vesktop · ") ? text : ""
+      })}
       onClicked={() => (item.is_menu ? openMenu() : item.activate(0, 0))}
     >
       <Gtk.GestureClick

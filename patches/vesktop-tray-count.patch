@@ -1,0 +1,106 @@
+--- a/src/main/appBadge.ts
++++ b/src/main/appBadge.ts
+@@ -30,7 +30,7 @@
+  * 0 = clear
+  */
+ export function setBadgeCount(count: number) {
+-    AppEvents.emit("setTrayVariant", count !== 0 ? "trayUnread" : "tray");
++    AppEvents.emit("setTrayBadge", count);
+ 
+     switch (process.platform) {
+         case "linux":
+--- a/src/main/events.ts
++++ b/src/main/events.ts
+@@ -11,5 +11,5 @@
+ export const AppEvents = new EventEmitter<{
+     appLoaded: [];
+     userAssetChanged: [UserAssetType];
+-    setTrayVariant: ["tray" | "trayUnread"];
++    setTrayBadge: [number];
+ }>();
+--- a/src/main/tray.ts
++++ b/src/main/tray.ts
+@@ -5,6 +5,8 @@
+  */
+ 
+ import { app, BrowserWindow, Menu, Tray } from "electron";
++import { join } from "path";
++import { STATIC_DIR } from "shared/paths";
+ 
+ import { createAboutWindow } from "./about";
+ import { AppEvents } from "./events";
+@@ -13,26 +15,52 @@
+ import { clearData } from "./utils/clearData";
+ import { downloadVencordFiles } from "./utils/vencordLoader";
+ 
+-let tray: Tray;
+-let trayVariant: "tray" | "trayUnread" = "tray";
++let tray: Tray | undefined;
++let trayCount = 0;
++let trayUpdate = 0;
++
++async function getTrayImage(count: number) {
++    if (process.platform === "linux" && count > 0) {
++        return join(STATIC_DIR, "tray", `count-${count > 9 ? "9+" : count}.png`);
++    }
++    return resolveAssetPath(count === 0 ? "tray" : "trayUnread");
++}
++
++async function updateTray() {
++    const currentTray = tray;
++    if (!currentTray) return;
++
++    const update = ++trayUpdate;
++    const count = trayCount;
++    const image = await getTrayImage(count);
++    if (update !== trayUpdate || currentTray !== tray || currentTray.isDestroyed()) return;
++
++    currentTray.setImage(image);
++    currentTray.setToolTip(
++        process.platform === "linux" && count > 0
++            ? `Vesktop · ${count} notification${count === 1 ? "" : "s"}`
++            : "Vesktop"
++    );
++}
+ 
+-AppEvents.on("userAssetChanged", async asset => {
++AppEvents.on("userAssetChanged", asset => {
+     if (tray && (asset === "tray" || asset === "trayUnread")) {
+-        tray.setImage(await resolveAssetPath(trayVariant));
++        void updateTray();
+     }
+ });
+ 
+-AppEvents.on("setTrayVariant", async variant => {
+-    if (trayVariant === variant) return;
+-
+-    trayVariant = variant;
+-    if (!tray) return;
+-
+-    tray.setImage(await resolveAssetPath(trayVariant));
++AppEvents.on("setTrayBadge", count => {
++    // -1 means ordinary unread messages without a notification count.
++    if (process.platform === "linux" && count === -1) count = 0;
++    if (trayCount === count) return;
++    trayCount = count;
++    void updateTray();
+ });
+ 
+ export function destroyTray() {
+     tray?.destroy();
++    tray = undefined;
++    trayUpdate++;
+ }
+ 
+ export async function initTray(win: BrowserWindow, setIsQuitting: (val: boolean) => void) {
+@@ -85,8 +113,8 @@
+         }
+     ]);
+ 
+-    tray = new Tray(await resolveAssetPath(trayVariant));
+-    tray.setToolTip("Vesktop");
++    tray = new Tray(await getTrayImage(trayCount));
+     tray.setContextMenu(trayMenu);
+     tray.on("click", onTrayClick);
++    await updateTray();
+ }
