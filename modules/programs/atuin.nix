@@ -34,7 +34,8 @@
         enableFishIntegration = true;
       };
 
-      programs.nushell.extraConfig = ''
+      # Keep Ctrl-R bound to Atuin after other shell integrations load.
+      programs.nushell.extraConfig = lib.mkAfter ''
         source ${atuinNushellConfig}
       '';
 

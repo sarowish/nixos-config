@@ -184,34 +184,6 @@ in
                 cmd: "__directory_history_move 1"
               }
             }
-            {
-              name: skim_files
-              modifier: control
-              keycode: char_t
-              mode: [emacs vi_normal vi_insert]
-              event: {
-                send: executehostcommand
-                cmd: "
-                  let files = (
-                    ^fd --hidden --follow --exclude .git --print0
-                    | ^sk --read0 --print0 --multi --reverse --scheme path
-                    | decode utf-8
-                    | split row (char nul)
-                    | where { is-not-empty }
-                    | each { to nuon --raw }
-                    | str join ' '
-                  )
-                  if ($files | is-not-empty) {
-                    let prefix = if (commandline | is-empty) or (commandline | str ends-with ' ') {
-                      \"\"
-                    } else {
-                      ' '
-                    }
-                    commandline edit --insert $'($prefix)($files) '
-                  }
-                "
-              }
-            }
           ]
         '';
       };
