@@ -3,6 +3,7 @@ import { onCleanup } from "ags"
 import type { createNiri } from "../services/niri"
 import type { createMpd } from "../services/mpd"
 import type { createSystemStats } from "../services/system"
+import type { createVolumeOsd } from "../services/volume-osd"
 import Workspaces from "./Workspaces"
 import WindowMap from "./WindowMap"
 import KeyboardLayout from "./KeyboardLayout"
@@ -16,6 +17,7 @@ type Services = {
   niri: ReturnType<typeof createNiri>
   mpd: ReturnType<typeof createMpd>
   system: ReturnType<typeof createSystemStats>
+  volumeOsd: ReturnType<typeof createVolumeOsd>
 }
 
 export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; services: Services }) {
@@ -34,7 +36,7 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
       marginLeft={8}
       marginRight={8}
       heightRequest={30}
-      $={(window) => onCleanup(() => window.destroy())}
+      $={(window: Astal.Window) => onCleanup(() => window.destroy())}
     >
       <centerbox>
         <box $type="start">
@@ -48,7 +50,7 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
         </box>
         <Clock $type="center" />
         <box $type="end" spacing={8}>
-          <Volume />
+          <Volume output={output} volumeOsd={services.volumeOsd} />
           <KeyboardLayout niri={services.niri} />
           <SystemStats system={services.system} />
           <Tray />

@@ -1,4 +1,5 @@
-window.VolumeOsd {
+window.VolumeOsd,
+popover.VolumePopover {
   color: #{"@foreground"};
   background: transparent;
   font-family: "Fira Sans Book", "Nerd Fonts";
@@ -53,5 +54,14 @@ window.VolumeOsd {
     font-size: 16px;
     font-weight: 700;
     font-feature-settings: "tnum";
+  }
+}
+
+popover.VolumePopover {
+  > contents {
+    background: transparent;
+    border: none;
+    padding: 12px;
+    box-shadow: none;
   }
 }
