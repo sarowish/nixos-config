@@ -1,31 +1,23 @@
 import { createComputed, onCleanup } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Cairo from "cairo"
-import type { createNiri } from "../services/niri"
 import type { createVolumeOsd } from "../services/volume-osd"
 import VolumeTrack, { TRACK_HEIGHT } from "./VolumeTrack"
 import SinkPanel from "./SinkPanel"
 
 export default function VolumeOsd({
   monitor,
-  niri,
   volumeOsd,
 }: {
   monitor: Gdk.Monitor
-  niri: ReturnType<typeof createNiri>
   volumeOsd: ReturnType<typeof createVolumeOsd>
 }) {
-  const output = monitor.connector ?? ""
-  const focused = niri.state(({ workspaces }) =>
-    workspaces.some((workspace) => workspace.output === output && workspace.is_focused),
-  )
-
   return (
     <window
       name={`volume-osd-${monitor.connector}`}
       namespace="ags-volume-osd"
       class="VolumeOsd"
-      visible={createComputed(() => focused() && volumeOsd.barOutput() === null)}
+      visible={volumeOsd.barOutput.as((output) => output === null)}
       gdkmonitor={monitor}
       anchor={Astal.WindowAnchor.RIGHT}
       layer={Astal.Layer.OVERLAY}
