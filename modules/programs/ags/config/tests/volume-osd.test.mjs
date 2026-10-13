@@ -22,7 +22,7 @@ const mockSources = {
   `,
   "gi://AstalWp?version=0.1": `
     export default {
-      get_default: () => ({ audio: { default_speaker: globalThis.volumeOsdFixture.speaker } }),
+      get_default: () => globalThis.volumeOsdFixture.wp,
     }
   `,
   "gi://GLib?version=2.0": `
@@ -84,6 +84,9 @@ beforeEach(() => {
       for (const { signal, callback } of handlers.values())
         if (signal === `notify::${property}`) callback()
     },
+    ready() {
+      for (const { signal, callback } of handlers.values()) if (signal === "ready") callback()
+    },
     advance(milliseconds) {
       fixture.now += milliseconds * 1000
       for (const timer of fixture.timers)
@@ -92,6 +95,11 @@ beforeEach(() => {
           timer.callback()
         }
     },
+  }
+  fixture.wp = {
+    audio: { default_speaker: fixture.speaker },
+    connect: fixture.speaker.connect,
+    disconnect: fixture.speaker.disconnect,
   }
   globalThis.volumeOsdFixture = fixture
 })
@@ -114,6 +122,36 @@ afterEach(() => {
 after(() => {
   hooks.deregister()
   delete globalThis.volumeOsdFixture
+})
+
+test("initial audio notifications stay silent until WirePlumber is ready", () => {
+  fixture.speaker.id = 0
+  fixture.update("volume", 0)
+  const osd = createVolumeOsd()
+
+  fixture.update("id", 1)
+  fixture.update("description", "Speakers")
+  fixture.update("volume", 0.5)
+  fixture.update("mute", true)
+  assert.equal(osd.visible(), false)
+  assert.equal(fixture.timers.size, 0)
+  assert.equal(osd.volume(), 0.5)
+  assert.equal(osd.mute(), true)
+
+  fixture.ready()
+  assert.equal(osd.visible(), false)
+  fixture.update("volume", 0.55)
+  assert.equal(osd.visible(), true)
+  assert.equal(osd.mode(), "volume")
+  fixture.advance(2000)
+
+  fixture.update("mute", false)
+  assert.equal(osd.visible(), true)
+  fixture.advance(2000)
+
+  fixture.update("id", 2)
+  assert.equal(osd.visible(), true)
+  assert.equal(osd.mode(), "sink")
 })
 
 test("a quantized bar update opens a popover that stays selected through shortcut updates", () => {

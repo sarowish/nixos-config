@@ -19,7 +19,8 @@ type BarChange = {
 }
 
 export function createVolumeOsd() {
-  const speaker = Wp.get_default()!.audio.default_speaker
+  const wp = Wp.get_default()!
+  const speaker = wp.audio.default_speaker
   const volume = createBinding(speaker, "volume")
   const mute = createBinding(speaker, "mute")
   const description = createBinding(speaker, "description")
@@ -30,6 +31,7 @@ export function createVolumeOsd() {
   let hideTimer: Timer | undefined
   let sinkPriorityUntil = 0
   let pendingBarChanges: BarChange[] = []
+  let ready = speaker.id !== 0
 
   function expectBarChange(
     kind: BarChange["kind"],
@@ -74,7 +76,7 @@ export function createVolumeOsd() {
   }
 
   function showVolume(output: string | null) {
-    if (GLib.get_monotonic_time() < sinkPriorityUntil) return
+    if (!ready || GLib.get_monotonic_time() < sinkPriorityUntil) return
     const keepPlacement = visible() || barPopoverVisible
     const keepSink = keepPlacement && barOutput() !== null && mode() !== "volume"
     if (!keepPlacement) setBarOutput(output)
@@ -82,6 +84,7 @@ export function createVolumeOsd() {
   }
 
   function showSink() {
+    if (!ready) return
     const change = consumeBarChange("sink", speaker.id)
     pendingBarChanges = pendingBarChanges.filter((pending) => pending.kind === "sink")
     const keepPlacement = visible() || barPopoverVisible
@@ -115,6 +118,10 @@ export function createVolumeOsd() {
     showVolume(change?.output ?? null)
   }
 
+  // Initial notifications load the current audio state before WirePlumber is ready.
+  const readyHandler = wp.connect("ready", () => {
+    ready = true
+  })
   const sinkChanged = speaker.connect("notify::id", showSink)
   const volumeHandler = speaker.connect("notify::volume", volumeChanged)
   const muteChanged = speaker.connect("notify::mute", () => {
@@ -124,6 +131,7 @@ export function createVolumeOsd() {
   })
   onCleanup(() => {
     hideTimer?.cancel()
+    wp.disconnect(readyHandler)
     speaker.disconnect(sinkChanged)
     speaker.disconnect(volumeHandler)
     speaker.disconnect(muteChanged)
