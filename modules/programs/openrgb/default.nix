@@ -38,6 +38,13 @@
         razer_color
       ];
 
+      xdg.configFile."razer/color" = {
+        text = config.colors.accent;
+        onChange = ''
+          ${razer_color}/bin/razer_color ${config.colors.accent}
+        '';
+      };
+
       systemd.user.services.openrgb = {
         Unit = {
           Description = "Set the colors of devices";
