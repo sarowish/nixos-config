@@ -92,3 +92,7 @@ export function focusWindow(id: number) {
 export function closeWindow(id: number) {
   requestAction({ CloseWindow: { id } })
 }
+
+export function switchKeyboardLayout(layout: "Next" | "Prev") {
+  requestAction({ SwitchLayout: { layout } })
+}
