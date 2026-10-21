@@ -7,7 +7,6 @@
 
     programs = {
       bash.enable = true;
-      direnv.enable = true;
 
       fd = {
         enable = true;
