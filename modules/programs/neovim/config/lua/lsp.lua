@@ -128,4 +128,4 @@ vim.diagnostic.config({
     virtual_text = true,
 })
 
-vim.lsp.enable({ 'lua_ls', 'clangd', 'ty', 'ruff', 'nixd', 'svelte', 'expert' })
+vim.lsp.enable({ 'lua_ls', 'clangd', 'ty', 'ruff', 'nixd', 'svelte', 'expert', 'nu' })
