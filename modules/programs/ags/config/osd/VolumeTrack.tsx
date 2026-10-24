@@ -9,7 +9,7 @@ export const TRACK_HEIGHT = 350
 const MIN_FILL_HEIGHT = 48
 const ICON_HEIGHT = 30
 const ICON_TOP_INSET = 8
-const VOLUME_DURATION_US = 180_000
+const VOLUME_DURATION_US = 280_000
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value))
