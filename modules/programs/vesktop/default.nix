@@ -41,6 +41,8 @@
       programs.nixcord = {
         enable = true;
         discord.enable = false;
+        # Nixcord otherwise rewrites this as Discord's MINIMIZE_TO_TRAY.
+        parseRules.settingRenames."".minimizeToTray = "minimizeToTray";
         vesktop = {
           enable = true;
           package = pkgs.vesktop.overrideAttrs (old: {
@@ -55,6 +57,7 @@
           settings = {
             discordBranch = "stable";
             tray = true;
+            minimizeToTray = false;
             appBadge = true;
             enableSplashScreen = false;
             arRPC = true;
