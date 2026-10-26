@@ -15,6 +15,7 @@ function M.get_filename_cached()
 end
 
 function M.show_toc()
+    require('plugins.telescope').load()
     local pickers = require "telescope.pickers"
     local finders = require "telescope.finders"
     local conf = require "telescope.config".values

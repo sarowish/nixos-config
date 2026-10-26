@@ -1,9 +1,9 @@
-return {
-    'stevearc/conform.nvim',
-    keys = {
-        { '<leader>cf', function() require('conform').format({ async = true, lsp_format = "fallback" }) end },
-    },
-    opts = {
+local loader = require('plugin_loader')
+
+local plugin = loader.defer({
+    "https://github.com/stevearc/conform.nvim",
+}, function()
+    require("conform").setup({
         formatters_by_ft = {
             elixir = { "mix" },
             eelixir = { "mix" },
@@ -13,5 +13,11 @@ return {
             svelte = { "prettier" },
             html = { "prettier" },
         }
-    },
-}
+    })
+end)
+
+plugin:on_key({
+    { 'n', '<leader>cf', function()
+        require('conform').format({ async = true, lsp_format = 'fallback' })
+    end },
+})

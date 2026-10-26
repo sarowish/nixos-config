@@ -1,3 +1,4 @@
+local loader = require('plugin_loader')
 local set = vim.keymap.set
 
 vim.g.rustaceanvim = {
@@ -15,7 +16,7 @@ vim.g.rustaceanvim = {
     },
 }
 
-return {
-    'mrcjkb/rustaceanvim',
-    lazy = false,
-}
+local plugin = loader.defer({
+    "https://github.com/mrcjkb/rustaceanvim",
+})
+plugin.load()

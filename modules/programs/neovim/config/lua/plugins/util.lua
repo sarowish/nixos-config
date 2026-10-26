@@ -1,14 +1,20 @@
-return {
-    { 'nvim-lua/plenary.nvim',       lazy = true },
-    { 'kyazdani42/nvim-web-devicons' },
-    { "folke/which-key.nvim",        event = "VeryLazy" },
-    { 'windwp/nvim-autopairs',       event = 'InsertEnter', config = true },
-    {
-        'L3MON4D3/LuaSnip',
-        dependencies = { "rafamadriz/friendly-snippets" },
-        event = 'InsertEnter',
-        config = function()
-            require("luasnip.loaders.from_vscode").lazy_load()
-        end
-    },
-}
+local loader = require('plugin_loader')
+
+local insert_plugins = loader.defer({
+    "https://github.com/windwp/nvim-autopairs",
+    "https://github.com/rafamadriz/friendly-snippets",
+    "https://github.com/L3MON4D3/LuaSnip",
+}, function()
+    require("nvim-autopairs").setup({})
+    require("luasnip.loaders.from_vscode").lazy_load()
+end)
+
+insert_plugins:on_event({
+    { 'InsertEnter' },
+})
+
+local which_key = loader.defer({ "https://github.com/folke/which-key.nvim" })
+
+which_key:on_event({
+    { 'VimEnter' },
+}, { schedule = true })

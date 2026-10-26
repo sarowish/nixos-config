@@ -1,14 +1,13 @@
-return {
-    "folke/trouble.nvim",
-    cmd = 'Trouble',
-    keys = {
-        -- { "<leader>ll", "<cmd>Trouble<cr>" },
-        -- { "<leader>lc", "<cmd>TroubleClose<cr>" },
-        -- { "<leader>lw", "<cmd>Trouble lsp_workspace_diagnostics<cr>" },
-        -- { "<leader>ld", "<cmd>Trouble lsp_document_diagnostics<cr>" },
-        -- { "gR",         "<cmd>Trouble lsp_references<cr>" },
-    },
-    opts = {
+local loader = require('plugin_loader')
+
+local plugin = loader.defer({
+    "https://github.com/folke/trouble.nvim",
+}, function()
+    require("trouble").setup({
         use_diagnostic_signs = true
-    }
-}
+    })
+end)
+
+plugin:on_command({
+    { 'Trouble' },
+})

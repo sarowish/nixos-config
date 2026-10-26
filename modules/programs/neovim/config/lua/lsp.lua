@@ -40,6 +40,13 @@ local get_document_highlights = function()
 end
 
 
+local function telescope(method)
+    return function()
+        require('plugins.telescope').load()
+        require('telescope.builtin')[method]()
+    end
+end
+
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
         local map = function(keys, func, desc, mode)
@@ -47,23 +54,23 @@ vim.api.nvim_create_autocmd('LspAttach', {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        map('gd', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+        map('gd', telescope('lsp_definitions'), 'Goto Definition')
         map('gD', vim.lsp.buf.declaration, 'Goto Declaration')
-        map('gI', require('telescope.builtin').lsp_implementations, 'Goto Implementation')
-        map('gr', require('telescope.builtin').lsp_references, 'Goto References')
-        map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type Definition')
+        map('gI', telescope('lsp_implementations'), 'Goto Implementation')
+        map('gr', telescope('lsp_references'), 'Goto References')
+        map('<leader>D', telescope('lsp_type_definitions'), 'Type Definition')
 
         map('<leader>rn', vim.lsp.buf.rename, 'Rename')
         map('ga', vim.lsp.buf.code_action, 'Code Action', { 'n', 'x' })
 
-        map('<leader><leader>s', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
-        map('<leader><leader>w', require('telescope.builtin').lsp_dynamic_workspace_symbols,
+        map('<leader><leader>s', telescope('lsp_document_symbols'), 'Document Symbols')
+        map('<leader><leader>w', telescope('lsp_dynamic_workspace_symbols'),
             'Workspace Symbols')
 
         map('K', vim.lsp.buf.hover, "Hover Information")
         map('<leader>K', vim.lsp.buf.signature_help, "Signature Information")
 
-        map('<leader><leader>d', require('telescope.builtin').diagnostics, "List Diagnostics")
+        map('<leader><leader>d', telescope('diagnostics'), "List Diagnostics")
         map('<leader>d', vim.diagnostic.open_float, "Show Diagnostic")
         map('g[', function() vim.diagnostic.jump({ count = -1 }) end, "Previous Diagnostic")
         map('g]', function() vim.diagnostic.jump({ count = 1 }) end, "Next Diagnostic")
