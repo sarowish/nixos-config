@@ -67,7 +67,7 @@
         quickCss = builtins.readFile ./quickCss.css;
 
         userPlugins."mpdControls.desktop" =
-          "github:sarowish/mpdControls/75ffa7c81a5b752a3777d9a03f440658d5f7b467";
+          "github:sarowish/mpdControls/c060d496c3f0b58afa95b1fc9efa5dc45a00048f";
         extraConfig.plugins.MPDControls.enable = true;
 
         config = {
