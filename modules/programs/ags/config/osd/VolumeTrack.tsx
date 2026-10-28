@@ -129,7 +129,12 @@ export default function VolumeTrack({
         })
       }}
     >
-      <overlay class="track" widthRequest={48} heightRequest={TRACK_HEIGHT}>
+      <overlay
+        class="track"
+        widthRequest={48}
+        heightRequest={TRACK_HEIGHT}
+        overflow={Gtk.Overflow.HIDDEN}
+      >
         <box />
         <box
           $type="overlay"
