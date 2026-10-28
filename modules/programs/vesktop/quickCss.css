@@ -53,6 +53,29 @@ body::before {
 .bar_c38106 {
   visibility: hidden !important;
   pointer-events: none !important;
+  z-index: 101;
+}
+
+/* Reserve space for Inbox in channel, DM, and Friends headers. */
+.page__5e434 :is(.subtitleContainer_f75fb0, .container__133bf) > .container__9293f {
+  anchor-name: --inbox-header;
+  padding-inline-end: 48px;
+}
+
+/* Keep the badge and popover anchors with Inbox; leave the rest of the bar hidden. */
+.base__5e434:has(
+  .page__5e434 :is(.subtitleContainer_f75fb0, .container__133bf) > .container__9293f
+)
+  .bar_c38106
+  .iconWrapper__468db {
+  position: fixed;
+  position-anchor: --inbox-header;
+  top: anchor(center);
+  right: calc(anchor(right) + var(--space-12));
+  translate: 0 -50%;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  -webkit-app-region: no-drag;
 }
 
 .container__5e434,
