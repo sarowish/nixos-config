@@ -27,8 +27,8 @@
             "privacy.resistFingerprinting" = false;
 
             "sidebar.verticalTabs" = true;
-            "sidebar.visibility" = "expand-on-hover";
-            "sidebar.animation.expand-on-hover.duration-ms" = 0;
+            # Hover expansion is handled by sidebar-hover.css.
+            "sidebar.visibility" = "always-show";
             "sidebar.verticalTabs.dragToPinPromo.dismissed" = true;
 
             "browser.uiCustomization.state" = builtins.toJSON {
@@ -99,7 +99,8 @@
               --user-chrome-accent-color: #${config.colors.accent};
             }
           ''
-          + builtins.readFile ./userChrome.css;
+          + builtins.readFile ./userChrome.css
+          + builtins.readFile ./sidebar-hover.css;
           userContent = ''
             @-moz-document url-prefix("about:") {
               :root {

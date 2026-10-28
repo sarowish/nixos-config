@@ -1,0 +1,169 @@
+/*
+ * Adapted from https://github.com/agincel/firefox-sidebar-hover-workaround
+ * Bypass the native hover tracking affected by Mozilla bug 1985692.
+ * Requires sidebar.visibility = always-show.
+ */
+@media -moz-pref("sidebar.verticalTabs") and -moz-pref("sidebar.visibility", "always-show") {
+  :root {
+    --user-sidebar-collapsed-width: 58px;
+    --user-sidebar-expanded-width: 250px;
+    --user-sidebar-tools-display: none;
+    --user-sidebar-overflow-display: flex;
+
+    body {
+      #sidebar-container,
+      #sidebar-main {
+        width: var(--user-sidebar-collapsed-width) !important;
+        border: none !important;
+        background-color: transparent !important;
+      }
+
+      #tabbrowser-tabs {
+        .tab-close-button {
+          opacity: 0 !important;
+        }
+
+        .tab-label-container {
+          display: none !important;
+        }
+
+        /* Keep the close button on the left in either saved sidebar state. */
+        &[expanded] .tab-close-button {
+          position: absolute !important;
+          inset: auto !important;
+          top: -3px !important;
+          inset-inline-start: 2px !important;
+          margin: 0 !important;
+        }
+
+        label.toolbarbutton-text {
+          display: none !important;
+        }
+
+        #tabs-newtab-button {
+          width: var(--tab-collapsed-background-width) !important;
+        }
+
+        .tab-background {
+          width: var(--tab-collapsed-background-width);
+        }
+
+        tab[pinned="true"] .tab-content {
+          justify-content: left !important;
+          margin-left: 5px;
+        }
+      }
+
+      #pinned-tabs-container[orient="vertical"] {
+        --tab-pinned-min-width-expanded: 100%;
+      }
+
+      #sidebar-button {
+        list-style-image: url("chrome://browser/skin/sidebar-collapsed.svg") !important;
+
+        .toolbarbutton-badge-stack {
+          background-color: transparent !important;
+        }
+      }
+
+      &:has(
+        #sidebar-container:hover,
+        #sidebar-container:active,
+        #sidebar-main:hover,
+        #sidebar-main:active
+      ) {
+        --user-sidebar-tools-display: flex;
+        --user-sidebar-overflow-display: none;
+
+        #sidebar-container,
+        #sidebar-main {
+          width: var(--user-sidebar-expanded-width) !important;
+          /* Overlay the page while leaving only the collapsed width in layout. */
+          margin-inline-end: calc(
+            var(--user-sidebar-collapsed-width) - var(--user-sidebar-expanded-width)
+          ) !important;
+          z-index: 9999 !important;
+        }
+
+        #sidebar-container {
+          background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+
+        .tab-label-container {
+          display: flex !important;
+          margin-left: 8px;
+        }
+
+        .tab-icon-image {
+          margin-inline-end: 0;
+        }
+
+        #tabbrowser-tabs {
+          .tabbrowser-tab:hover .tab-close-button {
+            opacity: 1 !important;
+          }
+
+          label.toolbarbutton-text {
+            display: flex !important;
+          }
+
+          #tabs-newtab-button {
+            width: 100% !important;
+          }
+
+          .tab-background {
+            width: 92% !important;
+          }
+
+          tab[pinned="true"] .tab-background {
+            width: 97.5% !important;
+          }
+        }
+
+        #sidebar-button {
+          list-style-image: url("chrome://browser/skin/sidebar-expanded.svg") !important;
+
+          .toolbarbutton-badge-stack {
+            background-color: var(--toolbarbutton-background-color-hover) !important;
+          }
+        }
+      }
+    }
+  }
+
+  /* Match the native bottom controls while CSS handles expansion. */
+  .buttons-wrapper:has(> .tools-and-extensions) {
+    /* Ignore the height retained from the resizable tools area. */
+    height: auto !important;
+  }
+
+  #sidebar-tools-and-extensions-splitter {
+    display: none !important;
+  }
+
+  .tools-and-extensions.actions-list:not(.overflow-button) {
+    display: var(--user-sidebar-tools-display) !important;
+    flex-direction: row !important;
+    gap: var(--space-xxsmall) !important;
+    padding-inline: var(--space-medium) !important;
+    padding-block-end: var(--space-small) !important;
+    margin-block-start: var(--space-small) !important;
+
+    @media -moz-pref("browser.nova.enabled") {
+      gap: 12.5px !important;
+    }
+
+    > moz-button {
+      width: unset !important;
+      --button-outer-padding-inline: 0px !important;
+      --button-outer-padding-block: 0px !important;
+      --button-outer-padding-block-start: 0px !important;
+      --button-outer-padding-block-end: 0px !important;
+    }
+  }
+
+  .tools-and-extensions.actions-list.overflow-button {
+    display: var(--user-sidebar-overflow-display) !important;
+    margin-block-end: var(--space-small) !important;
+  }
+}
