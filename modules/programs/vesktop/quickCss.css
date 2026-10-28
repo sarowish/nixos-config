@@ -91,7 +91,12 @@ body::before {
 }
 
 .listItem__650eb {
-  margin: 0 0 6px !important;
+  margin: 0 0 4px !important;
+}
+
+/* Include the icon margins when sizing expanded folders. */
+.folderGroup__48112.isExpanded__48112 > .folderGuildsList__48112 {
+  height: auto !important;
 }
 
 .scroller_ef3116 {
