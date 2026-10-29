@@ -9,6 +9,7 @@ import { createNiri } from "./services/niri"
 import { createMpd } from "./services/mpd"
 import { createSystemStats } from "./services/system"
 import { createVolumeOsd } from "./services/volume-osd"
+import { createWorldClocks } from "./services/world-clocks"
 import style from "./style.scss"
 
 const themePath = `${GLib.get_user_config_dir()}/ags-theme.css`
@@ -37,6 +38,7 @@ app.start({
       mpd: createMpd(),
       system: createSystemStats(),
       volumeOsd: createVolumeOsd(),
+      worldClocks: createWorldClocks(),
     }
 
     const windows = new Map<Gdk.Monitor, () => void>()

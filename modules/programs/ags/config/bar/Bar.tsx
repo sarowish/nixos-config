@@ -4,6 +4,7 @@ import type { createNiri } from "../services/niri"
 import type { createMpd } from "../services/mpd"
 import type { createSystemStats } from "../services/system"
 import type { createVolumeOsd } from "../services/volume-osd"
+import type { createWorldClocks } from "../services/world-clocks"
 import Workspaces from "./Workspaces"
 import WindowMap from "./WindowMap"
 import KeyboardLayout from "./KeyboardLayout"
@@ -18,6 +19,7 @@ type Services = {
   mpd: ReturnType<typeof createMpd>
   system: ReturnType<typeof createSystemStats>
   volumeOsd: ReturnType<typeof createVolumeOsd>
+  worldClocks: ReturnType<typeof createWorldClocks>
 }
 
 export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; services: Services }) {
@@ -48,7 +50,7 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
           />
           <Media mpd={services.mpd} />
         </box>
-        <Clock $type="center" />
+        <Clock $type="center" worldClocks={services.worldClocks} />
         <box $type="end" spacing={8}>
           <Volume output={output} volumeOsd={services.volumeOsd} />
           <KeyboardLayout niri={services.niri} />

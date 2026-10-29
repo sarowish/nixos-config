@@ -4,9 +4,15 @@ import { createPoll } from "ags/time"
 import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import CalendarPopover from "../calendar/CalendarPopover"
+import WorldClocksPopover from "../world-clocks/WorldClocksPopover"
+import type { createWorldClocks } from "../services/world-clocks"
 
-export default function Clock() {
-  const [open, setOpen] = createState(false)
+export default function Clock({
+  worldClocks,
+}: {
+  worldClocks: ReturnType<typeof createWorldClocks>
+}) {
+  const [panel, setPanel] = createState<"calendar" | "clocks" | null>(null)
   const now = createPoll(GLib.DateTime.new_now_local(), 1000, () => GLib.DateTime.new_now_local())
   const calendarWidth = new Gtk.SizeGroup({ mode: Gtk.SizeGroupMode.HORIZONTAL })
   const attributes = new Pango.AttrList()
@@ -22,17 +28,22 @@ export default function Clock() {
     attributes.insert(attribute)
   }
 
+  const toggleCalendar = () => setPanel(panel.peek() === "calendar" ? null : "calendar")
   return (
-    <button
+    <box
       class="Clock"
       valign={Gtk.Align.CENTER}
-      focusable={false}
-      onClicked={() => setOpen(!open())}
-      $={(anchor: Gtk.Button) => {
-        CalendarPopover({ anchor, now, open, onClose: () => setOpen(false) })
+      spacing={16}
+      $={(anchor: Gtk.Box) => {
+        CalendarPopover({
+          anchor,
+          now,
+          open: panel((value) => value === "calendar"),
+          onClose: () => setPanel((value) => (value === "calendar" ? null : value)),
+        })
       }}
     >
-      <box spacing={16}>
+      <button focusable={false} onClicked={toggleCalendar}>
         <label
           class="weekday"
           widthRequest={90}
@@ -41,12 +52,28 @@ export default function Clock() {
           label={now((time) => time.format("%A") ?? "")}
           $={(label: Gtk.Label) => calendarWidth.add_widget(label)}
         />
+      </button>
+      <button
+        focusable={false}
+        onClicked={() => setPanel(panel.peek() === "clocks" ? null : "clocks")}
+        $={(anchor: Gtk.Button) => {
+          WorldClocksPopover({
+            anchor,
+            now,
+            clocks: worldClocks,
+            open: panel((value) => value === "clocks"),
+            onClose: () => setPanel((value) => (value === "clocks" ? null : value)),
+          })
+        }}
+      >
         <label
           class="time"
           attributes={attributes}
           valign={Gtk.Align.CENTER}
           label={now((time) => time.format("%H:%M:%S") ?? "")}
         />
+      </button>
+      <button focusable={false} onClicked={toggleCalendar}>
         <label
           class="date"
           widthRequest={90}
@@ -55,7 +82,7 @@ export default function Clock() {
           label={now((time) => time.format("%-d %B") ?? "")}
           $={(label: Gtk.Label) => calendarWidth.add_widget(label)}
         />
-      </box>
-    </button>
+      </button>
+    </box>
   )
 }
