@@ -1,9 +1,12 @@
+import { createState } from "ags"
 import { Gtk } from "ags/gtk4"
 import { createPoll } from "ags/time"
 import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
+import CalendarPopover from "../calendar/CalendarPopover"
 
 export default function Clock() {
+  const [open, setOpen] = createState(false)
   const now = createPoll(GLib.DateTime.new_now_local(), 1000, () => GLib.DateTime.new_now_local())
   const calendarWidth = new Gtk.SizeGroup({ mode: Gtk.SizeGroupMode.HORIZONTAL })
   const attributes = new Pango.AttrList()
@@ -20,29 +23,39 @@ export default function Clock() {
   }
 
   return (
-    <box class="Clock" valign={Gtk.Align.CENTER} spacing={16}>
-      <label
-        class="weekday"
-        widthRequest={90}
-        xalign={1}
-        valign={Gtk.Align.CENTER}
-        label={now((time) => time.format("%A") ?? "")}
-        $={(label: Gtk.Label) => calendarWidth.add_widget(label)}
-      />
-      <label
-        class="time"
-        attributes={attributes}
-        valign={Gtk.Align.CENTER}
-        label={now((time) => time.format("%H:%M:%S") ?? "")}
-      />
-      <label
-        class="date"
-        widthRequest={90}
-        xalign={0}
-        valign={Gtk.Align.CENTER}
-        label={now((time) => time.format("%-d %B") ?? "")}
-        $={(label: Gtk.Label) => calendarWidth.add_widget(label)}
-      />
-    </box>
+    <button
+      class="Clock"
+      valign={Gtk.Align.CENTER}
+      focusable={false}
+      onClicked={() => setOpen(!open())}
+      $={(anchor: Gtk.Button) => {
+        CalendarPopover({ anchor, now, open, onClose: () => setOpen(false) })
+      }}
+    >
+      <box spacing={16}>
+        <label
+          class="weekday"
+          widthRequest={90}
+          xalign={1}
+          valign={Gtk.Align.CENTER}
+          label={now((time) => time.format("%A") ?? "")}
+          $={(label: Gtk.Label) => calendarWidth.add_widget(label)}
+        />
+        <label
+          class="time"
+          attributes={attributes}
+          valign={Gtk.Align.CENTER}
+          label={now((time) => time.format("%H:%M:%S") ?? "")}
+        />
+        <label
+          class="date"
+          widthRequest={90}
+          xalign={0}
+          valign={Gtk.Align.CENTER}
+          label={now((time) => time.format("%-d %B") ?? "")}
+          $={(label: Gtk.Label) => calendarWidth.add_widget(label)}
+        />
+      </box>
+    </button>
   )
 }
