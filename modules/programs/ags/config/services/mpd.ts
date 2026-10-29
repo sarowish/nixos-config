@@ -6,6 +6,7 @@ import { mediaLabel } from "./parsers"
 export function createMpd() {
   const [label, setLabel] = createState("     ")
   const [available, setAvailable] = createState(false)
+  const [playing, setPlaying] = createState(false)
   let pending: Promise<void> | undefined
   let watcher: Process | undefined
   let retry: Timer | undefined
@@ -15,6 +16,7 @@ export function createMpd() {
     return (pending ??= execAsync(["mpc", "--format", "%artist%\t%title%", "status"])
       .then((output) => {
         setLabel(mediaLabel(output))
+        setPlaying(/^\[playing\]/m.test(output))
         setAvailable(true)
       })
       .catch(() => {
@@ -57,6 +59,7 @@ export function createMpd() {
   return {
     label,
     available,
+    playing,
     async command(action: "toggle" | "next" | "cdprev") {
       try {
         await execAsync(["mpc", action])

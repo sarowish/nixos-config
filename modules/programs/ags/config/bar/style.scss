@@ -90,4 +90,25 @@ window.Bar {
   .Cpu {
     padding: 0 4px;
   }
+
+  .Media {
+    .play-pause {
+      min-width: 28px;
+      min-height: 20px;
+      border-radius: 10px;
+      color: #{"@background"};
+      background-color: #{"@accent"};
+      transition:
+        border-radius 150ms ease-out,
+        background-color 150ms ease-out;
+    }
+
+    .play-pause:hover {
+      background-color: #{"mix(@accent, @foreground, 0.18)"};
+    }
+
+    .play-pause:active {
+      border-radius: 7px;
+    }
+  }
 }
