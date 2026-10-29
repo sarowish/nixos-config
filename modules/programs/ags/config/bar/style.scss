@@ -91,6 +91,27 @@ window.Bar {
     padding: 0 4px;
   }
 
+  .Clock {
+    color: #{"@foreground"};
+
+    .weekday,
+    .date {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .weekday {
+      opacity: 0.85;
+    }
+
+    .time {
+      font-size: 18px;
+      font-family: "Fira Sans";
+      font-weight: 600;
+      color: #{"@accent"};
+    }
+  }
+
   .Media {
     .artist {
       opacity: 0.75;
