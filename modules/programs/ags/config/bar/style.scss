@@ -92,6 +92,10 @@ window.Bar {
   }
 
   .Media {
+    .artist {
+      opacity: 0.75;
+    }
+
     .play-pause {
       min-width: 28px;
       min-height: 20px;

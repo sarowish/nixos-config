@@ -8,7 +8,7 @@ import {
   windowColumnsOnOutput,
   workspacesOnOutput,
 } from "../services/niri-state.ts"
-import { cpuSample, cpuUsage, memoryUsed, mediaLabel } from "../services/parsers.ts"
+import { cpuSample, cpuUsage, memoryUsed, mediaTrack } from "../services/parsers.ts"
 import { fitWindowMap, interpolateRectangle, interpolateValue } from "../services/window-map.ts"
 
 function workspace(id, output, idx, active = false) {
@@ -259,11 +259,21 @@ test("window map interpolation is bounded and can continue from an interrupted f
   assert.equal(interpolateValue(0, 1, 0.5), 0.875)
 })
 
-test("MPD shows paused tracks, blanks stopped tracks, and limits only the title", () => {
-  assert.equal(mediaLabel("artist\ttitle\n[paused] #1/3\nvolume:100%"), "artist - title")
-  assert.equal(mediaLabel("artist\ttitle\nvolume:100%"), "     ")
-  assert.equal(mediaLabel(""), "     ")
-  assert.equal(mediaLabel(`artist\t${"🎵".repeat(81)}\n[playing]`), `artist - ${"🎵".repeat(80)}`)
+test("MPD keeps track fields separate, includes paused tracks, and limits only the title", () => {
+  assert.deepEqual(mediaTrack("artist\ttitle\n[paused] #1/3\nvolume:100%"), {
+    artist: "artist",
+    title: "title",
+  })
+  assert.equal(mediaTrack("artist\ttitle\nvolume:100%"), null)
+  assert.equal(mediaTrack(""), null)
+  assert.deepEqual(mediaTrack(`artist\t${"🎵".repeat(81)}\n[playing]`), {
+    artist: "artist",
+    title: "🎵".repeat(80),
+  })
+  assert.deepEqual(mediaTrack("Artist - Live & <Friends>\tTitle - Part 2\n[playing]"), {
+    artist: "Artist - Live & <Friends>",
+    title: "Title - Part 2",
+  })
 })
 
 test("CPU uses counter deltas, includes iowait as idle, and avoids guest double counting", () => {

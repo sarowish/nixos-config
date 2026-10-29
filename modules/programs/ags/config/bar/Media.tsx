@@ -4,7 +4,10 @@ import type { createMpd } from "../services/mpd"
 export default function Media({ mpd }: { mpd: ReturnType<typeof createMpd> }) {
   return (
     <box class="Media" visible={mpd.available} marginStart={8} spacing={8}>
-      <label label={mpd.label} />
+      <box>
+        <label class="artist" label={mpd.track((track) => (track ? `${track.artist} - ` : ""))} />
+        <label label={mpd.track((track) => track?.title ?? "     ")} />
+      </box>
       <button
         class="play-pause"
         valign={Gtk.Align.CENTER}

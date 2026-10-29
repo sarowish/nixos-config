@@ -1,10 +1,10 @@
 import { interval, timeout, type Timer } from "ags/time"
 import { execAsync, subprocess, type Process } from "ags/process"
 import { createState, onCleanup } from "ags"
-import { mediaLabel } from "./parsers"
+import { mediaTrack } from "./parsers"
 
 export function createMpd() {
-  const [label, setLabel] = createState("     ")
+  const [track, setTrack] = createState<ReturnType<typeof mediaTrack>>(null)
   const [available, setAvailable] = createState(false)
   const [playing, setPlaying] = createState(false)
   let pending: Promise<void> | undefined
@@ -15,7 +15,7 @@ export function createMpd() {
   function refresh() {
     return (pending ??= execAsync(["mpc", "--format", "%artist%\t%title%", "status"])
       .then((output) => {
-        setLabel(mediaLabel(output))
+        setTrack(mediaTrack(output))
         setPlaying(/^\[playing\]/m.test(output))
         setAvailable(true)
       })
@@ -57,7 +57,7 @@ export function createMpd() {
     watcher?.kill()
   })
   return {
-    label,
+    track,
     available,
     playing,
     async command(action: "toggle" | "next" | "cdprev") {

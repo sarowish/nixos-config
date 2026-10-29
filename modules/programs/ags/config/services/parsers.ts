@@ -1,10 +1,10 @@
-export function mediaLabel(status: string) {
+export function mediaTrack(status: string) {
   const lines = status.split("\n")
-  if (!lines.some((line) => /^\[(playing|paused)\]/.test(line))) return "     "
+  if (!lines.some((line) => /^\[(playing|paused)\]/.test(line))) return null
   const [artist = "", title = ""] = lines[0].split("\t")
   const characters = Array.from(title)
   const shortened = characters.slice(0, 80).join("")
-  return `${artist} - ${shortened}`
+  return { artist, title: shortened }
 }
 
 export function cpuSample(stat: string) {
