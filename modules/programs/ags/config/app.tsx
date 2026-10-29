@@ -16,6 +16,15 @@ const theme = GLib.file_test(themePath, GLib.FileTest.EXISTS) ? readFile(themePa
 
 app.start({
   css: `${style}\n${theme}`,
+  requestHandler([command], response) {
+    if (command === "reload-css") {
+      const css = readFile(`${GLib.get_user_config_dir()}/ags-style.css`)
+      app.apply_css(css, true)
+      response("Styles reloaded")
+    } else {
+      response("Unknown command")
+    }
+  },
   main() {
     const settings = Gtk.Settings.get_default()
     if (settings) {

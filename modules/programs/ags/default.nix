@@ -46,7 +46,12 @@ in
     };
 
   flake.modules.homeManager.ags =
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       imports = [ inputs.ags.homeManagerModules.default ];
 
@@ -56,6 +61,18 @@ in
         @define-color foreground #${config.colors.foreground};
         @define-color urgent #${config.colors.yellow};
       '';
+
+      xdg.configFile."ags-style.css".source =
+        let
+          styles = lib.fileset.toSource {
+            root = ./config;
+            fileset = lib.fileset.fileFilter (file: file.hasExt "scss" || file.hasExt "css") ./config;
+          };
+        in
+        pkgs.runCommand "ags-style.css" { nativeBuildInputs = [ pkgs.dart-sass ]; } ''
+          sass --no-source-map ${styles}/style.scss > "$out"
+          cat ${config.xdg.configFile."ags-theme.css".source} >> "$out"
+        '';
 
       programs.ags = {
         enable = true;
@@ -71,13 +88,14 @@ in
           After = [ "niri.service" ];
           ConditionEnvironment = "NIRI_SOCKET";
           X-Restart-Triggers = [
-            (builtins.path {
-              path = ./config;
-              name = "ags-config";
+            (lib.fileset.toSource {
+              root = ./config;
+              fileset = lib.fileset.fileFilter (file: !(file.hasExt "scss" || file.hasExt "css")) ./config;
             })
-            config.xdg.configFile."ags-theme.css".source
           ];
+          X-Reload-Triggers = [ config.xdg.configFile."ags-style.css".source ];
         };
+        Service.ExecReload = "${config.programs.ags.finalPackage}/bin/ags request reload-css";
       };
     };
 }
