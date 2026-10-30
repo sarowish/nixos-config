@@ -15,7 +15,7 @@ export default function KeyboardLayout({ niri }: { niri: ReturnType<typeof creat
         onReleased={() => switchKeyboardLayout("Prev")}
       />
       <box spacing={4}>
-        <label class="accent" label="󰌌" />
+        <label class="status-icon accent" label="󰌌" />
         <label label={layout} />
       </box>
     </button>

@@ -91,6 +91,16 @@ window.Bar {
     padding: 0 4px;
   }
 
+  .status-icon {
+    min-width: 20px;
+    font-family: "Symbols Nerd Font";
+    font-size: 14px;
+  }
+
+  .KeyboardLayout .status-icon {
+    font-size: 16px;
+  }
+
   .Clock {
     color: #{"@foreground"};
 

@@ -59,8 +59,8 @@ export default function Volume({
       />
       <box spacing={4}>
         <label
-          class={mute((muted) => (muted ? "" : "accent"))}
-          label={createComputed(() => (mute() ? "󰖁" : icon()))}
+          class={mute((muted) => (muted ? "status-icon" : "status-icon accent"))}
+          label={createComputed(() => (mute() ? "" : icon()))}
         />
         <label
           label={createComputed(() => (mute() ? "muted" : `${Math.round(volume() * 100)}%`))}
