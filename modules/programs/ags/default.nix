@@ -10,6 +10,7 @@ let
       wireplumber
       tray
       pkgs.mpc
+      pkgs.nodejs
       inputs.niri-pkgs.packages.${system}.niri-unstable
     ];
 in
@@ -81,6 +82,15 @@ in
         configDir = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/modules/programs/ags/config";
 
         extraPackages = extraPackagesFor pkgs.stdenv.hostPlatform.system;
+      };
+
+      xdg.desktopEntries.wallpapers = {
+        name = "Change wallpaper";
+        comment = "Browse wallpapers and preview accent colors";
+        exec = "${config.programs.ags.finalPackage}/bin/ags request wallpaper";
+        icon = "preferences-desktop-wallpaper";
+        categories = [ "Settings" ];
+        terminal = false;
       };
 
       systemd.user.services.ags = {

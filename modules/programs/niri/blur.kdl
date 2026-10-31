@@ -15,7 +15,7 @@ layer-rule {
 }
 
 layer-rule {
-    match namespace="^ags-(calendar|world-clocks|player|volume-(osd-)?(track|sink))$"
+    match namespace="^ags-(calendar|world-clocks|player|volume-(osd-)?(track|sink)|wallpaper-(picker|preview-controls|color-picker|preview-background))$"
     geometry-corner-radius 20
     shadow {
         on
@@ -31,8 +31,23 @@ layer-rule {
 }
 
 layer-rule {
-    match namespace="^ags-(player|volume-(osd-)?track)$"
+    match namespace="^ags-(player|volume-(osd-)?track|wallpaper-color-picker)$"
     geometry-corner-radius 14
+}
+
+layer-rule {
+    match namespace="^ags-wallpaper-preview-(background|strip|handle)$"
+    geometry-corner-radius 0
+    shadow {
+        off
+    }
+}
+
+layer-rule {
+    match namespace="^ags-wallpaper-preview-(strip|handle)$"
+    background-effect {
+        blur false
+    }
 }
 
 layer-rule {

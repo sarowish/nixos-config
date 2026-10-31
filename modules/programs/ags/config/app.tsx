@@ -10,10 +10,12 @@ import { createMpd } from "./services/mpd"
 import { createSystemStats } from "./services/system"
 import { createVolumeOsd } from "./services/volume-osd"
 import { createWorldClocks } from "./services/world-clocks"
+import { createWallpaperPicker } from "./wallpaper/WallpaperPicker"
 import style from "./style.scss"
 
 const themePath = `${GLib.get_user_config_dir()}/ags-theme.css`
 const theme = GLib.file_test(themePath, GLib.FileTest.EXISTS) ? readFile(themePath) : ""
+let wallpaperPicker: ReturnType<typeof createWallpaperPicker> | undefined
 
 app.start({
   css: `${style}\n${theme}`,
@@ -21,7 +23,11 @@ app.start({
     if (command === "reload-css") {
       const css = readFile(`${GLib.get_user_config_dir()}/ags-style.css`)
       app.apply_css(css, true)
+      wallpaperPicker?.reloadCss(css)
       response("Styles reloaded")
+    } else if (command === "wallpaper") {
+      wallpaperPicker?.toggle()
+      response("Wallpaper picker toggled")
     } else {
       response("Unknown command")
     }
@@ -44,6 +50,7 @@ app.start({
     const windows = new Map<Gdk.Monitor, () => void>()
     const monitors = Gdk.Display.get_default()!.get_monitors()
     function syncMonitors() {
+      wallpaperPicker?.endPreview()
       const current = app.get_monitors()
       for (const [monitor, dispose] of windows) {
         if (!current.includes(monitor)) {
@@ -66,5 +73,11 @@ app.start({
       for (const dispose of windows.values()) dispose()
     })
     syncMonitors()
+    wallpaperPicker = createWallpaperPicker(
+      `${style}\n${theme}`,
+      () =>
+        services.niri.state.peek().workspaces.find((workspace) => workspace.is_focused)?.output ??
+        undefined,
+    )
   },
 })
