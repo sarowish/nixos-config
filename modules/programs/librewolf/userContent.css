@@ -38,6 +38,37 @@
   }
 }
 
+@-moz-document domain("github.com") {
+  .ContributionCalendar[data-holiday="halloween"],
+  .halloween-activity-overview {
+    --contribution-halloween-bgColor-1: var(--contribution-default-bgColor-1) !important;
+    --contribution-halloween-bgColor-2: var(--contribution-default-bgColor-2) !important;
+    --contribution-halloween-bgColor-3: var(--contribution-default-bgColor-3) !important;
+    --contribution-halloween-bgColor-4: var(--contribution-default-bgColor-4) !important;
+  }
+
+  .halloween-activity-overview .js-highlight-blob {
+    fill: var(--contribution-default-bgColor-4) !important;
+    stroke: var(--contribution-default-bgColor-4) !important;
+  }
+
+  .contribution-activity .Progress-item[style*="#ffee4a" i] {
+    background-color: var(--contribution-default-bgColor-1) !important;
+  }
+
+  .contribution-activity .Progress-item[style*="#ffc501" i] {
+    background-color: var(--contribution-default-bgColor-2) !important;
+  }
+
+  .contribution-activity .Progress-item[style*="#fe9600" i] {
+    background-color: var(--contribution-default-bgColor-3) !important;
+  }
+
+  .contribution-activity .Progress-item[style*="#03001c" i] {
+    background-color: var(--contribution-default-bgColor-4) !important;
+  }
+}
+
 @-moz-document domain("reddit.com") {
   @media (max-width: 1280px) {
     #left-sidebar-container,
