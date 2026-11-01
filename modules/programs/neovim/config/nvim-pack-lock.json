@@ -65,6 +65,10 @@
       "rev": "c8d29979cb0cb3a2437a8e0ae683fd82f340d3b8",
       "src": "https://github.com/karb94/neoscroll.nvim"
     },
+    "no-neck-pain.nvim": {
+      "rev": "ed63925a065cddc73afd51c5d486f7956385a21f",
+      "src": "https://github.com/shortcuts/no-neck-pain.nvim"
+    },
     "nvim-autopairs": {
       "rev": "3172f40c16563db871a58f20d205c710ad782311",
       "src": "https://github.com/windwp/nvim-autopairs"
@@ -100,10 +104,6 @@
     "trouble.nvim": {
       "rev": "bd67efe408d4816e25e8491cc5ad4088e708a69a",
       "src": "https://github.com/folke/trouble.nvim"
-    },
-    "typescript-tools.nvim": {
-      "rev": "c2f5910074103705661e9651aa841e0d7eea9932",
-      "src": "https://github.com/pmizio/typescript-tools.nvim"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",

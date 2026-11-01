@@ -10,6 +10,7 @@ local plugin = loader.defer({
             heex = { "mix" },
             python = { "ruff_format", "ruff_organize_imports" },
             javascript = { "prettier" },
+            typescript = { "prettier" },
             svelte = { "prettier" },
             html = { "prettier" },
         }
