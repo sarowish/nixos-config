@@ -1,11 +1,13 @@
+local typescript = require('lsp.typescript')
+
 return {
     cmd = { 'typescript-language-server', '--stdio' },
     filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
     root_dir = function(bufnr, on_dir)
-        local root = vim.fs.root(bufnr, 'tsconfig.json')
-            or vim.fs.root(bufnr, { 'jsconfig.json', 'package.json', '.git' })
-            or vim.fn.getcwd()
-        on_dir(root:match('^(.-)/node_modules/') or root)
+        local root = typescript.root(bufnr)
+        if not typescript.native_cmd(root) then
+            on_dir(root)
+        end
     end,
     capabilities = require('blink.cmp').get_lsp_capabilities(),
     init_options = {
@@ -22,12 +24,7 @@ return {
     settings = {
         completions = { completeFunctionCalls = true },
     },
-    on_attach = function(_, bufnr)
-        -- Include import and cleanup actions alongside quick fixes and refactors.
-        vim.keymap.set({ 'n', 'x' }, 'ga', function()
-            vim.lsp.buf.code_action({ context = { only = { 'quickfix', 'refactor', 'source' } } })
-        end, { buffer = bufnr, desc = 'LSP: Code Action' })
-    end,
+    on_attach = typescript.on_attach,
     handlers = {
         ['_typescript.rename'] = function(_, params, ctx)
             local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
