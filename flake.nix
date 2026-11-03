@@ -66,6 +66,7 @@
     mpd-herald.url = "github:sarowish/mpd-herald";
     nix-t3code.url = "github:limwa/nix-t3code";
     codex.url = "github:sadjow/codex-cli-nix";
+    claude-code.url = "github:sadjow/claude-code-nix";
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);

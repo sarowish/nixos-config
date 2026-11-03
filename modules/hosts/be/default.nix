@@ -30,6 +30,7 @@ in
 
     home-manager.users.chels.imports = [
       homeManager.chels
+      homeManager.agents
       homeManager.ags
       homeManager.alacritty
       homeManager.atuin
@@ -38,7 +39,6 @@ in
       homeManager.beets
       homeManager.btop
       homeManager.byedpi
-      homeManager.codex
       homeManager.colors
       homeManager.cursor
       homeManager.fish
