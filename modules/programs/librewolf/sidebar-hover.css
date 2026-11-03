@@ -7,24 +7,101 @@
   :root {
     --user-sidebar-collapsed-width: 58px;
     --user-sidebar-expanded-width: 250px;
+    --user-sidebar-trigger-height: 40cqh;
+    --user-sidebar-tab-hover-buffer: 32px;
     --user-sidebar-tools-display: none;
     --user-sidebar-overflow-display: flex;
 
     body {
       #sidebar-container,
-      #sidebar-main {
-        width: var(--user-sidebar-collapsed-width) !important;
+      sidebar-main {
+        width: var(
+          --user-sidebar-width,
+          var(--user-sidebar-collapsed-width)
+        ) !important;
+        /* Overlay the page while leaving only the collapsed width in layout. */
+        margin-inline-end: var(--user-sidebar-margin, 0px) !important;
+        z-index: var(--user-sidebar-z-index, auto) !important;
         border: none !important;
         background-color: transparent !important;
       }
 
+      #sidebar-container {
+        position: relative;
+        /* Measure the top trigger against the whole sidebar height. */
+        container-type: size;
+        background-color: var(
+          --user-sidebar-background,
+          transparent
+        ) !important;
+      }
+
+      .tab-label-container {
+        display: var(--user-sidebar-label-display, none) !important;
+        margin-left: var(--user-sidebar-label-margin, 0px);
+      }
+
+      .tab-icon-image {
+        margin-inline-end: var(--user-sidebar-icon-margin, revert);
+      }
+
       #tabbrowser-tabs {
+        /* Keep the trigger inside the tab strip so incoming drags reach its
+         * native dragover and drop handlers. */
+        &::before {
+          content: "";
+          position: absolute;
+          inset-inline: 0;
+          top: 0;
+          height: var(--user-sidebar-trigger-height);
+          z-index: 1;
+          pointer-events: var(--user-sidebar-trigger-events, auto);
+        }
+
+        #tabbrowser-arrowscrollbox {
+          position: relative;
+        }
+
+        /* Keep the bottom gaps inside their controls' hit areas, so hovering
+         * them cannot match the top trigger's bare-tab-strip selector. */
+        #tabbrowser-arrowscrollbox::after,
+        #vertical-tabs-newtab-button::after {
+          content: "";
+          position: absolute;
+          z-index: 1;
+        }
+
+        #tabbrowser-arrowscrollbox::after {
+          top: 100%;
+          inset-inline: 0;
+          /* Include the tab strip's one-pixel bottom divider. */
+          height: calc(var(--space-small) + 1px);
+        }
+
+        #vertical-tabs-newtab-button::after {
+          inset-block: calc(-1 * var(--space-small));
+          inset-block-end: calc(-1 * (var(--space-small) + 1px));
+          inset-inline: calc(-1 * var(--tab-margin-inline-inner));
+        }
+
+        /* Follow the end of the tab list without stretching the hover area
+         * through the unused space below it. The scroll viewport clips this
+         * buffer before it can cover the bottom controls. */
+        #tabbrowser-arrowscrollbox-periphery::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          inset-inline: 0;
+          height: var(--user-sidebar-tab-hover-buffer);
+          pointer-events: var(--user-sidebar-trigger-events, auto);
+        }
+
         .tab-close-button {
           opacity: 0 !important;
         }
 
-        .tab-label-container {
-          display: none !important;
+        .tabbrowser-tab:hover .tab-close-button {
+          opacity: var(--user-sidebar-close-opacity, 0) !important;
         }
 
         /* Keep the close button on the left in either saved sidebar state. */
@@ -37,15 +114,28 @@
         }
 
         label.toolbarbutton-text {
-          display: none !important;
+          display: var(--user-sidebar-label-display, none) !important;
         }
 
         #tabs-newtab-button {
-          width: var(--tab-collapsed-background-width) !important;
+          width: var(
+            --user-sidebar-newtab-width,
+            var(--tab-collapsed-background-width)
+          ) !important;
         }
 
         .tab-background {
-          width: var(--tab-collapsed-background-width);
+          width: var(
+            --user-sidebar-tab-width,
+            var(--tab-collapsed-background-width)
+          ) !important;
+        }
+
+        tab[pinned="true"] .tab-background {
+          width: var(
+            --user-sidebar-pinned-tab-width,
+            var(--tab-collapsed-background-width)
+          ) !important;
         }
 
         tab[pinned="true"] .tab-content {
@@ -59,75 +149,82 @@
       }
 
       #sidebar-button {
-        list-style-image: url("chrome://browser/skin/sidebar-collapsed.svg") !important;
+        list-style-image: var(
+          --user-sidebar-button-icon,
+          url("chrome://browser/skin/sidebar-collapsed.svg")
+        ) !important;
 
         .toolbarbutton-badge-stack {
-          background-color: transparent !important;
+          background-color: var(
+            --user-sidebar-button-background,
+            transparent
+          ) !important;
         }
       }
 
       &:has(
         #sidebar-container:hover,
         #sidebar-container:active,
-        #sidebar-main:hover,
-        #sidebar-main:active
+        sidebar-main:hover,
+        sidebar-main:active
       ) {
-        --user-sidebar-tools-display: flex;
-        --user-sidebar-overflow-display: none;
-
-        #sidebar-container,
-        #sidebar-main {
-          width: var(--user-sidebar-expanded-width) !important;
-          /* Overlay the page while leaving only the collapsed width in layout. */
-          margin-inline-end: calc(
-            var(--user-sidebar-collapsed-width) - var(--user-sidebar-expanded-width)
-          ) !important;
-          z-index: 9999 !important;
-        }
-
-        #sidebar-container {
-          background-color: rgba(0, 0, 0, 0.9) !important;
-        }
-
-        .tab-label-container {
-          display: flex !important;
-          margin-left: 8px;
-        }
-
-        .tab-icon-image {
-          margin-inline-end: 0;
-        }
-
-        #tabbrowser-tabs {
-          .tabbrowser-tab:hover .tab-close-button {
-            opacity: 1 !important;
-          }
-
-          label.toolbarbutton-text {
-            display: flex !important;
-          }
-
-          #tabs-newtab-button {
-            width: 100% !important;
-          }
-
-          .tab-background {
-            width: 92% !important;
-          }
-
-          tab[pinned="true"] .tab-background {
-            width: 97.5% !important;
-          }
-        }
-
-        #sidebar-button {
-          list-style-image: url("chrome://browser/skin/sidebar-expanded.svg") !important;
-
-          .toolbarbutton-badge-stack {
-            background-color: var(--toolbarbutton-background-color-hover) !important;
-          }
-        }
+        /* Pause at the collapsed state until the top or tabs are hovered. Once played,
+         * retain the expanded state until leaving the sidebar removes it. */
+        animation: user-sidebar-expand 1ms step-end forwards paused;
       }
+
+      /* A visible drop indicator opens an incoming target without mouse hover. */
+      &:has(#tabbrowser-tabs .tab-drop-indicator:not([hidden])) {
+        animation: user-sidebar-expand 1ms step-end forwards;
+      }
+
+      &:has(#tabbrowser-tabs:hover):not(:has(#tabbrowser-tabs > :hover)),
+      &:has(
+        .tabbrowser-tab:hover,
+        .tab-group-label-container:hover,
+        #tabs-newtab-button:hover,
+        #tabbrowser-arrowscrollbox-periphery:hover
+      ) {
+        animation-play-state: running;
+      }
+    }
+
+    /* A click on the bottom chevron opens its native popup and expands the bar. */
+    &:has(#sidebar-tools-overflow[panelopen]) body {
+      animation-play-state: running;
+    }
+
+    /* A cross-window drag can leave :hover on the source window. Reset its
+     * expansion on focus loss, while allowing an incoming drop target to open. */
+    &:-moz-window-inactive
+      body:not(:has(#tabbrowser-tabs .tab-drop-indicator:not([hidden]))) {
+      animation: none;
+    }
+  }
+
+  @keyframes user-sidebar-expand {
+    to {
+      --user-sidebar-width: var(--user-sidebar-expanded-width);
+      --user-sidebar-margin: calc(
+        var(--user-sidebar-collapsed-width) - var(--user-sidebar-expanded-width)
+      );
+      --user-sidebar-z-index: 9999;
+      --user-sidebar-background: rgba(0, 0, 0, 0.9);
+      --user-sidebar-label-display: flex;
+      --user-sidebar-label-margin: 8px;
+      --user-sidebar-icon-margin: 0px;
+      --user-sidebar-close-opacity: 1;
+      --user-sidebar-newtab-width: 100%;
+      --user-sidebar-tab-width: 92%;
+      --user-sidebar-pinned-tab-width: 97.5%;
+      --user-sidebar-button-icon: url("chrome://browser/skin/sidebar-expanded.svg");
+      --user-sidebar-button-background: var(
+        --toolbarbutton-background-color-hover
+      );
+      --user-sidebar-tools-display: flex;
+      --user-sidebar-overflow-display: none;
+      /* Let clicks reach the tabs and bottom controls after expansion. */
+      --user-sidebar-trigger-events: none;
     }
   }
 
@@ -141,7 +238,8 @@
     display: none !important;
   }
 
-  .tools-and-extensions.actions-list:not(.overflow-button) {
+  /* The chevron's popup keeps its native layout while the sidebar is collapsed. */
+  .tools-and-extensions.actions-list:not(.overflow-button, .overflow-list) {
     display: var(--user-sidebar-tools-display) !important;
     flex-direction: row !important;
     gap: var(--space-xxsmall) !important;
