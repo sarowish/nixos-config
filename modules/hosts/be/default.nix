@@ -20,7 +20,7 @@ in
       nixos.openrgb
       nixos.packages
       nixos.pipewire
-      nixos.steam
+      # nixos.steam
       nixos.sudo
       nixos.user-chels
       nixos.virtualisation
