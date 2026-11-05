@@ -1,7 +1,7 @@
 import { createEffect, createMemo, createState, type Accessor } from "ags"
 import { Gtk } from "ags/gtk4"
 import GLib from "gi://GLib?version=2.0"
-import PopupWindow from "../widgets/PopupWindow"
+import PopupWindow, { above } from "../widgets/PopupWindow"
 import { monthDates } from "./dates"
 
 export default function CalendarPopover({
@@ -112,7 +112,7 @@ export default function CalendarPopover({
     </box>
   ) as Gtk.Box
   return PopupWindow({
-    anchor,
+    place: above(anchor),
     child: card,
     open,
     onClose,

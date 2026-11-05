@@ -1,8 +1,8 @@
-import { createComputed, onCleanup } from "ags"
-import { Astal, Gdk, Gtk } from "ags/gtk4"
-import Cairo from "cairo"
+import { createComputed } from "ags"
+import { Gdk, Gtk } from "ags/gtk4"
 import type { createVolumeOsd } from "../services/volume-osd"
-import VolumeTrack, { TRACK_HEIGHT } from "./VolumeTrack"
+import PopupWindow from "../widgets/PopupWindow"
+import VolumeTrack from "./VolumeTrack"
 import SinkPanel from "./SinkPanel"
 
 export default function VolumeOsd({
@@ -12,53 +12,38 @@ export default function VolumeOsd({
   monitor: Gdk.Monitor
   volumeOsd: ReturnType<typeof createVolumeOsd>
 }) {
-  return (
-    <window
-      name={`volume-osd-${monitor.connector}`}
-      namespace="ags-volume-osd"
-      class="VolumeOsd"
-      visible={volumeOsd.barOutput.as((output) => output === null)}
-      gdkmonitor={monitor}
-      anchor={Astal.WindowAnchor.RIGHT}
-      layer={Astal.Layer.OVERLAY}
-      exclusivity={Astal.Exclusivity.IGNORE}
-      keymode={Astal.Keymode.NONE}
-      marginRight={0}
-      $={(window: Astal.Window) => {
-        const makeClickThrough = () => window.get_surface()?.set_input_region(new Cairo.Region())
-        const realized = window.connect("realize", makeClickThrough)
+  const open = createComputed(() => volumeOsd.visible() && volumeOsd.barOutput() === null)
+  const track = VolumeTrack({ volumeOsd })
+  const sink = SinkPanel({ volumeOsd, visible: true })
+  const hasTrack = () => volumeOsd.mode() !== "sink-only"
+  const hasSink = () => volumeOsd.mode() !== "volume"
 
-        makeClickThrough()
-        onCleanup(() => {
-          window.disconnect(realized)
-          window.destroy()
-        })
-      }}
-    >
-      <overlay widthRequest={320} heightRequest={TRACK_HEIGHT + 24} overflow={Gtk.Overflow.HIDDEN}>
-        <box />
-        <revealer
-          $type="overlay"
-          revealChild={createComputed(() => volumeOsd.visible() && volumeOsd.barOutput() === null)}
-          transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
-          transitionDuration={220}
-          halign={Gtk.Align.END}
-          valign={Gtk.Align.FILL}
-        >
-          <box
-            class="content"
-            halign={Gtk.Align.END}
-            valign={Gtk.Align.CENTER}
-            spacing={12}
-            marginEnd={12}
-          >
-            <SinkPanel volumeOsd={volumeOsd} />
-            <box visible={volumeOsd.mode.as((mode) => mode !== "sink-only")}>
-              <VolumeTrack volumeOsd={volumeOsd} />
-            </box>
-          </box>
-        </revealer>
-      </overlay>
-    </window>
-  ) as Astal.Window
+  for (const [panel, child, visible] of [
+    ["track", track, hasTrack],
+    ["sink", sink, hasSink],
+  ] as const) {
+    PopupWindow({
+      child,
+      open: createComputed(() => open() && visible()),
+      name: `volume-osd-${panel}`,
+      className: "VolumeOsd",
+      passive: true,
+      duration: 220,
+      fade: false,
+      edge: "right",
+      place: (width, height, progress) => {
+        const screen = monitor.get_geometry()
+        const trackWidth = hasTrack() ? track.measure(Gtk.Orientation.HORIZONTAL, -1)[1] : 0
+        const sinkWidth = hasSink() ? sink.measure(Gtk.Orientation.HORIZONTAL, -1)[1] : 0
+        const gap = hasTrack() && hasSink() ? 12 : 0
+        const groupWidth = trackWidth + sinkWidth + gap
+        const right = 12 + (panel === "sink" ? trackWidth + gap : 0)
+        return {
+          monitor,
+          x: screen.width - right - width + (groupWidth + 12) * (1 - progress),
+          y: (screen.height - height) / 2,
+        }
+      },
+    })
+  }
 }

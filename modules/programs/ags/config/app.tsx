@@ -55,8 +55,7 @@ app.start({
         if (!windows.has(monitor))
           createRoot((dispose) => {
             app.add_window(Bar({ monitor, services }))
-            if (monitor.connector === "DP-1")
-              app.add_window(VolumeOsd({ monitor, volumeOsd: services.volumeOsd }))
+            if (monitor.connector === "DP-1") VolumeOsd({ monitor, volumeOsd: services.volumeOsd })
             windows.set(monitor, dispose)
           })
       }

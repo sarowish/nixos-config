@@ -8,8 +8,7 @@ window.Player {
   .player-card {
     border: 5px solid #{"@background"};
     border-radius: 14px;
-    background: #{"mix(@background, @foreground, 0.12)"};
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    background: #{"alpha(mix(@background, @foreground, 0.12), 0.8)"};
   }
   .player-content {
     padding: 11px;

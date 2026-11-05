@@ -1,7 +1,7 @@
 import type { Accessor } from "ags"
 import { Gtk } from "ags/gtk4"
 import type { createMpd } from "../services/mpd"
-import PopupWindow from "../widgets/PopupWindow"
+import PopupWindow, { above } from "../widgets/PopupWindow"
 import Player from "./Player"
 
 export default function PlayerWindow({
@@ -16,12 +16,11 @@ export default function PlayerWindow({
   onClose: () => void
 }) {
   return PopupWindow({
-    anchor,
+    place: above(anchor, { align: "start" }),
     child: Player({ mpd }),
     open,
     onClose,
     name: "player",
     className: "Player",
-    align: "start",
   })
 }

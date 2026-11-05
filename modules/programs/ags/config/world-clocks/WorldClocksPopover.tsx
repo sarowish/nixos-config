@@ -4,7 +4,7 @@ import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import type { createWorldClocks } from "../services/world-clocks"
 import { dayHint, matchesZone, zoneName } from "../services/world-clocks-state"
-import PopupWindow from "../widgets/PopupWindow"
+import PopupWindow, { above } from "../widgets/PopupWindow"
 
 type WorldClocks = ReturnType<typeof createWorldClocks>
 
@@ -387,7 +387,7 @@ export default function WorldClocksPopover({
   const stopped = search.connect("stop-search", onClose)
   onCleanup(() => search.disconnect(stopped))
   return PopupWindow({
-    anchor,
+    place: above(anchor),
     child: card,
     open,
     onClose,

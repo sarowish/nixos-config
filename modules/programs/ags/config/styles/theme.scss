@@ -9,6 +9,18 @@ window.Bar {
   font-family: "Fira Sans Book", "Nerd Fonts";
 }
 
+window.PopupBackdrop {
+  padding: 0;
+  margin: 0;
+  // A fully empty drawing makes GTK skip the buffer, leaving no Wayland input target.
+  background: rgba(0, 0, 0, 0.004);
+  box-shadow: none;
+
+  &.passive {
+    background: transparent;
+  }
+}
+
 .accent {
   color: #{"@accent"};
 }
