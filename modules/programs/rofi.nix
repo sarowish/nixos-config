@@ -5,8 +5,8 @@
       programs.rofi = {
         enable = true;
 
-        font = "Fira Sans Book 12";
-        extraConfig = {
+        settings = {
+          font = "Fira Sans Book 12";
           show-icons = false;
           hover-select = true;
         };
