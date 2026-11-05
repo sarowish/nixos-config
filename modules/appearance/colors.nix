@@ -13,7 +13,7 @@
     in
     {
       options.colors = {
-        accent = mkColorOption "f75663";
+        accent = mkColorOption "6ce5be";
 
         background = mkColorOption "1e1e2e";
         foreground = mkColorOption "d9e0ee";
