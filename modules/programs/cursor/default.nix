@@ -15,6 +15,7 @@
     in
     {
       home.pointerCursor = {
+        enable = true;
         package = cursorPackage;
         name = themeName;
 
