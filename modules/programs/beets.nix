@@ -9,6 +9,10 @@
           library = "${config.xdg.stateHome}/beets/library.db";
           paths.default = "$albumartist/[$original_year] $album%aunique{}/$track $title";
 
+          import = {
+            move = true;
+          };
+
           plugins = [
             "edit"
             "fetchart"
