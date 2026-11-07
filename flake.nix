@@ -20,7 +20,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
 
     niri = {
-      url = "github:epireyn/niri-flake/very-refactor";
+      url = "github:epireyn/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
