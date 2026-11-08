@@ -9,9 +9,13 @@ local plugin = loader.defer({
         sidebars = {
             ["codediff-explorer"] = "left"
         },
+        autocmds = {
+            enable_on_startup = "immediate",
+            enable_on_tab = "immediate",
+        },
+
     })
 end)
+plugin.load()
 
-plugin:on_key({
-    { 'n', '<leader>n', function() require('centerish').toggle() end },
-})
+vim.keymap.set('n', '<leader>n', function() require('centerish').toggle() end)
