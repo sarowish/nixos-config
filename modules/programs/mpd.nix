@@ -45,6 +45,25 @@ in
 {
   flake.modules.homeManager.mpd =
     { pkgs, ... }:
+    let
+      # Temporary pin: beta-1 uses sidebar properties that require libadwaita 1.10.
+      euphonica = pkgs.euphonica.overrideAttrs (
+        finalAttrs: _: {
+          version = "0.99.8-beta";
+          src = pkgs.fetchFromGitHub {
+            owner = "htkhiem";
+            repo = "euphonica";
+            tag = "v${finalAttrs.version}";
+            hash = "sha256-AKM/gyvndgq2rnusoI/TU3C9hIplymQH/RxgBFE42Rs=";
+            fetchSubmodules = true;
+          };
+          cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+            inherit (finalAttrs) pname version src;
+            hash = "sha256-ppWKQkQu37HNvG37I9BEO+MA/pU29kZ7w3KGdzXLbVM=";
+          };
+        }
+      );
+    in
     {
       imports = [ mpdHeraldModule ];
       home.packages = with pkgs; [
