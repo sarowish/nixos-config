@@ -98,18 +98,8 @@ in
             }
           }
 
-          $env.config.completions.external.completer = {|spans|
-            let expanded_alias = scope aliases
-              | where name == $spans.0
-              | get -o 0.expansion
-
-            let spans = if $expanded_alias != null {
-              $spans
-              | skip 1
-              | prepend ($expanded_alias | split row ' ' | take 1)
-            } else {
-              $spans
-            }
+          $env.config.completions.external.completer = {|place|
+            let spans = $place.command
 
             if $spans.0 in ["git" "jj"] {
               do $fish_completer $spans
