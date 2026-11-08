@@ -18,7 +18,7 @@
       "src": "https://github.com/catppuccin/nvim"
     },
     "centerish.nvim": {
-      "rev": "91ad0b8f5a58a3cb29758b038e84f88ec6899f7d",
+      "rev": "eb53ff66492c1fea5b8346d84b97b66c5bb0b742",
       "src": "https://github.com/sarowish/centerish.nvim"
     },
     "codediff.nvim": {
@@ -42,11 +42,11 @@
       "src": "https://github.com/Bekaboo/dropbar.nvim"
     },
     "friendly-snippets": {
-      "rev": "b4d01b0fdf3c9a549961c2f9ffe8dc09be166219",
+      "rev": "7a1c9f7897a4eb078b157a04c7af81e5869215b1",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "gitsigns.nvim": {
-      "rev": "fd780920613e541cbdfac41bf711583ed49f9249",
+      "rev": "ef707fb93301a9b856f36eae4c8f56f5b988a794",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "heirline.nvim": {
@@ -66,7 +66,7 @@
       "src": "https://github.com/karb94/neoscroll.nvim"
     },
     "no-neck-pain.nvim": {
-      "rev": "ed63925a065cddc73afd51c5d486f7956385a21f",
+      "rev": "83ed5249cfdfc5790ab2c05f96038eeca7dd9451",
       "src": "https://github.com/shortcuts/no-neck-pain.nvim"
     },
     "nvim-autopairs": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/windwp/nvim-autopairs"
     },
     "nvim-web-devicons": {
-      "rev": "ec309a0eaff6ea967e58c275996155ab5c16938d",
+      "rev": "0dc0cfb0c6858041174a53c7aa4adaf65e994b3c",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
@@ -86,11 +86,11 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "rustaceanvim": {
-      "rev": "a968f5133b8b24f481de12f08cd79420d1ace559",
+      "rev": "2a894d195adb1384495988b95188c0a0c61f84bc",
       "src": "https://github.com/mrcjkb/rustaceanvim"
     },
     "telescope.nvim": {
-      "rev": "40aedd8a68c78a656a10a8d62d80c54af59420fb",
+      "rev": "1e1bab730218eaf97fce743be3f56e51075928ac",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "toggleterm.nvim": {
@@ -98,7 +98,7 @@
       "src": "https://github.com/akinsho/toggleterm.nvim"
     },
     "tree-sitter-manager.nvim": {
-      "rev": "d93782393d7d4b48ddbdbcb0fdff6f8cb8d7043a",
+      "rev": "06c90a3af8eb471f4a4ff979d681312284a8583a",
       "src": "https://github.com/romus204/tree-sitter-manager.nvim"
     },
     "trouble.nvim": {
