@@ -39,6 +39,7 @@ require('nvim-treesitter').install({
     "svelte",
     "html",
     "css",
+    "just",
 })
 
 -- Highlight every buffer whose filetype has an installed parser.
