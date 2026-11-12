@@ -3,7 +3,8 @@
 @define-color foreground #d9e0ee;
 @define-color urgent #fae3b0;
 
-window.Bar {
+window.Bar,
+window.WindowMapTile {
   color: white;
   background: transparent;
   font-family: "Fira Sans Book", "Nerd Fonts";

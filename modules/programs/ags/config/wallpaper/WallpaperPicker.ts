@@ -460,6 +460,7 @@ export function createWallpaperPicker(css: string, focusedOutput: () => string |
   accentSection.append(savedColorsHint)
   const ratings = label("Select a wallpaper to check bar contrast.", "muted")
   ratings.wrap = true
+  const ratingsParentChanged = ratings.connect("notify::parent", showRatings)
   accentSection.append(ratings)
   card.append(accentSection)
 
@@ -583,7 +584,7 @@ export function createWallpaperPicker(css: string, focusedOutput: () => string |
           const rating = contrastLabel(sample)
           return `${GLib.markup_escape_text(output, -1)}: <span foreground="${contrastColors[rating]}">${rating} · ${sample.weak.toFixed(2)}:1 · ${Math.round(sample.coverage * 100)}% at 4.5:1</span>`
         })
-        .join(" · "),
+        .join(ratings.get_parent() === accentSection ? " · " : "\n"),
     )
     ratings.tooltip_text = entries
       .map(
@@ -1114,6 +1115,7 @@ export function createWallpaperPicker(css: string, focusedOutput: () => string |
   }
   onCleanup(() => {
     colorEditor.disconnect(colorChanged)
+    ratings.disconnect(ratingsParentChanged)
     hide()
     for (const cell of cells.values()) cell.cancel?.cancel()
     disconnectThumbnails()

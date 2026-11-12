@@ -15,6 +15,15 @@ layer-rule {
 }
 
 layer-rule {
+    match namespace="^ags-window-map-tile$"
+    geometry-corner-radius 1
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+layer-rule {
     match namespace="^ags-(calendar|world-clocks|player|volume-(osd-)?(track|sink)|wallpaper-(picker|preview-controls|color-picker|preview-background))$"
     geometry-corner-radius 20
     shadow {

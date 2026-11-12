@@ -1,6 +1,5 @@
-window.Bar {
-  min-height: 30px;
-
+window.Bar,
+window.WindowMapTile {
   button {
     border: none;
     border-radius: 0;
@@ -12,6 +11,28 @@ window.Bar {
     box-shadow: none;
     text-shadow: none;
   }
+}
+
+window.WindowMapTile button {
+  border-radius: 1px;
+  background-color: rgba(255, 255, 255, 0.22);
+  transition: background-color 180ms ease-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  &.focused {
+    background-color: #{"alpha(@accent, 0.8)"};
+  }
+
+  &.urgent {
+    background-color: #{"alpha(@urgent, 0.8)"};
+  }
+}
+
+window.Bar {
+  min-height: 30px;
 
   .Workspaces button {
     padding: 0 5px;
@@ -62,26 +83,6 @@ window.Bar {
       &.hovered {
         color: #{"@accent"};
         opacity: 1;
-      }
-    }
-  }
-
-  .WindowMap {
-    .tile {
-      border-radius: 1px;
-      background-color: rgba(255, 255, 255, 0.25);
-      transition: background-color 180ms ease-out;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.4);
-      }
-
-      &.focused {
-        background-color: #{"@accent"};
-      }
-
-      &.urgent {
-        background-color: #{"@urgent"};
       }
     }
   }

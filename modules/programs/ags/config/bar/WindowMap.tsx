@@ -1,6 +1,8 @@
 import { createEffect, onCleanup } from "ags"
-import { Gtk, Gdk } from "ags/gtk4"
+import app from "ags/gtk4/app"
+import { Astal, Gtk, Gdk } from "ags/gtk4"
 import GLib from "gi://GLib?version=2.0"
+import { barBounds } from "../widgets/PopupWindow"
 import { closeWindow, focusWindow, type createNiri } from "../services/niri"
 import {
   activeWorkspaceOnOutput,
@@ -23,6 +25,7 @@ const DURATION_US = 180_000
 
 interface AnimatedTile {
   button: Gtk.Button
+  window: Astal.Window
   current: WindowMapRectangle
   from: WindowMapRectangle
   to: WindowMapRectangle
@@ -72,21 +75,14 @@ export default function WindowMap({
     workspaceId: activeWorkspaceOnOutput(state, output)?.id ?? null,
     layout: fitWindowMap(windowColumnsOnOutput(state, output), outputHeight, HEIGHT),
   }))
-  const root = new Gtk.Overlay()
-  const spacer = new Gtk.Box()
-  const fixed = new Gtk.Fixed()
+  // Reserve the map's space in the bar. Each tile needs its own surface so
+  // compositor blur stops at its edges, leaving the gaps transparent.
+  const root = new Gtk.Box()
   const tiles = new Map<number, AnimatedTile>()
   root.add_css_class("WindowMap")
   root.set_valign(Gtk.Align.CENTER)
-  root.set_overflow(Gtk.Overflow.HIDDEN)
-  root.set_child(spacer)
-  root.add_overlay(fixed)
-  root.set_clip_overlay(fixed, true)
-  root.set_measure_overlay(fixed, false)
   root.set_visible(true)
-  spacer.set_size_request(0, HEIGHT)
-  fixed.set_halign(Gtk.Align.START)
-  fixed.set_valign(Gtk.Align.START)
+  root.set_size_request(0, HEIGHT)
 
   let currentWidth = 0
   let fromWidth = 0
@@ -99,13 +95,28 @@ export default function WindowMap({
     return layout.tiles.length > 0 ? layout.width + TRAILING_GAP : 0
   }
 
-  function applyGeometry(tile: AnimatedTile) {
-    fixed.move(tile.button, Math.round(tile.current.x), Math.round(tile.current.y))
-    tile.button.set_size_request(
-      Math.max(1, Math.round(tile.current.width)),
-      Math.max(1, Math.round(tile.current.height)),
-    )
-    tile.button.set_opacity(tile.opacity)
+  function placeTiles() {
+    const bounds = barBounds(root)
+    const bar = root.get_root() as Astal.Window | null
+    if (!bounds || !bar?.gdkmonitor) return
+    for (const tile of tiles.values()) {
+      const x = Math.max(0, Math.round(tile.current.x))
+      const y = Math.max(0, Math.round(tile.current.y))
+      const width = Math.min(Math.max(1, Math.round(tile.current.width)), bounds.width - x)
+      const height = Math.min(Math.max(1, Math.round(tile.current.height)), bounds.height - y)
+      if (width <= 0 || height <= 0) {
+        tile.window.set_visible(false)
+        continue
+      }
+      if (tile.window.gdkmonitor !== bar.gdkmonitor) tile.window.gdkmonitor = bar.gdkmonitor
+      const left = Math.round(bounds.x + x)
+      const top = Math.round(bounds.y + y)
+      if (tile.window.margin_left !== left) tile.window.margin_left = left
+      if (tile.window.margin_top !== top) tile.window.margin_top = top
+      tile.window.set_size_request(width, height)
+      tile.window.set_default_size(width, height)
+      tile.window.set_visible(true)
+    }
   }
 
   function applyFrame(now: number) {
@@ -113,15 +124,16 @@ export default function WindowMap({
     for (const tile of tiles.values()) {
       tile.current = interpolateRectangle(tile.from, tile.to, progress)
       tile.opacity = interpolateValue(tile.fromOpacity, tile.toOpacity, progress)
-      applyGeometry(tile)
+      tile.button.set_opacity(tile.opacity)
     }
     currentWidth = interpolateValue(fromWidth, toWidth, progress)
-    spacer.set_size_request(Math.max(0, Math.round(currentWidth)), HEIGHT)
+    root.set_size_request(Math.max(0, Math.round(currentWidth)), HEIGHT)
+    root.queue_draw()
 
     if (progress < 1) return true
     for (const [id, tile] of tiles)
       if (tile.removing) {
-        fixed.remove(tile.button)
+        tile.window.destroy()
         tiles.delete(id)
       }
     return false
@@ -139,10 +151,22 @@ export default function WindowMap({
 
   function createTile(tile: WindowMapTile, animate = true) {
     const button = new Gtk.Button({ focusable: false })
+    const window = new Astal.Window({
+      name: `window-map-tile-${output}-${tile.window.id}`,
+      namespace: "ags-window-map-tile",
+      css_classes: ["WindowMapTile"],
+      anchor: Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT,
+      layer: Astal.Layer.TOP,
+      exclusivity: Astal.Exclusivity.IGNORE,
+      keymode: Astal.Keymode.NONE,
+      child: button,
+    })
+    app.add_window(window)
 
     const start = animate ? collapsed(tile) : tile
     const animated: AnimatedTile = {
       button,
+      window,
       current: start,
       from: start,
       to: tile,
@@ -168,9 +192,8 @@ export default function WindowMap({
     middleClick.connect("pressed", (_source, _nPress, _x, _y) => closeWindow(tile.window.id))
     button.add_controller(middleClick)
 
-    fixed.put(button, start.x, start.y)
     button.set_visible(true)
-    applyGeometry(animated)
+    button.set_opacity(animated.opacity)
     return animated
   }
 
@@ -179,7 +202,7 @@ export default function WindowMap({
       root.remove_tick_callback(tickId)
       tickId = undefined
     }
-    for (const tile of tiles.values()) fixed.remove(tile.button)
+    for (const tile of tiles.values()) tile.window.destroy()
     tiles.clear()
     for (const targetTile of target.tiles)
       tiles.set(targetTile.window.id, createTile(targetTile, false))
@@ -187,7 +210,8 @@ export default function WindowMap({
     currentWidth = outerWidth(target)
     fromWidth = currentWidth
     toWidth = currentWidth
-    spacer.set_size_request(currentWidth, HEIGHT)
+    root.set_size_request(currentWidth, HEIGHT)
+    root.queue_draw()
   }
 
   function sync(target: { workspaceId: number | null; layout: WindowMapLayout }) {
@@ -247,8 +271,24 @@ export default function WindowMap({
   }
 
   createEffect(() => sync(view()))
+  // Follow bar layout changes without requesting frames while the map is idle.
+  let disconnectPlacement: (() => void) | undefined
+  const mapped = root.connect_after("map", () => {
+    const clock = root.get_frame_clock()!
+    const painted = clock.connect_after("after-paint", placeTiles)
+    disconnectPlacement = () => clock.disconnect(painted)
+  })
+  const unmapped = root.connect("unmap", () => {
+    disconnectPlacement?.()
+    disconnectPlacement = undefined
+    for (const tile of tiles.values()) tile.window.set_visible(false)
+  })
   onCleanup(() => {
     if (tickId !== undefined) root.remove_tick_callback(tickId)
+    disconnectPlacement?.()
+    root.disconnect(mapped)
+    root.disconnect(unmapped)
+    for (const tile of tiles.values()) tile.window.destroy()
     tiles.clear()
   })
   return root
