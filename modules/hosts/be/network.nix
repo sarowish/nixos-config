@@ -15,6 +15,7 @@
       address = "192.168.1.1";
       interface = "enp34s0";
     };
+    networking.firewall.interfaces.enp34s0.allowedTCPPorts = [ 3773 ];
 
     systemd.network.wait-online.enable = false;
 
