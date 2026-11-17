@@ -8,5 +8,8 @@
         enable = true;
         qemu.vhostUserPackages = [ pkgs.virtiofsd ];
       };
+
+      virtualisation.podman.enable = true;
+      environment.systemPackages = [ pkgs.podman-compose ];
     };
 }
