@@ -40,6 +40,7 @@ require('nvim-treesitter').install({
     "html",
     "css",
     "just",
+    "sql",
 })
 
 -- Highlight every buffer whose filetype has an installed parser.
