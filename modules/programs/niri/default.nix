@@ -17,6 +17,18 @@
       programs.niri =
         let
           niriPkgs = inputs.niri-pkgs.packages.${pkgs.stdenv.hostPlatform.system};
+          swapWorkspaceContents = pkgs.writeShellApplication {
+            name = "swap-workspace-contents";
+            runtimeInputs = [
+              niriPkgs.niri-unstable
+              pkgs.nushell
+              pkgs.util-linux
+            ];
+            text = ''
+              exec flock --nonblock "''${NIRI_SOCKET:?}.swap-workspace-contents.lock" \
+                nu --no-config-file ${./swap-workspace-contents.nu} "$@"
+            '';
+          };
         in
         {
           enable = true;
@@ -220,6 +232,10 @@
 
               "Mod+Shift+Ctrl+C".action = move-column-to-monitor-left;
               "Mod+Shift+Ctrl+T".action = move-column-to-monitor-right;
+              "Mod+Shift+W" = {
+                action = spawn (lib.getExe swapWorkspaceContents) "--apply";
+                repeat = false;
+              };
 
               "Mod+Tab".action = focus-workspace-previous;
               "Mod+BracketLeft".action = focus-workspace-up;
