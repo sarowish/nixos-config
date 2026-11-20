@@ -9,7 +9,12 @@ import {
   workspacesOnOutput,
 } from "../services/niri-state.ts"
 import { cpuSample, cpuUsage, memoryUsed, mediaTrack } from "../services/parsers.ts"
-import { fitWindowMap, interpolateRectangle, interpolateValue } from "../services/window-map.ts"
+import {
+  fitWindowMap,
+  fitWindowMapViewport,
+  interpolateRectangle,
+  interpolateValue,
+} from "../services/window-map.ts"
 
 function workspace(id, output, idx, active = false) {
   return {
@@ -245,6 +250,25 @@ test("single-window columns preserve their height without overflowing the minima
     [[0, 12]],
   )
   assert.equal(tall.tiles[0].height, 24)
+})
+
+test("viewport edges follow tiled positions and stay inside the minimap", () => {
+  function viewport(positions) {
+    const columns = positions.map((viewX, index) => {
+      const window = tiledWindow(index + 1, 2, index + 1, 1)
+      window.layout.tile_pos_in_workspace_view = viewX == null ? viewX : [viewX, 16]
+      return [window]
+    })
+    return fitWindowMapViewport(fitWindowMap(columns, 1080, 24), columns, 1920, 1080)
+  }
+
+  assert.deepEqual(viewport([-400, 576, 1552]), { left: 9, right: 52 })
+  assert.deepEqual(viewport([null, -400, 576]), { left: 31, right: 65 })
+  assert.deepEqual(viewport([16, null]), { left: 0, right: 42 })
+  assert.deepEqual(viewport([0, 961]), { left: 0, right: 43 })
+  assert.equal(viewport([0, 960]), null)
+  assert.equal(viewport([16]), null)
+  assert.equal(viewport([undefined, null]), null)
 })
 
 test("window map interpolation is bounded and can continue from an interrupted frame", () => {

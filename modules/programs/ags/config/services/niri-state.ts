@@ -12,6 +12,7 @@ export interface Workspace {
 export interface NiriWindowLayout {
   pos_in_scrolling_layout: [number, number] | null
   tile_size: [number, number]
+  tile_pos_in_workspace_view?: [number, number] | null
 }
 
 export interface NiriWindow {

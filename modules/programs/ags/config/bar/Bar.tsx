@@ -24,6 +24,7 @@ type Services = {
 
 export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; services: Services }) {
   const output = monitor.connector ?? ""
+  const { width, height } = monitor.get_geometry()
   return (
     <window
       visible
@@ -46,7 +47,8 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
           <WindowMap
             niri={services.niri}
             output={output}
-            outputHeight={monitor.get_geometry().height}
+            outputWidth={width}
+            outputHeight={height}
           />
           <Media mpd={services.mpd} />
         </box>

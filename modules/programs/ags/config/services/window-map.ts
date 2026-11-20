@@ -19,6 +19,11 @@ export interface WindowMapLayout {
   tiles: WindowMapTile[]
 }
 
+export interface WindowMapViewport {
+  left: number
+  right: number
+}
+
 function divideHeight(windows: NiriWindow[], height: number) {
   const weights = windows.map((window) => Math.max(0, window.layout.tile_size[1]))
   const weightTotal = weights.reduce((total, weight) => total + weight, 0)
@@ -70,6 +75,42 @@ export function fitWindowMap(
   }
 
   return { width: Math.max(0, x - SPACING), height, tiles }
+}
+
+export function fitWindowMapViewport(
+  layout: WindowMapLayout,
+  columns: NiriWindow[][],
+  outputWidth: number,
+  outputHeight: number,
+): WindowMapViewport | null {
+  if (outputWidth <= 0 || outputHeight <= 0) return null
+  // Check the original columns, since the minimap may omit tiles in tall stacks.
+  const allInView = columns.every((column) =>
+    column.every(({ layout }) => {
+      const x = layout.tile_pos_in_workspace_view?.[0]
+      return x !== undefined && x >= 0 && x + layout.tile_size[0] <= outputWidth
+    }),
+  )
+  if (allInView) return null
+
+  let first: { x: number; viewX: number } | undefined
+  let last: { x: number; viewX: number; viewRight: number } | undefined
+  for (const tile of layout.tiles) {
+    const position = tile.window.layout.tile_pos_in_workspace_view
+    if (!position) continue
+    const [viewX] = position
+    const viewRight = viewX + tile.window.layout.tile_size[0]
+    if (!first || viewX < first.viewX) first = { x: tile.x, viewX }
+    if (!last || viewRight > last.viewRight) last = { x: tile.x, viewX, viewRight }
+  }
+  if (!first || !last) return null
+
+  // Anchor each edge to its nearest visible tile so the map's rounded widths
+  // and fixed gaps don't accumulate error across the viewport.
+  const scale = layout.height / outputHeight
+  const left = Math.max(0, Math.round(first.x - first.viewX * scale))
+  const right = Math.min(layout.width, Math.round(last.x + (outputWidth - last.viewX) * scale))
+  return left < right ? { left, right } : null
 }
 
 export function interpolateValue(from: number, to: number, progress: number) {

@@ -12,14 +12,20 @@ import {
 } from "../services/niri-state"
 import {
   fitWindowMap,
+  fitWindowMapViewport,
   interpolateRectangle,
   interpolateValue,
   type WindowMapLayout,
   type WindowMapRectangle,
   type WindowMapTile,
+  type WindowMapViewport,
 } from "../services/window-map"
 
 const HEIGHT = 24
+const VIEWPORT_HEIGHT = 2
+const VIEWPORT_GAP = 1
+const TILE_TOP = VIEWPORT_HEIGHT + VIEWPORT_GAP
+const MAP_HEIGHT = HEIGHT + 2 * TILE_TOP
 const TRAILING_GAP = 8
 const DURATION_US = 180_000
 
@@ -65,31 +71,53 @@ function updateClasses(button: Gtk.Button, window: NiriWindow) {
 export default function WindowMap({
   niri,
   output,
+  outputWidth,
   outputHeight,
 }: {
   niri: ReturnType<typeof createNiri>
   output: string
+  outputWidth: number
   outputHeight: number
 }) {
-  const view = niri.state((state) => ({
-    workspaceId: activeWorkspaceOnOutput(state, output)?.id ?? null,
-    layout: fitWindowMap(windowColumnsOnOutput(state, output), outputHeight, HEIGHT),
-  }))
+  const view = niri.state((state) => {
+    const columns = windowColumnsOnOutput(state, output)
+    const layout = fitWindowMap(columns, outputHeight, HEIGHT)
+    return {
+      workspaceId: activeWorkspaceOnOutput(state, output)?.id ?? null,
+      layout,
+      viewport: fitWindowMapViewport(layout, columns, outputWidth, outputHeight),
+    }
+  })
   // Reserve the map's space in the bar. Each tile needs its own surface so
   // compositor blur stops at its edges, leaving the gaps transparent.
-  const root = new Gtk.Box()
+  const root = new Gtk.DrawingArea({ can_target: false })
   const tiles = new Map<number, AnimatedTile>()
   root.add_css_class("WindowMap")
   root.set_valign(Gtk.Align.CENTER)
   root.set_visible(true)
-  root.set_size_request(0, HEIGHT)
+  root.set_size_request(0, MAP_HEIGHT)
 
   let currentWidth = 0
   let fromWidth = 0
   let toWidth = 0
+  let currentViewport: WindowMapViewport | null = null
+  let fromViewport: WindowMapViewport | null = null
+  let toViewport: WindowMapViewport | null = null
   let currentWorkspaceId: number | null | undefined
   let animationStarted = 0
   let tickId: number | undefined
+
+  root.set_draw_func((widget, cr, width) => {
+    if (!currentViewport) return
+    const left = Math.round(currentViewport.left)
+    const right = Math.min(Math.round(currentViewport.right), width - TRAILING_GAP)
+    if (right <= left) return
+    const [hasForeground, foreground] = widget.get_style_context().lookup_color("foreground")
+    const color = hasForeground ? foreground : widget.get_color()
+    cr.setSourceRGBA(color.red, color.green, color.blue, color.alpha * 0.82)
+    cr.rectangle(left, 0, right - left, VIEWPORT_HEIGHT)
+    cr.fill()
+  })
 
   function outerWidth(layout: WindowMapLayout) {
     return layout.tiles.length > 0 ? layout.width + TRAILING_GAP : 0
@@ -103,14 +131,14 @@ export default function WindowMap({
       const x = Math.max(0, Math.round(tile.current.x))
       const y = Math.max(0, Math.round(tile.current.y))
       const width = Math.min(Math.max(1, Math.round(tile.current.width)), bounds.width - x)
-      const height = Math.min(Math.max(1, Math.round(tile.current.height)), bounds.height - y)
+      const height = Math.min(Math.max(1, Math.round(tile.current.height)), HEIGHT - y)
       if (width <= 0 || height <= 0) {
         tile.window.set_visible(false)
         continue
       }
       if (tile.window.gdkmonitor !== bar.gdkmonitor) tile.window.gdkmonitor = bar.gdkmonitor
       const left = Math.round(bounds.x + x)
-      const top = Math.round(bounds.y + y)
+      const top = Math.round(bounds.y + TILE_TOP + y)
       if (tile.window.margin_left !== left) tile.window.margin_left = left
       if (tile.window.margin_top !== top) tile.window.margin_top = top
       tile.window.set_size_request(width, height)
@@ -127,7 +155,12 @@ export default function WindowMap({
       tile.button.set_opacity(tile.opacity)
     }
     currentWidth = interpolateValue(fromWidth, toWidth, progress)
-    root.set_size_request(Math.max(0, Math.round(currentWidth)), HEIGHT)
+    if (fromViewport && toViewport)
+      currentViewport = {
+        left: interpolateValue(fromViewport.left, toViewport.left, progress),
+        right: interpolateValue(fromViewport.right, toViewport.right, progress),
+      }
+    root.set_size_request(Math.max(0, Math.round(currentWidth)), MAP_HEIGHT)
     root.queue_draw()
 
     if (progress < 1) return true
@@ -197,7 +230,7 @@ export default function WindowMap({
     return animated
   }
 
-  function applyImmediately(target: WindowMapLayout) {
+  function applyImmediately(target: WindowMapLayout, viewport: WindowMapViewport | null) {
     if (tickId !== undefined) {
       root.remove_tick_callback(tickId)
       tickId = undefined
@@ -210,16 +243,17 @@ export default function WindowMap({
     currentWidth = outerWidth(target)
     fromWidth = currentWidth
     toWidth = currentWidth
-    root.set_size_request(currentWidth, HEIGHT)
+    currentViewport = fromViewport = toViewport = viewport
+    root.set_size_request(currentWidth, MAP_HEIGHT)
     root.queue_draw()
   }
 
-  function sync(target: { workspaceId: number | null; layout: WindowMapLayout }) {
+  function sync(target: ReturnType<typeof view>) {
     const workspaceChanged =
       currentWorkspaceId !== undefined && currentWorkspaceId !== target.workspaceId
     currentWorkspaceId = target.workspaceId
     if (workspaceChanged) {
-      applyImmediately(target.layout)
+      applyImmediately(target.layout, target.viewport)
       return
     }
 
@@ -234,7 +268,10 @@ export default function WindowMap({
 
     const targets = new Map(target.layout.tiles.map((tile) => [tile.window.id, tile]))
     const targetWidth = outerWidth(target.layout)
-    let changed = toWidth !== targetWidth
+    let changed =
+      toWidth !== targetWidth ||
+      toViewport?.left !== target.viewport?.left ||
+      toViewport?.right !== target.viewport?.right
     for (const tile of target.layout.tiles) {
       const current = tiles.get(tile.window.id)
       if (!current || current.removing || !sameRectangle(current.to, tile)) changed = true
@@ -249,6 +286,8 @@ export default function WindowMap({
     }
     fromWidth = currentWidth
     toWidth = targetWidth
+    toViewport = target.viewport
+    fromViewport = currentViewport = toViewport ? (currentViewport ?? toViewport) : null
 
     for (const targetTile of target.layout.tiles) {
       const tile = tiles.get(targetTile.window.id)
