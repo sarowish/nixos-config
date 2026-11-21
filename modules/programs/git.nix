@@ -11,6 +11,8 @@
         credential.helper = "store";
       };
 
+      ignores = [ ".agent-notes/" ];
+
       signing = {
         format = "ssh";
         key = "~/.ssh/id_ed25519.pub";
