@@ -7,7 +7,16 @@
       home.packages = [
         inputs.nix-t3code.packages.${pkgs.stdenv.hostPlatform.system}.t3code
         inputs.codex.packages.${pkgs.stdenv.hostPlatform.system}.default
-        inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
+
+      programs.claude-code = {
+        enable = true;
+        package = inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        mutableSettings = true;
+        settings.attribution = {
+          commit = "";
+          pr = "";
+        };
+      };
     };
 }
