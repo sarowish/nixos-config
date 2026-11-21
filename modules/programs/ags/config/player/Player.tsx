@@ -1,19 +1,13 @@
-import { createComputed, createEffect, createState, onCleanup } from "ags"
+import { createEffect, createState, onCleanup } from "ags"
 import { Gtk } from "ags/gtk4"
 import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import type { createMpd } from "../services/mpd"
-import { formatTime, trackPosition } from "../services/mpd-state"
+import { formatTime } from "../services/mpd-state"
 
 export default function Player({ mpd }: { mpd: ReturnType<typeof createMpd> }) {
-  const [now, setNow] = createState(GLib.get_monotonic_time())
-  const position = createComputed(() => {
-    const track = mpd.track()
-    return trackPosition(track, (now() - track.updatedAt) / 1_000_000)
-  })
-  let ticker: number | undefined
   let seekTimer: number | undefined
-  let seeking = false
+  const [seeking, setSeeking] = createState(false)
   let seekGeneration = 0
   const scale = new Gtk.Scale({
     orientation: Gtk.Orientation.HORIZONTAL,
@@ -23,21 +17,18 @@ export default function Player({ mpd }: { mpd: ReturnType<typeof createMpd> }) {
   })
   scale.connect("change-value", (_scale, _scroll, value) => {
     if (seekTimer !== undefined) GLib.source_remove(seekTimer)
-    seeking = true
+    setSeeking(true)
     const generation = ++seekGeneration
     const file = mpd.track().file
     scale.set_value(value)
     seekTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, () => {
       seekTimer = undefined
       if (file !== mpd.track().file) {
-        seeking = false
+        setSeeking(false)
         return GLib.SOURCE_REMOVE
       }
       void mpd.seek(value).finally(() => {
-        if (generation === seekGeneration) {
-          seeking = false
-          setNow(GLib.get_monotonic_time())
-        }
+        if (generation === seekGeneration) setSeeking(false)
       })
       return GLib.SOURCE_REMOVE
     })
@@ -47,17 +38,15 @@ export default function Player({ mpd }: { mpd: ReturnType<typeof createMpd> }) {
     const track = mpd.track()
     scale.set_sensitive(track.duration > 0 && track.state !== "stopped")
     scale.adjustment.upper = Math.max(1, track.duration)
-    const elapsed = position()
-    if (!seeking) scale.set_value(track.duration > 0 ? elapsed : 0)
+    const elapsed = mpd.position()
+    if (!seeking()) scale.set_value(track.duration > 0 ? elapsed : 0)
   })
-  function stopTimers() {
-    if (ticker !== undefined) GLib.source_remove(ticker)
+  function cancelSeek() {
     if (seekTimer !== undefined) GLib.source_remove(seekTimer)
-    ticker = undefined
     seekTimer = undefined
-    seeking = false
+    setSeeking(false)
   }
-  onCleanup(stopTimers)
+  onCleanup(cancelSeek)
 
   return (
     <box
@@ -65,14 +54,7 @@ export default function Player({ mpd }: { mpd: ReturnType<typeof createMpd> }) {
       orientation={Gtk.Orientation.VERTICAL}
       widthRequest={320}
       overflow={Gtk.Overflow.HIDDEN}
-      onMap={() => {
-        setNow(GLib.get_monotonic_time())
-        ticker = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, () => {
-          setNow(GLib.get_monotonic_time())
-          return GLib.SOURCE_CONTINUE
-        })
-      }}
-      onUnmap={stopTimers}
+      onUnmap={cancelSeek}
     >
       <box class="player-content" orientation={Gtk.Orientation.VERTICAL}>
         <overlay
@@ -122,7 +104,7 @@ export default function Player({ mpd }: { mpd: ReturnType<typeof createMpd> }) {
         <box orientation={Gtk.Orientation.VERTICAL} marginTop={12}>
           {scale}
           <centerbox class="times">
-            <label $type="start" label={position(formatTime)} />
+            <label $type="start" label={mpd.position(formatTime)} />
             <label $type="end" label={mpd.track((track) => formatTime(track.duration))} />
           </centerbox>
         </box>

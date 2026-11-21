@@ -146,5 +146,9 @@ window.Bar {
     .play-pause:active {
       border-radius: 7px;
     }
+
+    .playback-dot {
+      color: #{"@accent"};
+    }
   }
 }

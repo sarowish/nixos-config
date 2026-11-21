@@ -1,10 +1,10 @@
 import { interval, timeout, type Timer } from "ags/time"
 import { execAsync, subprocess, type Process } from "ags/process"
-import { createState, onCleanup } from "ags"
+import { createComputed, createEffect, createState, onCleanup } from "ags"
 import { mediaTrack } from "./parsers"
 import Gio from "gi://Gio?version=2.0"
 import GLib from "gi://GLib?version=2.0"
-import { parseMpdStatus } from "./mpd-state"
+import { parseMpdStatus, trackPosition } from "./mpd-state"
 import { loadMpdArt, type MpdArt } from "./mpd-art"
 
 export function createMpd() {
@@ -12,6 +12,17 @@ export function createMpd() {
   const [available, setAvailable] = createState(false)
   const [track, setTrack] = createState({ ...parseMpdStatus(""), updatedAt: 0 })
   const [art, setArt] = createState<MpdArt | null>(null)
+  const [now, setNow] = createState(0)
+  const playing = createComputed(() => track().state === "playing")
+  const position = createComputed(() => {
+    const current = track()
+    return trackPosition(current, (now() - current.updatedAt) / 1_000_000)
+  })
+  createEffect(() => {
+    if (!available() || !playing()) return
+    const ticker = interval(1000, () => setNow(GLib.get_monotonic_time()))
+    onCleanup(() => ticker.cancel())
+  })
   let artFile = ""
   let artRequest: Gio.Cancellable | undefined
   let pending: Promise<void> | undefined
@@ -105,7 +116,8 @@ export function createMpd() {
     track,
     barTrack,
     available,
-    playing: track((current) => current.state === "playing"),
+    playing,
+    position,
     art,
     command(action: "toggle" | "next" | "cdprev") {
       return command(action)
