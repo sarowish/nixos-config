@@ -126,7 +126,7 @@ app.start({
           Gtk.WidgetPaintable.new(map!).snapshot(snapshot, width, height)
           const node = snapshot.to_node()
           if (!node) return () => 0
-          const texture = bar
+          const texture = (map!.get_root() as Gtk.Window)
             .get_renderer()!
             .render_texture(node, new Graphene.Rect().init(0, 0, width, height))
           const downloader = Gdk.TextureDownloader.new(texture)
@@ -157,6 +157,31 @@ app.start({
           pannedAlpha(9, 1) > 0 && pannedAlpha(9, 2) === 0,
           "Marker should be 2px high with a 1px gap before the tiles",
         )
+        checkGeometry()
+        const preview = new Astal.Window({
+          css_classes: ["Bar", "WallpaperPreview"],
+          gdkmonitor: monitor,
+          layer: Astal.Layer.OVERLAY,
+          exclusivity: Astal.Exclusivity.IGNORE,
+        })
+        try {
+          bar.set_child(null)
+          preview.set_child(content)
+          preview.present()
+          await wait(150)
+          check(map!.get_mapped(), "The preview should map the borrowed bar")
+          check(viewportAlpha()(9, 0) === 0, "The preview showed the viewport marker")
+          check(
+            tiles().every((w) => !w.visible),
+            "The preview showed the minimap tiles",
+          )
+        } finally {
+          preview.set_child(null)
+          preview.destroy()
+          bar.set_child(content)
+        }
+        await wait(150)
+        check(viewportAlpha()(9, 0) > 0, "The viewport marker did not return to the bar")
         checkGeometry()
         setState(initial)
         prefix.width_request = 110
@@ -206,7 +231,7 @@ app.start({
         cleanup = () => {}
         check(tiles().length === 0, "Disposal left tile windows registered")
         print(
-          `PASS: viewport marker, tile geometry, bar movement, visibility, empty map, workspace switch and disposal on ${output}`,
+          `PASS: viewport marker, tile geometry, bar movement, wallpaper preview, visibility, empty map, workspace switch and disposal on ${output}`,
         )
       }
       app.quit()

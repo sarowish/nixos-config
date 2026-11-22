@@ -107,8 +107,13 @@ export default function WindowMap({
   let animationStarted = 0
   let tickId: number | undefined
 
+  // The wallpaper preview borrows the bar's widgets for its accent preview.
+  function inWallpaperPreview() {
+    return (root.get_root() as Gtk.Widget | null)?.has_css_class("WallpaperPreview")
+  }
+
   root.set_draw_func((widget, cr, width) => {
-    if (!currentViewport) return
+    if (!currentViewport || inWallpaperPreview()) return
     const left = Math.round(currentViewport.left)
     const right = Math.min(Math.round(currentViewport.right), width - TRAILING_GAP)
     if (right <= left) return
@@ -313,6 +318,7 @@ export default function WindowMap({
   // Follow bar layout changes without requesting frames while the map is idle.
   let disconnectPlacement: (() => void) | undefined
   const mapped = root.connect_after("map", () => {
+    if (inWallpaperPreview()) return
     const clock = root.get_frame_clock()!
     const painted = clock.connect_after("after-paint", placeTiles)
     disconnectPlacement = () => clock.disconnect(painted)
