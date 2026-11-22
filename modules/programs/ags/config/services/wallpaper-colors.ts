@@ -52,10 +52,13 @@ export function coverCrop(
   }
 }
 
+function pixelIndex(position: number, size: number) {
+  return Math.min(size - 1, Math.max(0, Math.floor(position)))
+}
+
 function pixel(image: PixelImage, x: number, y: number): Rgb {
   const offset =
-    Math.min(image.height - 1, Math.max(0, Math.floor(y))) * image.rowstride +
-    Math.min(image.width - 1, Math.max(0, Math.floor(x))) * image.channels
+    pixelIndex(y, image.height) * image.rowstride + pixelIndex(x, image.width) * image.channels
   const alpha = image.channels === 4 ? image.pixels[offset + 3] / 255 : 1
   // awww fills transparent pixels with black by default.
   const channel = (index: number) => (image.pixels[offset + index] / 255) * alpha
@@ -139,14 +142,16 @@ function hex(color: Rgb) {
     .join("")}`
 }
 
-export function wallpaperColorAt(
+export function sampleWallpaper(
   image: PixelImage,
   output: Pick<WallpaperOutput, "width" | "height">,
   x: number,
   y: number,
 ) {
   const crop = coverCrop(image.width, image.height, output)
-  return hex(pixel(image, crop.x + x / crop.scale, crop.y + y / crop.scale))
+  const column = pixelIndex(crop.x + x / crop.scale, image.width)
+  const row = pixelIndex(crop.y + y / crop.scale, image.height)
+  return { column, row, color: hex(pixel(image, column, row)) }
 }
 
 function colorDistance(a: Rgb, b: Rgb) {

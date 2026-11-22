@@ -8,9 +8,9 @@ import {
   coverCrop,
   luminance,
   rgb,
+  sampleWallpaper,
   scoreAccent,
   suggestAccents,
-  wallpaperColorAt,
 } from "../services/wallpaper-colors.ts"
 
 const output = { name: "DP-1", width: 100, height: 100, barHeight: 10, margin: 0 }
@@ -57,10 +57,26 @@ test("portrait images sample the bottom of the visible crop, not the original im
 test("eyedropper coordinates follow the centered preview crop and scaling", () => {
   const landscape = image(200, 100, (x, y) => [x, y, 17])
   const portrait = image(100, 200, (x, y) => [x, y, 17])
-  assert.equal(wallpaperColorAt(landscape, { width: 100, height: 100 }, 0, 0), "#320011")
-  assert.equal(wallpaperColorAt(landscape, { width: 100, height: 100 }, 99, 99), "#956311")
-  assert.equal(wallpaperColorAt(portrait, { width: 100, height: 100 }, 10, 20), "#0a4611")
-  assert.equal(wallpaperColorAt(landscape, { width: 2000, height: 1000 }, 105, 55), "#0a0511")
+  assert.deepEqual(sampleWallpaper(landscape, output, 0, 0), {
+    column: 50,
+    row: 0,
+    color: "#320011",
+  })
+  assert.deepEqual(sampleWallpaper(landscape, output, 99.9, 99.9), {
+    column: 149,
+    row: 99,
+    color: "#956311",
+  })
+  assert.deepEqual(sampleWallpaper(portrait, output, 10, 20), {
+    column: 10,
+    row: 70,
+    color: "#0a4611",
+  })
+  assert.deepEqual(sampleWallpaper(landscape, { width: 2000, height: 1000 }, 105, 55), {
+    column: 10,
+    row: 5,
+    color: "#0a0511",
+  })
 })
 
 test("eyedropper colors respect alpha and padded image rows", () => {
@@ -73,9 +89,10 @@ test("eyedropper colors respect alpha and padded image rows", () => {
       200, 100, 60, 128, 50, 100, 250, 255, 0, 0, 0, 0, 30, 60, 90, 255, 0, 0, 0, 0, 0, 0, 0, 0,
     ]),
   }
-  assert.equal(wallpaperColorAt(source, { width: 20, height: 20 }, 0, 0), "#64321e")
-  assert.equal(wallpaperColorAt(source, { width: 20, height: 20 }, 11, 0), "#3264fa")
-  assert.equal(wallpaperColorAt(source, { width: 20, height: 20 }, 0, 11), "#1e3c5a")
+  const size = { width: 20, height: 20 }
+  assert.equal(sampleWallpaper(source, size, 0, 0).color, "#64321e")
+  assert.equal(sampleWallpaper(source, size, 11, 0).color, "#3264fa")
+  assert.equal(sampleWallpaper(source, size, 0, 11).color, "#1e3c5a")
 })
 
 test("narrow patches behind individual bar icons still affect the rating", () => {

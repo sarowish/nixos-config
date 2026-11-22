@@ -5,7 +5,8 @@ import Gio from "gi://Gio?version=2.0"
 import GLib from "gi://GLib?version=2.0"
 import Pango from "gi://Pango?version=1.0"
 import type { createWallpaperImages } from "../services/wallpaper-images"
-import { wallpaperColorAt, type PixelImage } from "../services/wallpaper-colors"
+import { sampleWallpaper, type PixelImage } from "../services/wallpaper-colors"
+import { WallpaperMagnifier } from "./WallpaperMagnifier"
 import { createPreviewWallpapers, previewHandleHeight } from "./PreviewWallpapers"
 
 const allEdges =
@@ -192,14 +193,12 @@ export function createWallpaperPreview({
     content.hexpand = true
     holder.append(content)
     overlay.add_overlay(holder)
-    const sampleLayer = new Gtk.Box({
-      css_classes: ["wallpaper-eyedropper"],
+    const sampleLayer = new WallpaperMagnifier({
       visible: false,
       hexpand: true,
       vexpand: true,
-      can_target: true,
     })
-    sampleLayer.set_cursor_from_name("crosshair")
+    sampleLayer.set_cursor_from_name("none")
     overlay.add_overlay(sampleLayer)
     const controls = new Gtk.Box({
       orientation: Gtk.Orientation.VERTICAL,
@@ -372,6 +371,7 @@ export function createWallpaperPreview({
       if (!sampling) return
       sampling = false
       sampleLayer.visible = false
+      sampleLayer.clearSample()
       compactRow.remove(colorValue)
       colorActions.set_end_widget(colorValue)
       compact.remove(ratings)
@@ -386,12 +386,14 @@ export function createWallpaperPreview({
       if (!sampling || !pixels) return
       const size = { width: sampleLayer.get_width(), height: sampleLayer.get_height() }
       if (!size.width || !size.height) return
-      const value = wallpaperColorAt(pixels, size, x, y)
-      if (value !== getAccent()) onColor(value, false)
+      const sample = sampleWallpaper(pixels, size, x, y)
+      sampleLayer.showSample(texture, x, y, sample)
+      if (sample.color !== getAccent()) onColor(sample.color, false)
     }
     const motion = new Gtk.EventControllerMotion()
     motion.connect("enter", (_controller, x, y) => sampleAt(x, y))
     motion.connect("motion", (_controller, x, y) => sampleAt(x, y))
+    motion.connect("leave", () => sampleLayer.clearSample())
     sampleLayer.add_controller(motion)
     const click = new Gtk.GestureClick({ button: Gdk.BUTTON_PRIMARY })
     click.connect("pressed", (gesture, _count, x, y) => {
