@@ -27,7 +27,7 @@ export function createVolumeOsd() {
   const [visible, setVisible] = createState(false)
   const [mode, setMode] = createState<VolumeOsdMode>("volume")
   const [barOutput, setBarOutput] = createState<string | null>(null)
-  let barPopoverVisible = false
+  let presentationVisible = false
   let hideTimer: Timer | undefined
   let sinkPriorityUntil = 0
   let pendingBarChanges: BarChange[] = []
@@ -77,8 +77,8 @@ export function createVolumeOsd() {
 
   function showVolume(output: string | null) {
     if (!ready || GLib.get_monotonic_time() < sinkPriorityUntil) return
-    const keepPlacement = visible() || barPopoverVisible
-    const keepSink = keepPlacement && barOutput() !== null && mode() !== "volume"
+    const keepPlacement = visible() || presentationVisible
+    const keepSink = keepPlacement && mode() !== "volume"
     if (!keepPlacement) setBarOutput(output)
     show(keepSink ? "sink" : "volume", VOLUME_VISIBLE_FOR_MS)
   }
@@ -87,7 +87,7 @@ export function createVolumeOsd() {
     if (!ready) return
     const change = consumeBarChange("sink", speaker.id)
     pendingBarChanges = pendingBarChanges.filter((pending) => pending.kind === "sink")
-    const keepPlacement = visible() || barPopoverVisible
+    const keepPlacement = visible() || presentationVisible
     const keepTrack = keepPlacement ? mode() !== "sink-only" : change === undefined
     if (!keepPlacement) setBarOutput(change?.output ?? null)
     sinkPriorityUntil = GLib.get_monotonic_time() + SINK_PRIORITY_FOR_US
@@ -144,9 +144,9 @@ export function createVolumeOsd() {
     mute,
     description,
     barOutput,
-    // Keep the current presentation through the popover's closing animation.
-    setBarPopoverVisible(output: string, isVisible: boolean) {
-      if (barOutput() === output) barPopoverVisible = isVisible
+    // Keep the current presentation through its closing animation.
+    setPresentationVisible(output: string | null, isVisible: boolean) {
+      if (barOutput() === output) presentationVisible = isVisible
     },
     changeVolumeFromBar,
     toggleMuteFromBar,

@@ -17,6 +17,11 @@ export default function VolumeOsd({
   const sink = SinkPanel({ volumeOsd, visible: true })
   const hasTrack = () => volumeOsd.mode() !== "sink-only"
   const hasSink = () => volumeOsd.mode() !== "volume"
+  let visibleCards = 0
+  const onVisibilityChanged = (visible: boolean) => {
+    visibleCards += visible ? 1 : -1
+    volumeOsd.setPresentationVisible(null, visibleCards > 0)
+  }
 
   for (const [panel, child, visible] of [
     ["track", track, hasTrack],
@@ -28,6 +33,7 @@ export default function VolumeOsd({
       name: `volume-osd-${panel}`,
       className: "VolumeOsd",
       passive: true,
+      onVisibilityChanged,
       duration: 220,
       fade: false,
       edge: "right",

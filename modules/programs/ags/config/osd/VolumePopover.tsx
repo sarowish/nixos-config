@@ -26,7 +26,7 @@ export default function VolumePopover({
   const onVisibilityChanged = (visible: boolean) => {
     visibleCards += visible ? 1 : -1
     if (visibleCards === 0) anchorBounds = undefined
-    volumeOsd.setBarPopoverVisible(output, visibleCards > 0)
+    volumeOsd.setPresentationVisible(output, visibleCards > 0)
   }
   const sinkWindow = PopupWindow({
     place: above(parent, { bounds, offset: () => 12 }),

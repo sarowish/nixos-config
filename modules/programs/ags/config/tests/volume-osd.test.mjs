@@ -210,7 +210,7 @@ test("adjustments during a popover's closing fade keep its placement and output 
   const osd = createVolumeOsd()
   osd.changeVolumeFromBar(0.05, "DP-1")
   fixture.update("volume", 0.55)
-  osd.setBarPopoverVisible("DP-1", true)
+  osd.setPresentationVisible("DP-1", true)
   fixture.advance(2000)
   assert.equal(osd.visible(), false)
 
@@ -231,7 +231,7 @@ test("adjustments during a popover's closing fade keep its placement and output 
   assert.equal(osd.barOutput(), "DP-1")
   fixture.advance(2000)
 
-  osd.setBarPopoverVisible("DP-1", false)
+  osd.setPresentationVisible("DP-1", false)
   fixture.update("volume", 0.7)
   assert.equal(osd.mode(), "volume")
   assert.equal(osd.barOutput(), null)
@@ -241,15 +241,15 @@ test("callbacks from another monitor cannot release the current popover's placem
   const osd = createVolumeOsd()
   osd.changeVolumeFromBar(0.05, "DP-1")
   fixture.update("volume", 0.55)
-  osd.setBarPopoverVisible("DP-1", true)
+  osd.setPresentationVisible("DP-1", true)
   fixture.advance(2000)
-  osd.setBarPopoverVisible("HDMI-A-1", false)
+  osd.setPresentationVisible("HDMI-A-1", false)
   fixture.update("volume", 0.6)
   assert.equal(osd.barOutput(), "DP-1")
 
   fixture.advance(2000)
-  osd.setBarPopoverVisible("DP-1", false)
-  osd.setBarPopoverVisible("HDMI-A-1", true)
+  osd.setPresentationVisible("DP-1", false)
+  osd.setPresentationVisible("HDMI-A-1", true)
   fixture.update("volume", 0.65)
   assert.equal(osd.barOutput(), null)
 })
@@ -412,16 +412,32 @@ test("unchanged and expired bar output selections leave external output feedback
   assert.equal(osd.barOutput(), null)
 })
 
-test("output switching clears pending bar requests and retains sink priority", () => {
+test("the standalone OSD keeps the output panel through volume changes until it closes", () => {
   const osd = createVolumeOsd()
   osd.changeVolumeFromBar(0.05, "DP-1")
   fixture.update("id", 2)
+  osd.setPresentationVisible(null, true)
   fixture.update("volume", 0.55)
   assert.equal(osd.mode(), "sink")
   assert.equal(osd.barOutput(), null)
 
   fixture.advance(250)
   fixture.update("volume", 0.6)
+  assert.equal(osd.mode(), "sink")
+  assert.equal(osd.barOutput(), null)
+
+  fixture.advance(1750)
+  assert.equal(osd.visible(), true)
+  fixture.advance(250)
+  assert.equal(osd.visible(), false)
+
+  fixture.update("volume", 0.65)
+  assert.equal(osd.visible(), true)
+  assert.equal(osd.mode(), "sink")
+
+  fixture.advance(2000)
+  osd.setPresentationVisible(null, false)
+  fixture.update("volume", 0.7)
   assert.equal(osd.mode(), "volume")
   assert.equal(osd.barOutput(), null)
 })
