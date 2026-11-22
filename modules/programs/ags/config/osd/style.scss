@@ -38,7 +38,7 @@ window.VolumePopover {
 
   .overflow {
     border-radius: 9px;
-    background: #f5ead7;
+    background: #{"mix(#f5ead7, @accent, 0.30)"};
   }
 
   .volume-icon {
