@@ -11,6 +11,8 @@ let
       tray
       pkgs.mpc
       pkgs.nodejs
+      pkgs.libsoup_3
+      pkgs.glib-networking
       inputs.niri-pkgs.packages.${system}.niri-unstable
     ];
 in

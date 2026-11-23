@@ -28,6 +28,7 @@ export function createVolumeOsd() {
   const [mode, setMode] = createState<VolumeOsdMode>("volume")
   const [barOutput, setBarOutput] = createState<string | null>(null)
   let presentationVisible = false
+  let panelVisible = false
   let hideTimer: Timer | undefined
   let sinkPriorityUntil = 0
   let pendingBarChanges: BarChange[] = []
@@ -76,7 +77,7 @@ export function createVolumeOsd() {
   }
 
   function showVolume(output: string | null) {
-    if (!ready || GLib.get_monotonic_time() < sinkPriorityUntil) return
+    if (!ready || panelVisible || GLib.get_monotonic_time() < sinkPriorityUntil) return
     const keepPlacement = visible() || presentationVisible
     const keepSink = keepPlacement && mode() !== "volume"
     if (!keepPlacement) setBarOutput(output)
@@ -87,6 +88,7 @@ export function createVolumeOsd() {
     if (!ready) return
     const change = consumeBarChange("sink", speaker.id)
     pendingBarChanges = pendingBarChanges.filter((pending) => pending.kind === "sink")
+    if (panelVisible) return
     const keepPlacement = visible() || presentationVisible
     const keepTrack = keepPlacement ? mode() !== "sink-only" : change === undefined
     if (!keepPlacement) setBarOutput(change?.output ?? null)
@@ -144,6 +146,14 @@ export function createVolumeOsd() {
     mute,
     description,
     barOutput,
+    setPanelVisible(visible: boolean) {
+      panelVisible = visible
+      if (visible) {
+        hideTimer?.cancel()
+        hideTimer = undefined
+        setVisible(false)
+      }
+    },
     // Keep the current presentation through its closing animation.
     setPresentationVisible(output: string | null, isVisible: boolean) {
       if (barOutput() === output) presentationVisible = isVisible

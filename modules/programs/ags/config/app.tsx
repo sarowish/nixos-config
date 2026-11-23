@@ -11,15 +11,19 @@ import { createSystemStats } from "./services/system"
 import { createVolumeOsd } from "./services/volume-osd"
 import { createWorldClocks } from "./services/world-clocks"
 import { createWallpaperPicker } from "./wallpaper/WallpaperPicker"
+import { createPower } from "./services/power"
+import { createWeather } from "./services/weather"
+import { createSidePanel } from "./side-panel/SidePanel"
 import style from "./style.scss"
 
 const themePath = `${GLib.get_user_config_dir()}/ags-theme.css`
 const theme = GLib.file_test(themePath, GLib.FileTest.EXISTS) ? readFile(themePath) : ""
 let wallpaperPicker: ReturnType<typeof createWallpaperPicker> | undefined
+let sidePanel: ReturnType<typeof createSidePanel> | undefined
 
 app.start({
   css: `${style}\n${theme}`,
-  requestHandler([command], response) {
+  requestHandler([command, output], response) {
     if (command === "reload-css") {
       const css = readFile(`${GLib.get_user_config_dir()}/ags-style.css`)
       app.apply_css(css, true)
@@ -28,6 +32,16 @@ app.start({
     } else if (command === "wallpaper") {
       wallpaperPicker?.toggle()
       response("Wallpaper picker toggled")
+    } else if (command === "panel") {
+      const monitor = output
+        ? app.get_monitors().find((monitor) => monitor.connector === output)
+        : undefined
+      if (output && !monitor) {
+        response(`Unknown output: ${output}`)
+        return
+      }
+      sidePanel?.toggle(monitor)
+      response("Side panel toggled")
     } else {
       response("Unknown command")
     }
@@ -45,7 +59,19 @@ app.start({
       system: createSystemStats(),
       volumeOsd: createVolumeOsd(),
       worldClocks: createWorldClocks(),
+      power: createPower(),
+      weather: createWeather(),
     }
+
+    const focusedOutput = () =>
+      services.niri.state.peek().workspaces.find((workspace) => workspace.is_focused)?.output ??
+      undefined
+    wallpaperPicker = createWallpaperPicker(`${style}\n${theme}`, focusedOutput)
+    sidePanel = createSidePanel({
+      ...services,
+      focusedOutput,
+      openWallpapers: (monitor) => wallpaperPicker?.open(monitor),
+    })
 
     const windows = new Map<Gdk.Monitor, () => void>()
     const monitors = Gdk.Display.get_default()!.get_monitors()
@@ -61,7 +87,7 @@ app.start({
       for (const monitor of current) {
         if (!windows.has(monitor))
           createRoot((dispose) => {
-            app.add_window(Bar({ monitor, services }))
+            app.add_window(Bar({ monitor, services, sidePanel: sidePanel! }))
             if (monitor.connector === "DP-1") VolumeOsd({ monitor, volumeOsd: services.volumeOsd })
             windows.set(monitor, dispose)
           })
@@ -73,11 +99,5 @@ app.start({
       for (const dispose of windows.values()) dispose()
     })
     syncMonitors()
-    wallpaperPicker = createWallpaperPicker(
-      `${style}\n${theme}`,
-      () =>
-        services.niri.state.peek().workspaces.find((workspace) => workspace.is_focused)?.output ??
-        undefined,
-    )
   },
 })

@@ -1,0 +1,481 @@
+window.SidePanel {
+  color: #{"@foreground"};
+  background: transparent;
+  font-family: "Fira Sans";
+
+  .panel-content {
+    background: #{"alpha(mix(@background, @foreground, 0.04), 0.92)"};
+    border-left: 1px solid #{"alpha(@foreground, 0.12)"};
+    border-radius: 0;
+  }
+
+  .panel-header {
+    padding: 24px 20px 20px;
+  }
+  .panel-title {
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .muted {
+    color: #{"alpha(@foreground, 0.6)"};
+    font-size: 12px;
+  }
+  .error {
+    color: #{"@urgent"};
+    font-size: 12px;
+  }
+  .panel-main > viewport > box {
+    padding: 0 18px 20px;
+  }
+
+  button {
+    padding: 9px 12px;
+    min-height: 0;
+    min-width: 0;
+    color: inherit;
+    border: none;
+    border-radius: 10px;
+    background: #{"alpha(@foreground, 0.06)"};
+    box-shadow: none;
+    text-shadow: none;
+    transition: background-color 120ms ease;
+
+    &:hover {
+      background: #{"alpha(@foreground, 0.12)"};
+    }
+    &:active {
+      background: #{"alpha(@accent, 0.18)"};
+    }
+    &:focus-visible {
+      outline: 2px solid #{"@accent"};
+      outline-offset: -2px;
+    }
+    &:disabled {
+      opacity: 0.4;
+    }
+    &.icon-button {
+      padding: 7px;
+      background: transparent;
+    }
+    &.primary {
+      background: #{"@accent"};
+      color: #{"@background"};
+      font-weight: 600;
+
+      &:hover {
+        background: #{"mix(@accent, @foreground, 0.12)"};
+      }
+      &:active {
+        background: #{"mix(@accent, @background, 0.12)"};
+      }
+    }
+    &.destructive {
+      background: #{"alpha(@urgent, 0.2)"};
+      color: #{"@urgent"};
+
+      &:hover {
+        background: #{"alpha(@urgent, 0.32)"};
+      }
+      &:active {
+        background: #{"alpha(@urgent, 0.45)"};
+      }
+    }
+  }
+
+  entry {
+    min-height: 30px;
+    padding: 4px 9px;
+    border-radius: 8px;
+    border: 1px solid #{"alpha(@foreground, 0.14)"};
+    color: inherit;
+    background: #{"alpha(@background, 0.5)"};
+    box-shadow: none;
+    &:focus-within {
+      border-color: #{"@accent"};
+    }
+  }
+
+  .panel-card,
+  .wallpaper-shortcut {
+    padding: 16px;
+    border-radius: 14px;
+    background: #{"alpha(@foreground, 0.045)"};
+    border: 1px solid #{"alpha(@foreground, 0.07)"};
+  }
+  .wallpaper-shortcut image {
+    color: #{"@accent"};
+  }
+  .weather-summary {
+    background: transparent;
+    padding: 12px;
+  }
+  .weather-icon {
+    color: #{"@accent"};
+  }
+  .temperature {
+    font-size: 40px;
+    font-weight: 500;
+  }
+  .hourly-forecast {
+    font-size: 12px;
+  }
+  .rain-chance {
+    color: #{"mix(@foreground, @accent, 0.5)"};
+    font-size: 10px;
+  }
+  .location-result {
+    padding: 8px;
+  }
+  .weather-card button.link {
+    padding: 0;
+    font-size: 10px;
+    background: transparent;
+    color: #{"alpha(@foreground, 0.55)"};
+  }
+  .updated-at {
+    font-size: 10px;
+  }
+  .audio-card {
+    .mute-button {
+      padding: 9px;
+      border-radius: 12px;
+      background: #{"alpha(@accent, 0.12)"};
+      color: #{"@accent"};
+
+      &:hover {
+        background: #{"alpha(@accent, 0.22)"};
+      }
+    }
+
+    .volume-value {
+      color: #{"@accent"};
+      font-size: 20px;
+      font-weight: 500;
+      font-feature-settings: "tnum";
+    }
+
+    .output-picker {
+      border-radius: 10px;
+      transition: background-color 120ms ease;
+
+      &.expanded {
+        background: #{"alpha(@foreground, 0.035)"};
+
+        .output-selector {
+          border-radius: 10px 10px 0 0;
+          color: #{"@accent"};
+          background: #{"alpha(@accent, 0.08)"};
+        }
+      }
+    }
+
+    .output-selector {
+      padding: 10px;
+      background: transparent;
+      color: #{"alpha(@foreground, 0.7)"};
+      font-size: 12px;
+
+      &:hover {
+        color: #{"@foreground"};
+      }
+      &:disabled {
+        opacity: 1;
+      }
+    }
+
+    .output-row {
+      padding: 10px;
+      border-radius: 0;
+      background: transparent;
+      font-size: 12px;
+      &:last-child {
+        border-radius: 0 0 10px 10px;
+      }
+      &:hover {
+        background: #{"alpha(@foreground, 0.06)"};
+      }
+    }
+  }
+
+  .volume-paint {
+    color: #{"@accent"};
+
+    &.volume-paint-boost {
+      color: #{"mix(@accent, @urgent, 0.6)"};
+    }
+  }
+
+  .volume-slider {
+    color: #{"@foreground"};
+    padding: 2px 0;
+    marks,
+    mark,
+    indicator {
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      opacity: 0;
+    }
+    trough {
+      min-height: 22px;
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-radius: 11px;
+      background: transparent;
+      box-shadow: none;
+    }
+    highlight {
+      min-width: 0;
+      min-height: 22px;
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-radius: 11px;
+      background: transparent;
+      box-shadow: none;
+    }
+    slider {
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+    &:focus-visible trough {
+      outline: 2px solid #{"@accent"};
+      outline-offset: 3px;
+    }
+  }
+
+  .boosted-audio {
+    .volume-value {
+      color: #{"mix(@accent, @urgent, 0.6)"};
+    }
+  }
+  .muted-audio {
+    .mute-button {
+      color: #{"alpha(@foreground, 0.65)"};
+      background: #{"alpha(@foreground, 0.06)"};
+    }
+    .volume-value {
+      color: #{"alpha(@foreground, 0.5)"};
+      font-size: 16px;
+    }
+  }
+
+  .power-section {
+    padding: 18px 18px 22px;
+    border-top: 1px solid #{"alpha(@foreground, 0.09)"};
+  }
+  .power-actions button {
+    padding: 13px 4px;
+    font-size: 11px;
+  }
+  .schedule-editor {
+    entry {
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      outline: none;
+      color: #{"@foreground"};
+      caret-color: #{"@accent"};
+      font-feature-settings: "tnum";
+      transition: color 120ms ease;
+
+      &:hover,
+      &:focus-within {
+        color: #{"@accent"};
+      }
+
+      selection {
+        color: #{"@accent"};
+        background: #{"alpha(@accent, 0.14)"};
+      }
+    }
+
+    .schedule-control {
+      border: 1px solid #{"alpha(@accent, 0.3)"};
+      border-radius: 24px;
+      background: #{"alpha(@accent, 0.11)"};
+      transition: background-color 120ms ease;
+
+      &.duration-control {
+        min-height: 176px;
+      }
+      &.time-control {
+        min-height: 140px;
+      }
+      &.focused {
+        background: #{"alpha(@accent, 0.15)"};
+      }
+      entry {
+        color: #{"@accent"};
+      }
+      .schedule-adjustments {
+        min-width: 54px;
+
+        &.left {
+          border-right: 1px solid #{"alpha(@accent, 0.3)"};
+          button:first-child {
+            border-top-left-radius: 23px;
+          }
+          button:last-child {
+            border-bottom-left-radius: 23px;
+          }
+        }
+        &.right {
+          border-left: 1px solid #{"alpha(@accent, 0.3)"};
+          button:first-child {
+            border-top-right-radius: 23px;
+          }
+          button:last-child {
+            border-bottom-right-radius: 23px;
+          }
+        }
+        button {
+          min-width: 0;
+          min-height: 44px;
+          padding: 0;
+          border-radius: 0;
+          background: transparent;
+
+          + button {
+            border-top: 1px solid #{"alpha(@accent, 0.3)"};
+          }
+          &:hover {
+            background: #{"alpha(@accent, 0.1)"};
+            color: #{"@accent"};
+          }
+          &:active {
+            background: #{"alpha(@accent, 0.18)"};
+          }
+        }
+      }
+    }
+    .schedule-center {
+      padding: 16px 8px;
+    }
+    .shutdown-minutes {
+      font-size: 64px;
+      font-weight: 500;
+    }
+    .shutdown-time {
+      font-size: 50px;
+      font-weight: 500;
+    }
+    .shutdown-date {
+      font-size: 13px;
+    }
+    .schedule-caption {
+      color: #{"alpha(@foreground, 0.55)"};
+      font-size: 12px;
+    }
+    .schedule-date {
+      color: #{"alpha(@foreground, 0.5)"};
+
+      button {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+      .date-choice.selected {
+        background: #{"alpha(@accent, 0.14)"};
+        color: #{"@accent"};
+        &:hover {
+          background: #{"alpha(@accent, 0.22)"};
+        }
+      }
+    }
+    .schedule-modes {
+      padding: 3px;
+      border-radius: 10px;
+      background: #{"alpha(@foreground, 0.06)"};
+
+      button {
+        padding: 8px;
+        border-radius: 8px;
+        background: transparent;
+        color: #{"alpha(@foreground, 0.7)"};
+        &:hover {
+          background: #{"alpha(@foreground, 0.08)"};
+          color: #{"@foreground"};
+        }
+        &:checked {
+          background: #{"@accent"};
+          color: #{"@background"};
+          font-weight: 600;
+          &:hover {
+            background: #{"mix(@accent, @foreground, 0.12)"};
+          }
+          &:active {
+            background: #{"mix(@accent, @background, 0.12)"};
+          }
+        }
+        &:active {
+          background: #{"alpha(@accent, 0.28)"};
+        }
+      }
+    }
+    .schedule-presets {
+      margin-top: 12px;
+
+      button {
+        min-height: 30px;
+        padding: 0 4px;
+        border-radius: 8px;
+        background: #{"alpha(@accent, 0.06)"};
+        color: #{"alpha(@foreground, 0.6)"};
+        font-size: 12px;
+
+        &:hover {
+          background: #{"alpha(@accent, 0.12)"};
+          color: #{"@accent"};
+        }
+      }
+    }
+    .duration-preset.selected {
+      background: #{"alpha(@accent, 0.14)"};
+      color: #{"@accent"};
+      &:hover {
+        background: #{"alpha(@accent, 0.22)"};
+      }
+    }
+    .duration-step {
+      color: #{"alpha(@foreground, 0.6)"};
+      font-size: 14px;
+    }
+    .duration-jump {
+      font-size: 18px;
+    }
+    .schedule-submit {
+      padding: 12px;
+    }
+    .schedule-hint {
+      font-size: 11px;
+    }
+  }
+  .shutdown-status {
+    padding: 12px;
+    border-radius: 10px;
+    background: #{"alpha(@accent, 0.08)"};
+  }
+  .schedule-countdown {
+    color: #{"@accent"};
+    font-size: 18px;
+    font-weight: 600;
+    font-feature-settings: "tnum";
+  }
+}

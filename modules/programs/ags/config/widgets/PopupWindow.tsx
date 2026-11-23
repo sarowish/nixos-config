@@ -3,6 +3,7 @@ import { createEffect, onCleanup, type Accessor } from "ags"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Cairo from "cairo"
 import { popupPlacement, type Rectangle } from "./popup-placement"
+import { registerOverlay } from "./overlays"
 
 // Places the card in output coordinates for the given animation progress.
 export type Place = (
@@ -62,6 +63,7 @@ export default function PopupWindow({
   name,
   className,
   passive = false,
+  overlayGroup,
   onVisibilityChanged,
   duration = 180,
   fade = true,
@@ -75,10 +77,12 @@ export default function PopupWindow({
   name: string
   className: string
   passive?: boolean
+  overlayGroup?: symbol
   onVisibilityChanged?: (visible: boolean) => void
   duration?: number
   fade?: boolean
 }) {
+  const dismissOthers = passive ? undefined : registerOverlay(() => onClose?.(), overlayGroup)
   let tick: { widget: Gtk.Widget; id: number } | undefined
   let progress = 0
   let from = 0
@@ -203,6 +207,7 @@ export default function PopupWindow({
   createEffect(() => {
     const next = open() ? 1 : 0
     if (next === target) return
+    if (next) dismissOthers?.()
     if (next && !layout()) {
       onClose?.()
       return

@@ -441,3 +441,21 @@ test("the standalone OSD keeps the output panel through volume changes until it 
   assert.equal(osd.mode(), "volume")
   assert.equal(osd.barOutput(), null)
 })
+
+test("opening the side panel hides the OSD and suppresses duplicate audio feedback until closed", () => {
+  const osd = createVolumeOsd()
+  fixture.update("volume", 0.6)
+  assert.equal(osd.visible(), true)
+
+  osd.setPanelVisible(true)
+  assert.equal(osd.visible(), false)
+  fixture.update("volume", 0.7)
+  fixture.update("mute", true)
+  fixture.update("id", 2)
+  assert.equal(osd.visible(), false)
+
+  osd.setPanelVisible(false)
+  fixture.update("volume", 0.8)
+  assert.equal(osd.visible(), true)
+  assert.equal(osd.mode(), "volume")
+})

@@ -172,6 +172,7 @@
               "Mod+Shift+Return".action = spawn "alacritty";
               "Mod+Period".action = spawn "librewolf";
               "Mod+Shift+Period".action = spawn "helium";
+              "Mod+Comma".action = spawn "${config.programs.ags.finalPackage}/bin/ags" "request" "panel";
               "Mod+I".action = spawn "rofi" "-show" "drun";
               "Mod+SemiColon".action = spawn "foot" "ytsub";
               "Mod+Shift+Z".action = spawn "foot" "bawa";

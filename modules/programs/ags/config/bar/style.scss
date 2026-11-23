@@ -34,6 +34,37 @@ window.WindowMapTile button {
 window.Bar {
   min-height: 30px;
 
+  .PanelToggle {
+    min-width: 24px;
+    padding: 0;
+    background-image: linear-gradient(to right, transparent, #{"alpha(@foreground, 0.04)"});
+
+    .panel-rail {
+      min-width: 2px;
+      background-color: #{"alpha(@foreground, 0.4)"};
+      transition:
+        min-width 100ms ease,
+        background-color 140ms ease;
+    }
+
+    &:hover {
+      background-image: linear-gradient(to right, transparent, #{"alpha(@accent, 0.12)"});
+
+      .panel-rail {
+        background-color: #{"@accent"};
+      }
+    }
+
+    &:active {
+      background-image: linear-gradient(to right, transparent, #{"alpha(@accent, 0.2)"});
+
+      .panel-rail {
+        min-width: 3px;
+        background-color: #{"@accent"};
+      }
+    }
+  }
+
   .Workspaces button {
     padding: 0 5px;
 

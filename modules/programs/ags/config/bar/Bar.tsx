@@ -1,4 +1,4 @@
-import { Astal, Gdk } from "ags/gtk4"
+import { Astal, Gdk, Gtk } from "ags/gtk4"
 import { onCleanup } from "ags"
 import type { createNiri } from "../services/niri"
 import type { createMpd } from "../services/mpd"
@@ -13,6 +13,7 @@ import Volume from "./Volume"
 import Media from "./Media"
 import SystemStats from "./SystemStats"
 import Tray from "./Tray"
+import type { createSidePanel } from "../side-panel/SidePanel"
 
 type Services = {
   niri: ReturnType<typeof createNiri>
@@ -22,7 +23,15 @@ type Services = {
   worldClocks: ReturnType<typeof createWorldClocks>
 }
 
-export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; services: Services }) {
+export default function Bar({
+  monitor,
+  services,
+  sidePanel,
+}: {
+  monitor: Gdk.Monitor
+  services: Services
+  sidePanel: ReturnType<typeof createSidePanel>
+}) {
   const output = monitor.connector ?? ""
   const { width, height } = monitor.get_geometry()
   return (
@@ -36,13 +45,11 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
       layer={Astal.Layer.TOP}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       keymode={Astal.Keymode.NONE}
-      marginLeft={8}
-      marginRight={8}
       heightRequest={30}
       $={(window: Astal.Window) => onCleanup(() => window.destroy())}
     >
       <centerbox>
-        <box $type="start">
+        <box $type="start" marginStart={8}>
           <Workspaces niri={services.niri} output={output} />
           <WindowMap
             niri={services.niri}
@@ -58,6 +65,17 @@ export default function Bar({ monitor, services }: { monitor: Gdk.Monitor; servi
           <KeyboardLayout niri={services.niri} />
           <SystemStats system={services.system} />
           <Tray />
+          <button
+            class="PanelToggle"
+            focusable={false}
+            tooltipText="Control center (Super+,)"
+            $={(button: Gtk.Button) =>
+              button.update_property([Gtk.AccessibleProperty.LABEL], ["Control center"])
+            }
+            onClicked={() => sidePanel.toggle(monitor)}
+          >
+            <box class="panel-rail" halign={Gtk.Align.END} valign={Gtk.Align.FILL} />
+          </button>
         </box>
       </centerbox>
     </window>

@@ -9,6 +9,7 @@ import { createWallpapers } from "../services/wallpapers"
 import { createAccentPreview } from "../services/accent-preview"
 import { createWallpaperImages, type WallpaperAnalysis } from "../services/wallpaper-images"
 import PopupWindow from "../widgets/PopupWindow"
+import { registerOverlay } from "../widgets/overlays"
 import { createWallpaperPreview } from "./WallpaperPreview"
 import {
   contrastLabel,
@@ -56,6 +57,10 @@ function hideScreenPicker(widget: Gtk.Widget) {
 }
 
 export function createWallpaperPicker(css: string, focusedOutput: () => string | undefined) {
+  const overlayGroup = Symbol("wallpaper")
+  const dismissOthers = registerOverlay(() => {
+    if (window.visible || preview || openingPreview) hide()
+  }, overlayGroup)
   const wallpapers = createWallpapers()
   const theme = createAccentPreview(css)
   const images = createWallpaperImages()
@@ -346,6 +351,7 @@ export function createWallpaperPicker(css: string, focusedOutput: () => string |
   colorCard.append(colorEditor)
   PopupWindow({
     name: "wallpaper-color-picker",
+    overlayGroup,
     className: "WallpaperColorPicker",
     child: colorCard,
     open: colorOpen,
@@ -1049,9 +1055,11 @@ export function createWallpaperPicker(css: string, focusedOutput: () => string |
       wallpapers.error() || (wallpapers.busy() ? "Applying wallpaper…" : statusMessage())
   })
 
-  async function show() {
+  async function show(requestedMonitor?: Gdk.Monitor) {
+    dismissOthers()
     const request = ++openRequest
     const monitor =
+      requestedMonitor ??
       monitors().find((candidate) => candidate.connector === focusedOutput()) ??
       monitors().find((candidate) => candidate.connector === "DP-1") ??
       monitors()[0]
@@ -1124,6 +1132,10 @@ export function createWallpaperPicker(css: string, focusedOutput: () => string |
     backdrop.destroy()
   })
   return {
+    open(monitor: Gdk.Monitor) {
+      hide()
+      void show(monitor)
+    },
     toggle() {
       if (window.visible || preview || openingPreview) hide()
       else void show()
