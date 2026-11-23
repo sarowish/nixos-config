@@ -20,22 +20,22 @@
  }>();
 --- a/src/main/tray.ts
 +++ b/src/main/tray.ts
-@@ -5,6 +5,8 @@
+@@ -4,7 +4,10 @@
+  * SPDX-License-Identifier: GPL-3.0-or-later
   */
  
- import { app, BrowserWindow, Menu, Tray } from "electron";
 +import { join } from "path";
++
+ import { app, BrowserWindow, Menu, Tray } from "electron";
 +import { STATIC_DIR } from "shared/paths";
+ import { sleep } from "shared/utils/sleep";
  
  import { createAboutWindow } from "./about";
- import { AppEvents } from "./events";
-@@ -13,26 +15,52 @@
- import { clearData } from "./utils/clearData";
+@@ -18,27 +21,51 @@
  import { downloadVencordFiles } from "./utils/vencordLoader";
  
--let tray: Tray;
+ let tray: Tray | undefined;
 -let trayVariant: "tray" | "trayUnread" = "tray";
-+let tray: Tray | undefined;
 +let trayCount = 0;
 +let trayUpdate = 0;
 +
@@ -45,7 +45,9 @@
 +    }
 +    return resolveAssetPath(count === 0 ? "tray" : "trayUnread");
 +}
-+
+ 
+-// resolve the image before checking tray, as it might get destroyed in the meantime
+-AppEvents.on("userAssetChanged", async asset => {
 +async function updateTray() {
 +    const currentTray = tray;
 +    if (!currentTray) return;
@@ -62,22 +64,21 @@
 +            : "Vesktop"
 +    );
 +}
- 
--AppEvents.on("userAssetChanged", async asset => {
++
 +AppEvents.on("userAssetChanged", asset => {
-     if (tray && (asset === "tray" || asset === "trayUnread")) {
--        tray.setImage(await resolveAssetPath(trayVariant));
-+        void updateTray();
-     }
+     if (asset !== "tray" && asset !== "trayUnread") return;
+ 
+-    const image = await resolveAssetPath(trayVariant);
+-    tray?.setImage(image);
++    void updateTray();
  });
  
 -AppEvents.on("setTrayVariant", async variant => {
 -    if (trayVariant === variant) return;
 -
 -    trayVariant = variant;
--    if (!tray) return;
--
--    tray.setImage(await resolveAssetPath(trayVariant));
+-    const image = await resolveAssetPath(trayVariant);
+-    tray?.setImage(image);
 +AppEvents.on("setTrayBadge", count => {
 +    // -1 means ordinary unread messages without a notification count.
 +    if (process.platform === "linux" && count === -1) count = 0;
@@ -88,14 +89,14 @@
  
  export function destroyTray() {
      tray?.destroy();
-+    tray = undefined;
+     tray = undefined;
 +    trayUpdate++;
  }
  
- export async function initTray(win: BrowserWindow, setIsQuitting: (val: boolean) => void) {
-@@ -85,8 +113,8 @@
-         }
-     ]);
+ // Chromium gives up on the tray if no StatusNotifierHost is registered when it is created and never retries.
+@@ -108,8 +135,8 @@
+     await waitForStatusNotifierHost();
+     if (Settings.store.tray === false) return;
  
 -    tray = new Tray(await resolveAssetPath(trayVariant));
 -    tray.setToolTip("Vesktop");
