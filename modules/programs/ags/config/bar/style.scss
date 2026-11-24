@@ -48,7 +48,9 @@ window.Bar {
 
     .panel-rail {
       min-width: $rail-width;
-      background-color: #{"alpha(@foreground, 0.4)"};
+      background-color: #{"alpha(@foreground, 0.16)"};
+      // GTK requests compositor blur for radii of at least 20px.
+      backdrop-filter: blur(24px);
       transition:
         min-width 100ms ease,
         background-color 140ms ease;
