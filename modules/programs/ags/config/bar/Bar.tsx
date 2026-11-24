@@ -61,10 +61,10 @@ export default function Bar({
         </box>
         <Clock $type="center" worldClocks={services.worldClocks} />
         <box $type="end" spacing={8}>
+          <Tray />
           <Volume output={output} volumeOsd={services.volumeOsd} />
           <KeyboardLayout niri={services.niri} />
           <SystemStats system={services.system} />
-          <Tray />
           <button
             class="PanelToggle"
             focusable={false}
