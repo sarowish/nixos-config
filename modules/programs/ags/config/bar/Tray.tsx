@@ -51,7 +51,13 @@ function TrayItem({ item }: { item: AstalTray.TrayItem }) {
 export default function Tray() {
   const items = createBinding(AstalTray.get_default(), "items")
   return (
-    <box class="Tray" visible={items((current) => current.length > 0)} spacing={10}>
+    <box
+      class="Tray"
+      visible={items((current) => current.length > 0)}
+      valign={Gtk.Align.CENTER}
+      marginEnd={8}
+      spacing={2}
+    >
       <For each={items}>{(item: AstalTray.TrayItem) => <TrayItem item={item} />}</For>
     </box>
   )
