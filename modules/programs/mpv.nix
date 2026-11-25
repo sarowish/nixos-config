@@ -15,6 +15,8 @@
       };
 
       bindings = {
+        "MBTN_RIGHT" = "cycle pause";
+
         h = "seek -5";
         l = "seek 5";
         j = "seek -10";
