@@ -35,7 +35,6 @@ export default function Bar({
   const { width, height } = monitor.get_geometry()
   return (
     <window
-      visible
       name={`bar-${monitor.connector}`}
       namespace="ags-bar"
       class="Bar"
@@ -45,7 +44,11 @@ export default function Bar({
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       keymode={Astal.Keymode.NONE}
       heightRequest={30}
-      $={(window: Astal.Window) => onCleanup(() => window.destroy())}
+      $={(window: Astal.Window) => {
+        onCleanup(() => window.destroy())
+        // Map only after the anchors and child layout are configured.
+        window.present()
+      }}
     >
       <centerbox>
         <box $type="start" marginStart={8}>
