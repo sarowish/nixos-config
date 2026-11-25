@@ -107,10 +107,13 @@ app.start({
       let panel!: ReturnType<typeof createSidePanel>
       let setForecast!: (value: Forecast | null) => void
       let setLocation!: (value: WeatherLocation | null) => void
+      let setWeatherUpdatedAt!: (value: number) => void
       let setSchedule!: (value: ShutdownSchedule | null) => void
       let dismissPanel!: () => void
       let launched: Gdk.Monitor | undefined
       const scheduleRequests: number[] = []
+      let weatherRefreshes = 0
+      let refreshedWhileSliding = false
       createRoot((cleanup) => {
         dispose = cleanup
         const [schedule, updateSchedule] = createState<ShutdownSchedule | null>(null)
@@ -133,18 +136,25 @@ app.start({
         }
         const [location, updateLocation] = createState<WeatherLocation | null>(null)
         const [forecast, updateForecast] = createState<Forecast | null>(null)
+        const [updatedAt, updateUpdatedAt] = createState(Date.now())
         setForecast = updateForecast
         setLocation = updateLocation
+        setWeatherUpdatedAt = updateUpdatedAt
         const weather: ReturnType<typeof createWeather> = {
           location,
           forecast,
-          updatedAt: createState(Date.now())[0],
+          updatedAt,
           busy: createState(false)[0],
           error: createState("")[0],
           results: createState<WeatherLocation[]>([])[0],
           searching: createState(false)[0],
           searchError: createState("")[0],
-          refresh: async () => {},
+          refresh: async () => {
+            weatherRefreshes++
+            const window = app.get_window("panel") as Astal.Window
+            refreshedWhileSliding ||= window.margin_right !== 0
+            updateUpdatedAt(Date.now())
+          },
           search: async () => {},
           select: () => {},
         }
@@ -208,8 +218,18 @@ app.start({
         })),
       })
       setSchedule({ type: "poweroff", when: Date.now() + 94 * 60_000 + 20_000 })
+      setWeatherUpdatedAt(0)
+      panel.toggle(monitor)
+      check(weatherRefreshes === 0, "Opening must not initialize weather during the slide")
+      panel.close(true)
+      await wait(250)
+      check(weatherRefreshes === 0, "Closing during the slide must cancel the pending refresh")
       panel.toggle(monitor)
       await wait(350)
+      check(
+        weatherRefreshes === 1 && !refreshedWhileSliding,
+        "Stale weather should refresh once after the panel finishes sliding in",
+      )
       check(window.get_width() <= 440, "Loaded weather or schedule stretched the panel")
       const all = widgets(window)
       const outputs = all.find((widget) => widget.has_css_class("audio-outputs"))!
@@ -525,6 +545,7 @@ app.start({
       dismissPanel()
       await wait(250)
       check(!window.visible, "Opening another overlay did not dismiss the panel")
+      check(weatherRefreshes === 1, "Reopening with fresh weather should reuse the cached forecast")
       print("Side panel smoke test passed")
       dispose()
       app.quit(0)

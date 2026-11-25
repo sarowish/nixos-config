@@ -11,13 +11,17 @@ const mocks = {
     }
     export const onCleanup = callback => globalThis.weatherFixture.cleanups.push(callback)
   `,
-  "ags/time": `export const interval = () => ({ cancel() {} })`,
   "ags/file": `export const readFile = () => globalThis.weatherFixture.saved`,
   "gi://Gio?version=2.0": `export default { Cancellable: class {
     cancelled = false; cancel() { this.cancelled = true }; is_cancelled() { return this.cancelled }
   } }`,
   "gi://GLib?version=2.0": `export default {
     get_user_state_dir: () => '/fixture', PRIORITY_DEFAULT: 0, FileTest: { EXISTS: 1 },
+    SOURCE_CONTINUE: true,
+    timeout_add_seconds: (_priority, seconds, callback) => {
+      globalThis.weatherFixture.timer = { seconds, callback }; return 1
+    },
+    Source: { remove: () => { globalThis.weatherFixture.timer = null } },
     file_test: () => Boolean(globalThis.weatherFixture.saved), mkdir_with_parents: () => 0,
     file_set_contents: (_path, value) => { globalThis.weatherFixture.saved = value },
   }`,
@@ -124,11 +128,13 @@ test("an offline refresh retains the cached forecast and its original update tim
   })
   const weather = createWeather()
   assert.equal(weather.forecast().current.temperature, 12)
+  assert.equal(fixture.requests.length, 0, "Loading cached weather must not start a request")
+  const pending = weather.refresh()
   const originalError = console.error
   try {
     console.error = () => {}
     fixture.requests[0].callback(new Error("Offline"))
-    await turn()
+    await pending
   } finally {
     console.error = originalError
   }

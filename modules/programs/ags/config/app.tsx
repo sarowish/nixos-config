@@ -1,5 +1,5 @@
 import app from "ags/gtk4/app"
-import { createRoot, onCleanup } from "ags"
+import { createRoot, getScope, onCleanup } from "ags"
 import { Gdk, Gtk } from "ags/gtk4"
 import GLib from "gi://GLib?version=2.0"
 import { readFile } from "ags/file"
@@ -19,7 +19,7 @@ import style from "./style.scss"
 const themePath = `${GLib.get_user_config_dir()}/ags-theme.css`
 const theme = GLib.file_test(themePath, GLib.FileTest.EXISTS) ? readFile(themePath) : ""
 let wallpaperPicker: ReturnType<typeof createWallpaperPicker> | undefined
-let sidePanel: ReturnType<typeof createSidePanel> | undefined
+let toggleSidePanel: ((monitor?: Gdk.Monitor) => void) | undefined
 
 app.start({
   css: `${style}\n${theme}`,
@@ -40,7 +40,7 @@ app.start({
         response(`Unknown output: ${output}`)
         return
       }
-      sidePanel?.toggle(monitor)
+      toggleSidePanel?.(monitor)
       response("Side panel toggled")
     } else {
       response("Unknown command")
@@ -59,19 +59,28 @@ app.start({
       system: createSystemStats(),
       volumeOsd: createVolumeOsd(),
       worldClocks: createWorldClocks(),
-      power: createPower(),
-      weather: createWeather(),
     }
 
     const focusedOutput = () =>
       services.niri.state.peek().workspaces.find((workspace) => workspace.is_focused)?.output ??
       undefined
     wallpaperPicker = createWallpaperPicker(`${style}\n${theme}`, focusedOutput)
-    sidePanel = createSidePanel({
-      ...services,
-      focusedOutput,
-      openWallpapers: (monitor) => wallpaperPicker?.open(monitor),
-    })
+    const scope = getScope()
+    let sidePanel: ReturnType<typeof createSidePanel> | undefined
+    const togglePanel = (monitor?: Gdk.Monitor) => {
+      // Event callbacks must attach these resources to the application's lifetime.
+      const panel = (sidePanel ??= scope.run(() =>
+        createSidePanel({
+          power: createPower(),
+          weather: createWeather(),
+          volumeOsd: services.volumeOsd,
+          focusedOutput,
+          openWallpapers: (monitor) => wallpaperPicker?.open(monitor),
+        }),
+      ))
+      panel.toggle(monitor)
+    }
+    toggleSidePanel = togglePanel
 
     const windows = new Map<Gdk.Monitor, () => void>()
     const monitors = Gdk.Display.get_default()!.get_monitors()
@@ -87,7 +96,7 @@ app.start({
       for (const monitor of current) {
         if (!windows.has(monitor))
           createRoot((dispose) => {
-            app.add_window(Bar({ monitor, services, sidePanel: sidePanel! }))
+            app.add_window(Bar({ monitor, services, togglePanel }))
             if (monitor.connector === "DP-1") VolumeOsd({ monitor, volumeOsd: services.volumeOsd })
             windows.set(monitor, dispose)
           })
@@ -95,6 +104,7 @@ app.start({
     }
     const changed = monitors.connect("items-changed", syncMonitors)
     onCleanup(() => {
+      toggleSidePanel = undefined
       monitors.disconnect(changed)
       for (const dispose of windows.values()) dispose()
     })

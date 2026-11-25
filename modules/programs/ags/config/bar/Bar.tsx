@@ -13,7 +13,6 @@ import Volume from "./Volume"
 import Media from "./Media"
 import SystemStats from "./SystemStats"
 import Tray from "./Tray"
-import type { createSidePanel } from "../side-panel/SidePanel"
 
 type Services = {
   niri: ReturnType<typeof createNiri>
@@ -26,11 +25,11 @@ type Services = {
 export default function Bar({
   monitor,
   services,
-  sidePanel,
+  togglePanel,
 }: {
   monitor: Gdk.Monitor
   services: Services
-  sidePanel: ReturnType<typeof createSidePanel>
+  togglePanel: (monitor: Gdk.Monitor) => void
 }) {
   const output = monitor.connector ?? ""
   const { width, height } = monitor.get_geometry()
@@ -72,7 +71,7 @@ export default function Bar({
             $={(button: Gtk.Button) =>
               button.update_property([Gtk.AccessibleProperty.LABEL], ["Control center"])
             }
-            onClicked={() => sidePanel.toggle(monitor)}
+            onClicked={() => togglePanel(monitor)}
           >
             <box class="panel-rail" halign={Gtk.Align.END} valign={Gtk.Align.FILL} />
           </button>

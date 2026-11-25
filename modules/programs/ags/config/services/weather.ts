@@ -1,5 +1,4 @@
 import { createState, onCleanup } from "ags"
-import { interval } from "ags/time"
 import { readFile } from "ags/file"
 import Gio from "gi://Gio?version=2.0"
 import GLib from "gi://GLib?version=2.0"
@@ -142,15 +141,17 @@ export function createWeather() {
     }
   }
 
-  const timer = interval(15 * 60 * 1000, () => void refresh())
+  const timer = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 15 * 60, () => {
+    void refresh()
+    return GLib.SOURCE_CONTINUE
+  })
   onCleanup(() => {
     stopped = true
-    timer.cancel()
+    GLib.Source.remove(timer)
     request?.cancel()
     searchRequest?.cancel()
     session.abort()
   })
-  if (location.peek()) void refresh()
 
   return {
     location,

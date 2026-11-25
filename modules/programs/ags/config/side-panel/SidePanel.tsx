@@ -32,6 +32,7 @@ export function createSidePanel({
   let from = 0
   let started = 0
   let tick: number | undefined
+  let weatherRefresh: number | undefined
   let width = 400
 
   const backdrop = new Astal.Window({
@@ -126,24 +127,47 @@ export function createSidePanel({
   app.add_window(window)
   const dismissOthers = registerOverlay(close)
 
+  function cancelWeatherRefresh() {
+    if (weatherRefresh !== undefined) GLib.Source.remove(weatherRefresh)
+    weatherRefresh = undefined
+  }
+
   function animate(next: number) {
+    cancelWeatherRefresh()
     from = progress
     target = next
-    started = GLib.get_monotonic_time()
+    started = 0
     if (tick !== undefined) return
     tick = window.add_tick_callback((_widget, clock) => {
-      const elapsed = Math.min(1, Math.max(0, (clock.get_frame_time() - started) / 200_000))
+      const now = clock.get_frame_time()
+      if (!started) started = now
+      const elapsed = Math.min(1, (now - started) / 200_000)
       progress = from + (target - from) * (1 - (1 - elapsed) ** 3)
       window.margin_right = Math.round((1 - progress) * (1 - width))
       if (elapsed < 1) return true
       tick = undefined
       if (!target) window.set_visible(false)
+      else {
+        // Let the final animation frame paint before initializing weather networking.
+        weatherRefresh = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+          weatherRefresh = undefined
+          if (
+            monitor.peek() &&
+            weather.location.peek() &&
+            Date.now() - weather.updatedAt.peek() > 15 * 60_000 &&
+            !weather.busy.peek()
+          )
+            void weather.refresh()
+          return GLib.SOURCE_REMOVE
+        })
+      }
       return false
     })
   }
 
   function close(immediate = false) {
     if (!monitor.peek()) return
+    cancelWeatherRefresh()
     setMonitor(null)
     window.keymode = Astal.Keymode.NONE
     content.sensitive = false
@@ -174,12 +198,6 @@ export function createSidePanel({
     closeButton.grab_focus()
     animate(1)
     void power.refresh()
-    if (
-      weather.location.peek() &&
-      Date.now() - weather.updatedAt.peek() > 15 * 60_000 &&
-      !weather.busy.peek()
-    )
-      void weather.refresh()
   }
 
   createEffect(() => {
@@ -198,6 +216,7 @@ export function createSidePanel({
   onCleanup(() => {
     monitors.disconnect(changed)
     volumeOsd.setPanelVisible(false)
+    cancelWeatherRefresh()
     if (tick !== undefined) window.remove_tick_callback(tick)
     window.destroy()
     backdrop.destroy()
